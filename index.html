@@ -128,5 +128,31 @@
         </aside>
 
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize the Google Mind (Supabase)
+        const supabaseUrl = 'https://pmhmuzctbstrhtmwxlay.supabase.co';
+        
+        // --- PUT YOUR KEY IN THE QUOTES BELOW ---
+        const supabaseKey = 'sb_publishable_8dtRYPrztDbEt3bZhU3ibQ_5PAt_FsP';
+        // ----------------------------------------
+        
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        console.log("RevBoard Brain Initialized!");
+
+        // Test connection to the Pulses table
+        async function testPulseConnection() {
+            const { data, error } = await supabaseClient.from('pulses').select('*').limit(1);
+            if (error) {
+                console.error("Connection Error (Check your key!):", error.message);
+            } else {
+                console.log("Connection Success! Data:", data);
+            }
+        }
+        
+        testPulseConnection();
+    </script>
 </body>
 </html>
