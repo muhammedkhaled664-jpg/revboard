@@ -2,229 +2,132 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYNC | Operations Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SYNC | Ops</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { 
-                        base: '#09090b',     /* Deepest black/gray */
-                        surface: '#18181b',  /* Elevated */
-                    },
-                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                    colors: { base: '#050505', surface: '#0f0f0f', border: '#1f1f1f' }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
-        /* Clean invisible scrollbars */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body { background-color: #050505; font-family: 'Inter', sans-serif; color: #eee; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Tactical UI Elements */
-        body { background-color: #09090b; color: #e4e4e7; }
+        /* Premium Layout Anchors */
+        .lane { background: #0f0f0f; border: 1px solid #1f1f1f; border-radius: 4px; display: flex; flex-direction: column; height: 100%; }
+        .card { background: #050505; border: 1px solid #1f1f1f; border-radius: 4px; transition: border 0.2s; cursor: pointer; }
+        .card:hover { border-color: #444; }
         
-        .kanban-lane { 
-            background-color: #18181b; 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .task-card { 
-            background-color: #09090b; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            border-radius: 8px;
-            transition: all 0.15s ease-in-out; 
-            cursor: pointer;
-        }
-        .task-card:hover { border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .task-card:active { transform: translateY(0); }
-
-        /* Custom Dropdown Styling to kill the ugly native look */
-        select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-            background-repeat: no-repeat;
-            background-position-x: 95%;
-            background-position-y: 50%;
-        }
-
-        /* Modal transitions */
-        .modal-enter { opacity: 0; transform: scale(0.95); pointer-events: none; }
-        .modal-active { opacity: 1; transform: scale(1); pointer-events: auto; transition: all 0.2s ease-out; }
+        /* Status Badges */
+        .badge-critical { color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.3); background: rgba(255, 77, 77, 0.05); }
+        .badge-high { color: #ffb84d; border: 1px solid rgba(255, 184, 77, 0.3); background: rgba(255, 184, 77, 0.05); }
+        
+        /* Side Drawer Control */
+        #peekDrawer { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .drawer-open { transform: translateX(0) !important; }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden font-sans antialiased flex flex-col relative selection:bg-white selection:text-black">
+<body class="h-screen w-screen overflow-hidden flex flex-col">
 
-    <div id="lockScreen" class="absolute inset-0 z-[100] bg-base flex flex-col items-center justify-center transition-opacity duration-500">
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold tracking-[0.25em] text-white uppercase">SYNC</h1>
-        </div>
-
-        <div class="bg-surface border border-white/10 p-8 rounded-2xl w-80 shadow-2xl">
+    <div id="lockScreen" class="fixed inset-0 z-[100] bg-base flex flex-col items-center justify-center transition-opacity duration-500">
+        <h1 class="text-2xl font-extrabold tracking-[0.4em] mb-12 uppercase text-white">SYNC</h1>
+        <div class="bg-surface border border-border p-8 rounded-lg w-72 shadow-2xl">
             <div class="flex justify-center gap-4 mb-8" id="pinDots">
-                <div class="h-2 w-2 rounded-full bg-base border border-white/20 transition-colors" id="dot-1"></div>
-                <div class="h-2 w-2 rounded-full bg-base border border-white/20 transition-colors" id="dot-2"></div>
-                <div class="h-2 w-2 rounded-full bg-base border border-white/20 transition-colors" id="dot-3"></div>
-                <div class="h-2 w-2 rounded-full bg-base border border-white/20 transition-colors" id="dot-4"></div>
+                <div class="h-1.5 w-1.5 rounded-full bg-border" id="dot-1"></div>
+                <div class="h-1.5 w-1.5 rounded-full bg-border" id="dot-2"></div>
+                <div class="h-1.5 w-1.5 rounded-full bg-border" id="dot-3"></div>
+                <div class="h-1.5 w-1.5 rounded-full bg-border" id="dot-4"></div>
             </div>
-            
-            <div class="grid grid-cols-3 gap-3" id="numpad">
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="1">1</button>
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="2">2</button>
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="3">3</button>
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="4">4</button>
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="5">5</button>
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="6">6</button>
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="7">7</button>
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="8">8</button>
-                <button class="pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="9">9</button>
-                <button class="col-start-2 pin-btn h-14 bg-base border border-white/5 rounded-xl text-lg font-medium text-white hover:bg-white/10 active:scale-95 transition-all" data-val="0">0</button>
-                <button class="pin-clear h-14 bg-transparent text-[10px] font-bold text-white/40 hover:text-white uppercase tracking-widest active:scale-95 transition-all">CLR</button>
+            <div class="grid grid-cols-3 gap-4" id="numpad">
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="1">1</button>
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="2">2</button>
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="3">3</button>
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="4">4</button>
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="5">5</button>
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="6">6</button>
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="7">7</button>
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="8">8</button>
+                <button class="pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="9">9</button>
+                <button class="col-start-2 pin-btn h-12 text-lg font-bold hover:bg-white/5 rounded" data-val="0">0</button>
             </div>
-            <p id="pinError" class="text-red-500 text-[10px] font-semibold tracking-wider uppercase text-center mt-6 h-4 opacity-0 transition-opacity">Access Denied</p>
+            <p id="pinError" class="text-[9px] font-bold text-red-500 uppercase tracking-widest text-center mt-6 opacity-0">Error</p>
         </div>
     </div>
 
-    <header class="h-16 border-b border-white/5 flex items-center justify-between px-6 shrink-0 z-10 w-full bg-base">
+    <header class="h-14 border-b border-border flex items-center justify-between px-6 bg-base z-50">
+        <span class="text-xs font-black tracking-widest text-white uppercase">SYNC Command</span>
         <div class="flex items-center gap-4">
-            <h1 class="text-lg font-bold tracking-widest text-white uppercase">SYNC</h1>
-        </div>
-        <div class="flex justify-end items-center gap-4">
-            <div class="text-right hidden sm:block">
-                <p id="activeUserName" class="text-[11px] font-bold text-white tracking-wider uppercase">LOCKED</p>
-            </div>
-            <button onclick="lockStation()" class="h-8 w-8 rounded-full border border-white/10 flex items-center justify-center text-xs text-white/60 bg-surface hover:bg-white/10 transition-colors">
-                <i class="fa-solid fa-lock"></i>
-            </button>
+            <span id="activeUserName" class="text-[10px] font-bold uppercase tracking-tighter text-white/40">Offline</span>
+            <button onclick="lockStation()" class="text-white/20 hover:text-white"><i class="fa-solid fa-power-off text-xs"></i></button>
         </div>
     </header>
 
-    <main class="flex-1 overflow-x-auto overflow-y-hidden p-6 scrollbar-hide">
-        <div class="flex flex-row gap-6 h-full items-start min-w-max pb-10">
-            
-            <div class="w-[85vw] sm:w-[320px] shrink-0 kanban-lane h-full p-4">
-                <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                    <h3 class="font-semibold text-[11px] uppercase tracking-wider text-white/60">Radar</h3>
-                    <span class="text-[10px] font-mono text-white/40 bg-base px-2 py-0.5 rounded" id="count-Radar">0</span>
-                </div>
-                <div class="flex-1 overflow-y-auto space-y-3 scrollbar-hide" id="col-Radar"></div>
-            </div>
-
-            <div class="w-[85vw] sm:w-[320px] shrink-0 kanban-lane h-full p-4">
-                <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                    <h3 class="font-semibold text-[11px] uppercase tracking-wider text-white">Assigned To</h3>
-                    <span class="text-[10px] font-mono text-white bg-white/10 px-2 py-0.5 rounded" id="count-Assigned To">0</span>
-                </div>
-                <div class="flex-1 overflow-y-auto space-y-3 scrollbar-hide" id="col-Assigned To"></div>
-            </div>
-
-            <div class="w-[85vw] sm:w-[320px] shrink-0 kanban-lane h-full p-4">
-                <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                    <h3 class="font-semibold text-[11px] uppercase tracking-wider text-white/60 flex items-center gap-2"><i class="fa-solid fa-circle-notch animate-spin text-[9px]"></i> In Progress</h3>
-                    <span class="text-[10px] font-mono text-white/40 bg-base px-2 py-0.5 rounded" id="count-In Progress">0</span>
-                </div>
-                <div class="flex-1 overflow-y-auto space-y-3 scrollbar-hide" id="col-In Progress"></div>
-            </div>
-
-            <div class="w-[85vw] sm:w-[320px] shrink-0 kanban-lane h-full p-4 opacity-70">
-                <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                    <h3 class="font-semibold text-[11px] uppercase tracking-wider text-white/40">Completed</h3>
-                </div>
-                <div class="flex-1 overflow-y-auto space-y-3 scrollbar-hide" id="col-Completed"></div>
-            </div>
-
-        </div>
+    <main class="flex-1 overflow-x-auto p-4 flex gap-4 scrollbar-hide bg-base">
+        <div class="w-[280px] shrink-0 flex flex-col h-full"><div class="lane p-3"><h2 class="text-[9px] font-black uppercase tracking-widest mb-3 text-white/30">Radar</h2><div id="col-Radar" class="flex-1 space-y-2 overflow-y-auto scrollbar-hide"></div></div></div>
+        <div class="w-[280px] shrink-0 flex flex-col h-full"><div class="lane p-3"><h2 class="text-[9px] font-black uppercase tracking-widest mb-3 text-white">Assigned</h2><div id="col-Assigned To" class="flex-1 space-y-2 overflow-y-auto scrollbar-hide"></div></div></div>
+        <div class="w-[280px] shrink-0 flex flex-col h-full"><div class="lane p-3"><h2 class="text-[9px] font-black uppercase tracking-widest mb-3 text-white/50">In Progress</h2><div id="col-In Progress" class="flex-1 space-y-2 overflow-y-auto scrollbar-hide"></div></div></div>
+        <div class="w-[280px] shrink-0 flex flex-col h-full"><div class="lane p-3"><h2 class="text-[9px] font-black uppercase tracking-widest mb-3 text-white/20">Completed</h2><div id="col-Completed" class="flex-1 space-y-2 overflow-y-auto scrollbar-hide opacity-50"></div></div></div>
     </main>
-
-    <button onclick="openCreateModal()" class="fixed bottom-8 right-8 h-14 w-14 bg-white text-black rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.2)] flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-[60]">
-        <i class="fa-solid fa-plus"></i>
+    <button onclick="openCreateModal()" class="fixed bottom-6 right-6 h-12 w-12 bg-white text-black rounded shadow-2xl flex items-center justify-center transition-transform active:scale-90 z-[60]">
+        <i class="fa-solid fa-plus text-sm"></i>
     </button>
-    <div id="shiftBlackout" class="fixed inset-0 z-[200] bg-base flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-1000">
-        <h2 class="text-white text-2xl font-black tracking-[0.3em] uppercase">Syncing Shift</h2>
-        <p class="text-white/40 text-[10px] tracking-widest mt-4">Purging Completed Data...</p>
-    </div>
 
-    <div id="toastAlert" class="fixed top-20 right-6 transform translate-x-[150%] transition-transform duration-300 ease-out bg-surface border border-white/10 px-5 py-4 rounded-xl shadow-2xl z-[90] flex items-center gap-4">
-        <i class="fa-solid fa-check text-white/60"></i>
-        <div>
-            <p class="text-[9px] font-bold uppercase tracking-widest text-white/50" id="toastHeader">System</p>
-            <p id="toastMessage" class="text-xs font-medium text-white mt-0.5">Action Confirmed</p>
+    <div id="createModal" class="fixed inset-0 z-[80] bg-black/90 hidden items-center justify-center p-4">
+        <div class="bg-surface border border-border w-full max-w-sm p-6 rounded shadow-2xl">
+            <h3 class="text-xs font-black uppercase tracking-widest mb-6">New Directive</h3>
+            <input type="text" id="pulseTitle" placeholder="Title" class="w-full bg-base border border-border h-11 px-4 text-xs mb-3 rounded outline-none focus:border-white/20">
+            <input type="text" id="pulseTarget" list="rosterList" placeholder="Entity" class="w-full bg-base border border-border h-11 px-4 text-xs mb-3 rounded outline-none focus:border-white/20">
+            <datalist id="rosterList"></datalist>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <select id="pulseTL" class="bg-base border border-border h-11 px-3 text-[10px] rounded outline-none text-white uppercase font-bold"><option value="None">Assign</option></select>
+                <select id="pulsePriority" class="bg-base border border-border h-11 px-3 text-[10px] rounded outline-none text-white uppercase font-bold"><option value="Standard">Standard</option><option value="High">High</option><option value="Critical">Critical</option></select>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeCreateModal()" class="flex-1 h-11 text-[9px] uppercase font-bold tracking-widest border border-border rounded">Cancel</button>
+                <button id="executeBtn" class="flex-1 h-11 text-[9px] uppercase font-bold tracking-widest bg-white text-black rounded">Sync</button>
+            </div>
         </div>
     </div>
 
-    <div id="createModal" class="fixed inset-0 z-[80] bg-black/80 backdrop-blur-sm flex items-center justify-center modal-enter">
-        <div class="bg-surface border border-white/10 rounded-2xl w-[90%] max-w-[400px] p-6 shadow-2xl flex flex-col gap-4">
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="text-lg font-bold text-white tracking-wide">Initiate Directive</h2>
-                <button onclick="closeCreateModal()" class="text-white/40 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+    <div id="peekDrawer" class="fixed top-0 right-0 h-full w-full sm:w-80 bg-surface border-l border-border z-[90] translate-x-full flex flex-col shadow-2xl">
+        <div class="p-6 border-b border-border flex justify-between items-center">
+            <span class="text-[9px] font-black uppercase tracking-widest text-white/30" id="peekEntity">#Entity</span>
+            <button onclick="closePeek()" class="text-white/40 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="flex-1 p-6 flex flex-col gap-6">
+            <h2 id="peekTitle" class="text-sm font-bold leading-tight">Task Title</h2>
             
             <div>
-                <label class="text-[10px] font-bold tracking-widest text-white/50 uppercase mb-2 block">Task Title</label>
-                <input type="text" id="pulseTitle" placeholder="Enter objective..." class="w-full bg-base border border-white/10 rounded-lg h-12 px-4 text-sm text-white outline-none focus:border-white/30 transition-colors">
-            </div>
-
-            <div>
-                <label class="text-[10px] font-bold tracking-widest text-white/50 uppercase mb-2 block">Entity / Target</label>
-                <input type="text" id="pulseTarget" list="rosterList" placeholder="e.g. Squad A, Dialer..." class="w-full bg-base border border-white/10 rounded-lg h-12 px-4 text-sm text-white outline-none focus:border-white/30 transition-colors">
-                <datalist id="rosterList"></datalist>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="text-[10px] font-bold tracking-widest text-white/50 uppercase mb-2 block">Assign To</label>
-                    <select id="pulseTL" class="w-full bg-base border border-white/10 rounded-lg h-12 px-4 text-sm text-white outline-none focus:border-white/30 cursor-pointer transition-colors">
-                        <option value="None">Unassigned</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold tracking-widest text-white/50 uppercase mb-2 block">Priority</label>
-                    <select id="pulsePriority" class="w-full bg-base border border-white/10 rounded-lg h-12 px-4 text-sm text-white outline-none focus:border-white/30 cursor-pointer transition-colors">
-                        <option value="Standard">Standard</option>
-                        <option value="High" class="text-yellow-400">High</option>
-                        <option value="Critical" class="text-red-500">Critical</option>
-                    </select>
+                <label class="text-[8px] font-black uppercase tracking-widest text-white/30 mb-3 block">Tactical Status</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="updateStatus('Radar')" class="h-10 bg-base border border-border text-[9px] font-bold uppercase rounded hover:bg-white/5">Radar</button>
+                    <button onclick="updateStatus('Assigned To')" class="h-10 bg-base border border-border text-[9px] font-bold uppercase rounded hover:bg-white/5">Assign</button>
+                    <button onclick="updateStatus('In Progress')" class="h-10 bg-base border border-border text-[9px] font-bold uppercase rounded hover:bg-white/5">Progress</button>
+                    <button onclick="updateStatus('Completed')" class="h-10 bg-base border border-border text-[9px] font-bold uppercase rounded hover:bg-white/5 text-green-500">Done</button>
                 </div>
             </div>
 
-            <button id="executeBtn" class="w-full h-12 bg-white text-black rounded-lg text-xs font-bold tracking-widest uppercase hover:bg-gray-200 transition-all active:scale-95 mt-4">
-                Sync Task
-            </button>
-        </div>
-    </div>
-
-    <div id="peekDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-surface border-l border-white/5 z-[80] transform translate-x-full transition-transform duration-300 ease-out flex flex-col shadow-2xl">
-        <div class="p-6 border-b border-white/5 flex justify-between items-start">
-            <div>
-                <p id="peekEntity" class="text-[10px] text-white/50 font-mono mb-1">#Entity</p>
-                <h2 id="peekTitle" class="text-lg font-semibold text-white leading-tight">Directive Title</h2>
+            <div class="flex-1 flex flex-col">
+                <label class="text-[8px] font-black uppercase tracking-widest text-white/30 mb-3 block">Operational Notes</label>
+                <textarea id="peekNotes" class="flex-1 w-full bg-base border border-border rounded p-4 text-xs outline-none focus:border-white/10 resize-none"></textarea>
+                <button id="commitNoteBtn" class="mt-3 h-10 bg-white/5 border border-border text-[9px] font-black uppercase rounded hover:bg-white/10">Save Note</button>
             </div>
-            <button onclick="closePeek()" class="text-white/40 hover:text-white transition-colors h-8 w-8 bg-base rounded-full flex items-center justify-center border border-white/5 hover:bg-white/10"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="flex-1 p-6 flex flex-col gap-3">
-            <label class="text-[10px] font-semibold tracking-wider text-white/50 uppercase">Operational Notes</label>
-            <textarea id="peekNotes" class="w-full flex-1 bg-base border border-white/10 rounded-xl p-4 text-sm text-white outline-none focus:border-white/30 resize-none transition-colors leading-relaxed"></textarea>
-            <button id="commitNoteBtn" class="bg-white/10 hover:bg-white/20 text-white border border-white/10 py-3.5 rounded-xl text-xs font-bold tracking-widest uppercase transition-all active:scale-95 mt-2">Save Note</button>
-        </div>
-        <div class="p-6 border-t border-white/5 bg-base">
-            <button id="archiveBtn" class="w-full text-red-400 hover:text-red-500 hover:bg-red-500/10 py-3 rounded-xl text-xs font-bold tracking-widest uppercase transition-all border border-transparent hover:border-red-500/20 active:scale-95"><i class="fa-solid fa-trash-can mr-2"></i> Archive Task</button>
+        <div class="p-4 bg-base/50">
+            <button id="archiveBtn" class="w-full h-10 text-[9px] font-black uppercase text-red-500/50 hover:text-red-500">Archive Task</button>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // --- 1. CORE ENGINE SETUP ---
+        // --- CORE CONFIG ---
         const supabaseUrl = 'https://pmhmuzctbstrhtmwxlay.supabase.co';
         const supabaseKey = 'sb_publishable_8dtRYPrztDbEt3bZhU3ibQ_5PAt_FsP';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
@@ -232,174 +135,87 @@
         let currentUser = null;
         let currentPin = '';
         let activePeekId = null;
-        let rosterNames = [];
 
-        // Workflow Pipeline for Click-to-Move
-        const PIPELINE = ['Radar', 'Assigned To', 'In Progress', 'Completed'];
-
-        async function loadRoster() {
-            const { data } = await supabaseClient.from('floor_users').select('name').eq('status', 'Active');
-            if (!data) return;
-            const dropdown = document.getElementById('pulseTL');
-            const datalist = document.getElementById('rosterList');
-            rosterNames = data.map(u => u.name);
-            data.forEach(user => {
-                dropdown.insertAdjacentHTML('beforeend', `<option value="${user.name}">${user.name}</option>`);
-                datalist.insertAdjacentHTML('beforeend', `<option value="${user.name}">`);
-            });
-        }
-        loadRoster();
-
-        document.getElementById('pulseTarget').addEventListener('input', (e) => {
-            if (rosterNames.includes(e.target.value)) document.getElementById('pulseTL').value = e.target.value;
-        });
+        // UI Helpers
+        function openCreateModal() { document.getElementById('createModal').style.display = 'flex'; }
+        function closeCreateModal() { document.getElementById('createModal').style.display = 'none'; }
+        function openPeek(id) { loadTaskData(id); }
+        function closePeek() { document.getElementById('peekDrawer').classList.remove('drawer-open'); }
 
         // PIN Logic
         document.querySelectorAll('.pin-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 if(currentPin.length < 4) {
                     currentPin += e.currentTarget.getAttribute('data-val');
-                    updatePinDots();
+                    document.getElementById(`dot-${currentPin.length}`).classList.add('bg-white');
                     if(currentPin.length === 4) verifyPin();
                 }
             });
         });
-
         document.querySelector('.pin-clear').addEventListener('click', () => { 
             currentPin = ''; 
-            updatePinDots(); 
+            for(let i=1; i<=4; i++) document.getElementById(`dot-${i}`).classList.remove('bg-white');
         });
 
-        function updatePinDots() {
-            for(let i=1; i<=4; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                if(i <= currentPin.length) dot.classList.replace('bg-base', 'bg-white');
-                else dot.classList.replace('bg-white', 'bg-base');
-            }
-        }
-
         async function verifyPin() {
-            const { data, error } = await supabaseClient.from('floor_users').select('*').eq('pin', currentPin).single();
+            const { data } = await supabaseClient.from('floor_users').select('*').eq('pin', currentPin).single();
             if (data) {
                 currentUser = data;
-                document.getElementById('lockScreen').classList.add('opacity-0', 'pointer-events-none');
+                document.getElementById('lockScreen').style.opacity = '0';
+                setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
                 document.getElementById('activeUserName').innerText = data.name;
-                showToast('SYSTEM', `Authorized`);
                 loadBoard();
             } else {
                 document.getElementById('pinError').style.opacity = '1';
-                setTimeout(() => { currentPin = ''; updatePinDots(); document.getElementById('pinError').style.opacity = '0'; }, 1000);
+                setTimeout(() => { currentPin = ''; document.getElementById('pinError').style.opacity = '0'; }, 1000);
             }
         }
 
-        function lockStation() {
-            currentUser = null;
-            currentPin = '';
-            updatePinDots();
-            document.getElementById('lockScreen').classList.remove('opacity-0', 'pointer-events-none');
+        function lockStation() { location.reload(); }
+
+        // Load Roster
+        async function initRoster() {
+            const { data } = await supabaseClient.from('floor_users').select('name').eq('status', 'Active');
+            if(data) {
+                const dl = document.getElementById('rosterList');
+                const sel = document.getElementById('pulseTL');
+                data.forEach(u => {
+                    dl.insertAdjacentHTML('beforeend', `<option value="${u.name}">`);
+                    sel.insertAdjacentHTML('beforeend', `<option value="${u.name}">${u.name}</option>`);
+                });
+            }
         }
+        initRoster();
 
-        // Realtime Subscription
-        supabaseClient.channel('custom-all-channel')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'pulses' }, payload => {
-                if (currentUser) { loadBoard(); }
-            }).subscribe();
-
-        // Modal Controls
-        function openCreateModal() { document.getElementById('createModal').classList.add('modal-active'); }
-        function closeCreateModal() { document.getElementById('createModal').classList.remove('modal-active'); }
-
-        // Core Render Function
+        // Render Cards
         async function loadBoard() {
             const { data } = await supabaseClient.from('pulses').select('*').order('id', { ascending: false });
-            if (!data) return;
-
-            PIPELINE.forEach(status => { document.getElementById(`col-${status}`).innerHTML = ''; });
-
+            ['Radar', 'Assigned To', 'In Progress', 'Completed'].forEach(s => document.getElementById(`col-${s}`).innerHTML = '');
             let counts = { 'Radar': 0, 'Assigned To': 0, 'In Progress': 0, 'Completed': 0 };
-
-            data.forEach(item => {
-                const colElement = document.getElementById(`col-${item.status}`);
-                if(colElement) {
-                    if (counts[item.status] !== undefined) counts[item.status]++;
-
-                    const borderClass = item.priority === 'Critical' ? 'border-red-500/50' : 'border-white/5';
-                    const tagClass = item.assigned_to !== 'None' ? `bg-white text-black` : `bg-base border border-white/10 text-white/50`;
-                    const hasNotes = item.notes && item.notes.trim() !== '' ? `<i class="fa-regular fa-comment-dots text-white/30 text-[10px] ml-2"></i>` : '';
-                    
-                    // Click-To-Move Logic (Safely separated from card click)
-                    const currentIndex = PIPELINE.indexOf(item.status);
-                    let advanceBtn = '';
-                    if (currentIndex < 3) {
-                        const nextStatus = PIPELINE[currentIndex + 1];
-                        advanceBtn = `<button onclick="event.stopPropagation(); moveCard('${item.id}', '${nextStatus}')" class="h-6 w-8 rounded flex items-center justify-center bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-colors border border-white/5" title="Advance to ${nextStatus}">
-                                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                                      </button>`;
-                    }
-
-                    const cardHTML = `
-                        <div id="card-${item.id}" onclick="openPeek('${item.id}')" class="task-card p-4 relative ${borderClass}">
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="text-[9px] font-bold tracking-widest px-2 py-0.5 rounded ${tagClass}">${item.assigned_to.toUpperCase()}</span>
-                                ${item.priority === 'Critical' ? '<i class="fa-solid fa-fire text-red-500 text-[10px] ml-2"></i>' : ''}
-                            </div>
-                            <p class="text-[13px] font-medium text-white/90 mb-4 leading-snug">${item.title} ${hasNotes}</p>
-                            
-                            <div class="flex justify-between items-center border-t border-white/5 pt-3 mt-1">
-                                <span class="text-[10px] text-white/40 font-mono">${item.linked_entity}</span>
-                                ${advanceBtn}
-                            </div>
-                        </div>
-                    `;
-                    colElement.insertAdjacentHTML('beforeend', cardHTML);
-                }
-            });
-
-            PIPELINE.forEach(status => {
-                if(counts[status] === 0) {
-                    document.getElementById(`col-${status}`).innerHTML = `<div class="border border-dashed border-white/5 rounded-xl h-24 flex items-center justify-center text-[10px] uppercase tracking-widest text-white/20 font-medium m-2">Clear</div>`;
-                }
-                document.getElementById(`count-${status}`).innerText = counts[status];
-            });
-        }
-
-        // The Rock-Solid Move Function
-        async function moveCard(id, newStatus) {
-            await supabaseClient.from('pulses').update({ status: newStatus }).eq('id', id);
-        }
-
-        // Create Task Execution
-        document.getElementById('executeBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('executeBtn');
-            const title = document.getElementById('pulseTitle').value;
-            const target = document.getElementById('pulseTarget').value;
-            const tl = document.getElementById('pulseTL').value;
-            const priority = document.getElementById('pulsePriority').value;
-
-            if(!title) { alert("Title is required."); return; }
-
-            btn.innerText = "WAIT...";
-            const initialStatus = tl !== 'None' ? 'Assigned To' : 'Radar';
-
-            const { error } = await supabaseClient.from('pulses').insert([{ 
-                title: title, linked_entity: target || 'Unspecified', 
-                assigned_to: tl, priority: priority, status: initialStatus 
-            }]);
-
-            if (error) { alert("ERROR: " + error.message); btn.innerText = "Sync Task"; return; }
-
-            document.getElementById('pulseTitle').value = '';
-            document.getElementById('pulseTarget').value = '';
-            document.getElementById('pulseTL').value = 'None';
-            btn.innerText = "Sync Task";
             
-            closeCreateModal();
-            showToast(`Sent`, `Task Synced`);
-            loadBoard();
-        });
+            data.forEach(item => {
+                const lane = document.getElementById(`col-${item.status}`);
+                if(lane) {
+                    counts[item.status]++;
+                    const prioClass = item.priority === 'Critical' ? 'badge-critical' : (item.priority === 'High' ? 'badge-high' : 'text-white/20 border-border');
+                    const notes = item.notes ? '<i class="fa-solid fa-file-lines ml-2 opacity-20"></i>' : '';
+                    const html = `
+                        <div onclick="openPeek('${item.id}')" class="card p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded border ${item.assigned_to !== 'None' ? 'border-white/20 text-white' : 'border-border text-white/20'}">${item.assigned_to}</span>
+                                <span class="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${prioClass}">${item.priority}</span>
+                            </div>
+                            <p class="text-xs font-semibold leading-relaxed text-white/90">${item.title} ${notes}</p>
+                            <p class="text-[9px] font-mono text-white/20 mt-3 uppercase tracking-tighter">${item.linked_entity}</p>
+                        </div>`;
+                    lane.insertAdjacentHTML('beforeend', html);
+                }
+            });
+            ['Radar', 'Assigned To', 'In Progress'].forEach(s => document.getElementById(`count-${s}`).innerText = counts[s]);
+        }
 
-        // Peek Drawer Execution
-        async function openPeek(id) {
+        // Side Drawer Data
+        async function loadTaskData(id) {
             activePeekId = id;
             const { data } = await supabaseClient.from('pulses').select('*').eq('id', id).single();
             if(data) {
@@ -409,52 +225,41 @@
                 document.getElementById('peekDrawer').classList.add('drawer-open');
             }
         }
-        function closePeek() {
-            activePeekId = null;
-            document.getElementById('peekDrawer').classList.remove('drawer-open');
+
+        async function updateStatus(s) {
+            if(!activePeekId) return;
+            await supabaseClient.from('pulses').update({ status: s }).eq('id', activePeekId);
+            closePeek();
+            loadBoard();
         }
 
         document.getElementById('commitNoteBtn').addEventListener('click', async () => {
-            if(!activePeekId) return;
-            const text = document.getElementById('peekNotes').value;
-            await supabaseClient.from('pulses').update({ notes: text }).eq('id', activePeekId);
-            showToast('Saved', 'Notes updated.');
-            loadBoard();
+            const n = document.getElementById('peekNotes').value;
+            await supabaseClient.from('pulses').update({ notes: n }).eq('id', activePeekId);
             closePeek();
+            loadBoard();
         });
 
         document.getElementById('archiveBtn').addEventListener('click', async () => {
-            if(!activePeekId) return;
             await supabaseClient.from('pulses').delete().eq('id', activePeekId);
-            showToast('Archived', 'Task deleted.');
             closePeek();
             loadBoard();
         });
 
-        function showToast(header, msg) {
-            const toast = document.getElementById('toastAlert');
-            document.getElementById('toastHeader').innerText = header;
-            document.getElementById('toastMessage').innerText = msg;
-            toast.classList.remove('translate-x-[150%]');
-            setTimeout(() => toast.classList.add('translate-x-[150%]'), 3000);
-        }
-        
-        let lastPurgeHour = -1;
-        setInterval(() => {
-            const now = new Date();
-            const hr = now.getHours();
-            if ((hr === 6 || hr === 14 || hr === 22) && now.getMinutes() === 0 && hr !== lastPurgeHour) {
-                lastPurgeHour = hr;
-                executeShiftPurge();
-            }
-        }, 10000);
+        // Create Execution
+        document.getElementById('executeBtn').addEventListener('click', async () => {
+            const t = document.getElementById('pulseTitle').value;
+            const e = document.getElementById('pulseTarget').value;
+            const tl = document.getElementById('pulseTL').value;
+            const p = document.getElementById('pulsePriority').value;
+            if(!t) return;
+            const status = tl !== 'None' ? 'Assigned To' : 'Radar';
+            await supabaseClient.from('pulses').insert([{ title: t, linked_entity: e || 'N/A', assigned_to: tl, priority: p, status: status }]);
+            closeCreateModal();
+            loadBoard();
+        });
 
-        async function executeShiftPurge() {
-            const blackout = document.getElementById('shiftBlackout');
-            blackout.classList.remove('opacity-0', 'pointer-events-none');
-            await supabaseClient.from('pulses').delete().eq('status', 'Completed');
-            setTimeout(() => { blackout.classList.add('opacity-0', 'pointer-events-none'); loadBoard(); }, 3000);
-        }
+        supabaseClient.channel('db-sync').on('postgres_changes', { event: '*', schema: 'public', table: 'pulses' }, () => loadBoard()).subscribe();
     </script>
 </body>
 </html>
