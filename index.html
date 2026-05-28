@@ -34,7 +34,7 @@
         }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex antialiased selection:bg-apple-blue selection:text-white">
+<body class="h-screen w-screen overflow-hidden flex antialiased selection:bg-apple-blue selection:text-white relative">
 
     <div id="lockScreen" class="fixed inset-0 z-[100] bg-[#F5F5F7]/90 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="bg-white border border-apple-border p-10 rounded-[24px] w-80 shadow-apple-soft text-center">
@@ -69,16 +69,24 @@
         <div class="h-10 w-10 bg-apple-primary rounded-xl flex items-center justify-center text-white mb-8 shadow-sm">
             <i class="fa-solid fa-layer-group text-lg"></i>
         </div>
+        
         <nav class="flex flex-col gap-6 w-full items-center">
-            <button class="text-apple-blue relative group w-full flex justify-center" title="Dashboard">
+            <button onclick="switchView('table')" id="nav-table" class="text-apple-blue relative group w-full flex justify-center transition-colors" title="Data Table View">
+                <i class="fa-solid fa-list text-xl"></i>
+                <div id="indicator-table" class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
+            </button>
+            <button onclick="switchView('board')" id="nav-board" class="text-apple-secondary hover:text-apple-primary relative group w-full flex justify-center transition-colors" title="Tactical Board View">
                 <i class="fa-solid fa-border-all text-xl"></i>
-                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
+                <div id="indicator-board" class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md hidden"></div>
             </button>
+            <button class="text-apple-secondary hover:text-apple-primary transition-colors group w-full flex justify-center mt-4" title="Team & Roster"><i class="fa-solid fa-users text-xl"></i></button>
+            <button class="text-apple-secondary hover:text-apple-primary transition-colors group w-full flex justify-center" title="Activity Log"><i class="fa-solid fa-bolt text-xl"></i></button>
+            <button class="text-apple-secondary hover:text-apple-primary transition-colors group w-full flex justify-center" title="Floor Analytics"><i class="fa-solid fa-chart-line text-xl"></i></button>
         </nav>
-        <div class="mt-auto">
-            <button onclick="location.reload()" class="text-apple-secondary hover:text-red-500 transition-colors group w-full flex justify-center" title="Lock Station">
-                <i class="fa-solid fa-power-off text-xl"></i>
-            </button>
+
+        <div class="mt-auto flex flex-col gap-6 w-full items-center">
+            <button class="text-apple-secondary hover:text-apple-primary transition-colors group w-full flex justify-center" title="Settings"><i class="fa-solid fa-gear text-xl"></i></button>
+            <button onclick="location.reload()" class="text-apple-secondary hover:text-red-500 transition-colors group w-full flex justify-center" title="Lock Station"><i class="fa-solid fa-power-off text-xl"></i></button>
         </div>
     </aside>
 
@@ -98,19 +106,14 @@
             </div>
         </header>
         <main class="flex-1 mt-16 p-6 md:p-10 overflow-y-auto scrollbar-hide bg-apple-canvas">
-            <div class="max-w-7xl mx-auto">
+            <div class="max-w-7xl mx-auto h-full flex flex-col">
                 
-                <div class="mb-8 flex justify-between items-end">
-                    <div>
-                        <h1 class="text-2xl font-bold tracking-tight text-apple-primary">Floor Operations</h1>
-                        <p class="text-sm text-apple-secondary mt-1">Live task telemetry.</p>
-                    </div>
-                    <button onclick="openNewTaskModal()" class="bg-apple-blue hover:bg-apple-blueHover text-white px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-colors shadow-sm flex items-center gap-2 active:scale-95">
-                        <i class="fa-solid fa-plus"></i> New Directive
-                    </button>
+                <div class="mb-8">
+                    <h1 class="text-2xl font-bold tracking-tight text-apple-primary">Floor Operations</h1>
+                    <p class="text-sm text-apple-secondary mt-1">Live task telemetry.</p>
                 </div>
 
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 shrink-0">
                     <div class="bg-apple-surface rounded-2xl p-5 md:p-6 shadow-apple-soft border border-apple-border">
                         <p class="text-[11px] uppercase tracking-wider font-semibold text-apple-secondary mb-2">Total Active</p>
                         <span id="kpi-total" class="text-3xl font-bold tracking-tight text-apple-primary">0</span>
@@ -129,7 +132,7 @@
                     </div>
                 </div>
 
-                <div class="bg-apple-surface rounded-2xl shadow-apple-soft border border-apple-border overflow-hidden">
+                <div id="view-table" class="bg-apple-surface rounded-2xl shadow-apple-soft border border-apple-border overflow-hidden block">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse min-w-[800px]">
                             <thead>
@@ -141,13 +144,41 @@
                                     <th class="py-4 px-6 text-[10px] uppercase tracking-wider font-semibold text-apple-secondary text-right">Details</th>
                                 </tr>
                             </thead>
-                            <tbody id="taskTableBody">
-                                </tbody>
+                            <tbody id="taskTableBody"></tbody>
                         </table>
                     </div>
                 </div>
+
+                <div id="view-board" class="flex gap-6 overflow-x-auto pb-10 scrollbar-hide flex-1 hidden">
+                    
+                    <div class="w-80 shrink-0 flex flex-col bg-white/40 border border-apple-border rounded-2xl p-4">
+                        <h3 class="text-[10px] uppercase tracking-wider font-semibold text-apple-secondary mb-4 flex items-center justify-between">Radar <span id="board-count-radar" class="bg-white border border-apple-border px-2 py-0.5 rounded text-apple-primary">0</span></h3>
+                        <div id="col-radar" class="flex-1 overflow-y-auto space-y-3 scrollbar-hide pb-10"></div>
+                    </div>
+
+                    <div class="w-80 shrink-0 flex flex-col bg-white/40 border border-apple-border rounded-2xl p-4">
+                        <h3 class="text-[10px] uppercase tracking-wider font-semibold text-apple-secondary mb-4 flex items-center justify-between">Assigned <span id="board-count-assigned" class="bg-white border border-apple-border px-2 py-0.5 rounded text-apple-primary">0</span></h3>
+                        <div id="col-assigned" class="flex-1 overflow-y-auto space-y-3 scrollbar-hide pb-10"></div>
+                    </div>
+
+                    <div class="w-80 shrink-0 flex flex-col bg-apple-blue/5 border border-apple-blue/20 rounded-2xl p-4">
+                        <h3 class="text-[10px] uppercase tracking-wider font-semibold text-apple-blue mb-4 flex items-center justify-between">In Progress <span id="board-count-progress" class="bg-white border border-apple-blue/20 px-2 py-0.5 rounded text-apple-blue">0</span></h3>
+                        <div id="col-progress" class="flex-1 overflow-y-auto space-y-3 scrollbar-hide pb-10"></div>
+                    </div>
+
+                    <div class="w-80 shrink-0 flex flex-col bg-white/40 border border-apple-border rounded-2xl p-4 opacity-60">
+                        <h3 class="text-[10px] uppercase tracking-wider font-semibold text-apple-secondary mb-4 flex items-center justify-between">Completed</h3>
+                        <div id="col-completed" class="flex-1 overflow-y-auto space-y-3 scrollbar-hide pb-10"></div>
+                    </div>
+
+                </div>
+
             </div>
         </main>
+
+        <button onclick="openNewTaskModal()" class="fixed bottom-10 right-10 h-14 w-14 bg-apple-blue text-white rounded-full shadow-lg hover:bg-apple-blueHover hover:scale-105 active:scale-95 transition-all flex items-center justify-center text-xl z-40 border border-white/20">
+            <i class="fa-solid fa-plus"></i>
+        </button>
 
         <div id="slideDrawer" class="absolute top-16 right-0 bottom-0 w-full sm:w-[420px] bg-white/90 backdrop-blur-2xl shadow-apple-drawer border-l border-apple-border z-30 transform translate-x-full flex flex-col">
             <div class="px-8 py-6 border-b border-apple-border flex justify-between items-start bg-white/50">
@@ -230,6 +261,18 @@
         let activeDrawerId = null;
         let globalTasks = [];
 
+        // --- VIEW TOGGLE LOGIC ---
+        function switchView(viewName) {
+            document.getElementById('nav-table').className = viewName === 'table' ? "text-apple-blue relative group w-full flex justify-center transition-colors" : "text-apple-secondary hover:text-apple-primary relative group w-full flex justify-center transition-colors";
+            document.getElementById('nav-board').className = viewName === 'board' ? "text-apple-blue relative group w-full flex justify-center transition-colors" : "text-apple-secondary hover:text-apple-primary relative group w-full flex justify-center transition-colors";
+            
+            document.getElementById('indicator-table').style.display = viewName === 'table' ? 'block' : 'none';
+            document.getElementById('indicator-board').style.display = viewName === 'board' ? 'block' : 'none';
+
+            document.getElementById('view-table').style.display = viewName === 'table' ? 'block' : 'none';
+            document.getElementById('view-board').style.display = viewName === 'board' ? 'flex' : 'none';
+        }
+
         // --- PIN SECURITY ---
         document.querySelectorAll('.pin-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -258,7 +301,7 @@
                 setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
                 document.getElementById('activeUserName').innerText = data.name;
                 initRoster();
-                loadTable();
+                loadData();
             } else {
                 document.getElementById('pinError').style.opacity = '1';
                 setTimeout(() => { 
@@ -279,12 +322,12 @@
             }
         }
 
-        // --- LOAD DATA ---
+        // --- DATA RENDERING ENGINE ---
         supabaseClient.channel('db-sync').on('postgres_changes', { event: '*', schema: 'public', table: 'pulses' }, () => {
-            if(currentUser) loadTable();
+            if(currentUser) loadData();
         }).subscribe();
 
-        async function loadTable() {
+        async function loadData() {
             const { data } = await supabaseClient.from('pulses').select('*').order('id', { ascending: false });
             if(!data) return;
             globalTasks = data;
@@ -292,43 +335,73 @@
             const tbody = document.getElementById('taskTableBody');
             tbody.innerHTML = '';
             
-            let counts = { total: 0, radar: 0, progress: 0, completed: 0 };
+            const boardCols = { 'Radar': 'col-radar', 'Assigned To': 'col-assigned', 'In Progress': 'col-progress', 'Completed': 'col-completed' };
+            Object.values(boardCols).forEach(id => document.getElementById(id).innerHTML = '');
+            
+            let counts = { total: 0, radar: 0, progress: 0, completed: 0, assigned: 0 };
+            const nextStatusMap = { 'Radar': 'Assigned To', 'Assigned To': 'In Progress', 'In Progress': 'Completed' };
 
             data.forEach(item => {
                 counts.total++;
                 if(item.status === 'Radar') counts.radar++;
+                if(item.status === 'Assigned To') counts.assigned++;
                 if(item.status === 'In Progress' || item.status === 'Assigned To') counts.progress++;
                 if(item.status === 'Completed') counts.completed++;
 
-                // Badge Logic
+                let hasNotes = item.notes && item.notes.trim() !== '' ? `<i class="fa-solid fa-note-sticky ml-2 text-apple-secondary/50 text-[10px]"></i>` : '';
+
+                // Table Row
                 let statusBadge = '';
                 if(item.status === 'Completed') statusBadge = `<span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-[#F2F2F7] text-[#8E8E93] uppercase">Done</span>`;
                 else if(item.status === 'Radar') statusBadge = `<span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-gray-100 text-gray-600 uppercase">Radar</span>`;
                 else statusBadge = `<span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-[#FEF0E3] text-[#E37400] uppercase">${item.status}</span>`;
 
-                let prioColor = item.priority === 'Critical' ? 'text-red-500' : (item.priority === 'High' ? 'text-orange-500' : 'text-apple-secondary');
-                let hasNotes = item.notes && item.notes.trim() !== '' ? `<i class="fa-solid fa-note-sticky ml-2 text-apple-secondary/50 text-[10px]"></i>` : '';
-
                 const rowHTML = `
                     <tr class="border-b border-apple-border hover:bg-apple-canvas transition-colors cursor-pointer group" onclick="openDrawer('${item.id}')">
-                        <td class="py-4 px-6">
-                            <p class="text-sm font-semibold text-apple-primary">${item.title} ${hasNotes}</p>
-                        </td>
+                        <td class="py-4 px-6"><p class="text-sm font-semibold text-apple-primary">${item.title} ${hasNotes}</p></td>
                         <td class="py-4 px-6 text-sm text-apple-secondary font-mono text-[11px]">${item.linked_entity}</td>
                         <td class="py-4 px-6 text-sm font-medium text-apple-primary">${item.assigned_to}</td>
                         <td class="py-4 px-6">${statusBadge}</td>
-                        <td class="py-4 px-6 text-right text-apple-secondary group-hover:text-apple-blue transition-colors">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </td>
+                        <td class="py-4 px-6 text-right text-apple-secondary group-hover:text-apple-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></td>
                     </tr>
                 `;
                 tbody.insertAdjacentHTML('beforeend', rowHTML);
+
+                // Kanban Card
+                let arrowBtn = '';
+                if (nextStatusMap[item.status]) {
+                    arrowBtn = `<button onclick="event.stopPropagation(); quickMove('${item.id}', '${nextStatusMap[item.status]}')" class="h-6 w-6 rounded-full bg-apple-canvas hover:bg-apple-blue hover:text-white text-apple-secondary flex items-center justify-center transition-colors shadow-sm" title="Move to Next Phase"><i class="fa-solid fa-arrow-right text-[10px]"></i></button>`;
+                }
+
+                let prioBorder = item.priority === 'Critical' ? 'border-l-4 border-l-red-500' : (item.priority === 'High' ? 'border-l-4 border-l-orange-500' : '');
+
+                const cardHTML = `
+                    <div class="bg-white border border-apple-border ${prioBorder} rounded-xl p-4 shadow-sm hover:shadow-apple-soft cursor-pointer transition-shadow" onclick="openDrawer('${item.id}')">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-flex px-2 py-0.5 rounded text-[9px] font-bold tracking-widest bg-gray-100 text-gray-600 uppercase">${item.assigned_to}</span>
+                            ${arrowBtn}
+                        </div>
+                        <h4 class="text-sm font-semibold text-apple-primary leading-snug mb-2">${item.title} ${hasNotes}</h4>
+                        <p class="text-[10px] font-mono text-apple-secondary uppercase">${item.linked_entity}</p>
+                    </div>
+                `;
+                if(boardCols[item.status]) document.getElementById(boardCols[item.status]).insertAdjacentHTML('beforeend', cardHTML);
             });
 
             document.getElementById('kpi-total').innerText = counts.total;
             document.getElementById('kpi-radar').innerText = counts.radar;
             document.getElementById('kpi-progress').innerText = counts.progress;
             document.getElementById('kpi-completed').innerText = counts.completed;
+
+            document.getElementById('board-count-radar').innerText = counts.radar;
+            document.getElementById('board-count-assigned').innerText = counts.assigned;
+            document.getElementById('board-count-progress').innerText = counts.progress - counts.assigned;
+        }
+
+        async function quickMove(id, nextStatus) {
+            await supabaseClient.from('pulses').update({ status: nextStatus }).eq('id', id);
+            showToast(`Moved to ${nextStatus}`);
+            loadData();
         }
 
         // --- DRAWER LOGIC ---
@@ -367,7 +440,7 @@
             btn.innerHTML = 'Save Changes';
             showToast('Changes applied successfully');
             closeDrawer();
-            loadTable();
+            loadData();
         }
 
         document.getElementById('archiveBtn').addEventListener('click', async () => {
@@ -375,7 +448,7 @@
             await supabaseClient.from('pulses').delete().eq('id', activeDrawerId);
             showToast('Task removed from board');
             closeDrawer();
-            loadTable();
+            loadData();
         });
 
         // --- NEW TASK MODAL ---
@@ -401,7 +474,7 @@
             
             closeNewTaskModal();
             showToast('New directive initialized');
-            loadTable();
+            loadData();
         });
 
         // --- UTILS ---
@@ -412,7 +485,6 @@
             setTimeout(() => toast.classList.add('translate-y-[150%]'), 3000);
         }
 
-        // Cmd+K Search Focus
         document.addEventListener('keydown', (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
