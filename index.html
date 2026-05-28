@@ -1,201 +1,241 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYNC | Ops Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNC | Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { 
-                        base: '#050505',
-                        surface: '#0f0f0f',
-                        border: '#1f1f1f'
+                    colors: {
+                        apple: { canvas: '#F5F5F7', surface: '#FFFFFF', border: '#E5E5EA', primary: '#1D1D1F', secondary: '#86868B', blue: '#007AFF', blueHover: '#005bb5' }
                     },
-                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    boxShadow: { 'apple-soft': '0 8px 30px rgba(0, 0, 0, 0.04)', 'apple-drawer': '-20px 0 40px rgba(0, 0, 0, 0.05)' }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        
-        body { background-color: #050505; font-family: 'Inter', sans-serif; color: #eeeeee; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { background-color: #F5F5F7; color: #1D1D1F; font-family: 'Inter', sans-serif; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Premium UI Elements */
-        .incoming-row { border-bottom: 1px solid #1f1f1f; transition: background 0.2s; }
-        .incoming-row:hover { background-color: #0f0f0f; }
-        
-        .active-card { 
-            background: #0a0a0a; 
-            border: 1px solid #1f1f1f; 
-            border-radius: 8px; 
-            transition: all 0.2s ease;
-        }
-        .active-card:hover { border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.8); transform: translateY(-2px); }
-        
-        /* Clean Dropdowns */
+        #slideDrawer { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .drawer-open { transform: translateX(0) !important; }
         select {
             -webkit-appearance: none; appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-            background-repeat: no-repeat; background-position-x: 95%; background-position-y: 50%;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%2386868B' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat; background-position-x: calc(100% - 12px); background-position-y: 50%;
         }
-
-        /* Drawer Animation */
-        #peekDrawer { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .drawer-open { transform: translateX(0) !important; }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex flex-col selection:bg-white selection:text-black">
+<body class="h-screen w-screen overflow-hidden flex antialiased selection:bg-apple-blue selection:text-white">
 
-    <div id="lockScreen" class="fixed inset-0 z-[100] bg-base flex flex-col items-center justify-center transition-opacity duration-500">
-        <h1 class="text-4xl font-black tracking-[0.4em] mb-12 uppercase text-white">SYNC</h1>
-        <div class="bg-surface border border-border p-8 rounded-2xl w-80 shadow-2xl">
+    <div id="lockScreen" class="fixed inset-0 z-[100] bg-[#F5F5F7]/90 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="bg-white border border-apple-border p-10 rounded-[24px] w-80 shadow-apple-soft text-center">
+            <h1 class="text-xl font-bold tracking-tight text-apple-primary mb-2">Command Access</h1>
+            <p class="text-xs text-apple-secondary mb-8">Enter your PIN to unlock</p>
+            
             <div class="flex justify-center gap-4 mb-8" id="pinDots">
-                <div class="h-2 w-2 rounded-full border border-white/20 transition-colors" id="dot-1"></div>
-                <div class="h-2 w-2 rounded-full border border-white/20 transition-colors" id="dot-2"></div>
-                <div class="h-2 w-2 rounded-full border border-white/20 transition-colors" id="dot-3"></div>
-                <div class="h-2 w-2 rounded-full border border-white/20 transition-colors" id="dot-4"></div>
+                <div class="h-3 w-3 rounded-full border-2 border-apple-border transition-colors" id="dot-1"></div>
+                <div class="h-3 w-3 rounded-full border-2 border-apple-border transition-colors" id="dot-2"></div>
+                <div class="h-3 w-3 rounded-full border-2 border-apple-border transition-colors" id="dot-3"></div>
+                <div class="h-3 w-3 rounded-full border-2 border-apple-border transition-colors" id="dot-4"></div>
             </div>
             
             <div class="grid grid-cols-3 gap-3" id="numpad">
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="1">1</button>
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="2">2</button>
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="3">3</button>
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="4">4</button>
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="5">5</button>
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="6">6</button>
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="7">7</button>
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="8">8</button>
-                <button class="pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="9">9</button>
-                <button class="col-start-2 pin-btn h-14 bg-base border border-border rounded-xl text-lg font-bold hover:bg-white/5 active:scale-95 transition-all" data-val="0">0</button>
-                <button class="pin-clear h-14 text-[10px] font-black text-white/40 hover:text-white uppercase tracking-widest active:scale-95 transition-all">CLR</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="1">1</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="2">2</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="3">3</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="4">4</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="5">5</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="6">6</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="7">7</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="8">8</button>
+                <button class="pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="9">9</button>
+                <button class="col-start-2 pin-btn h-14 bg-apple-canvas rounded-xl text-lg font-medium hover:bg-[#E8E8ED] active:scale-95 transition-all text-apple-primary" data-val="0">0</button>
+                <button class="pin-clear h-14 text-[10px] font-bold text-apple-secondary hover:text-apple-primary uppercase tracking-widest active:scale-95 transition-all">CLR</button>
             </div>
-            <p id="pinError" class="text-red-500 text-[10px] font-bold tracking-widest uppercase text-center mt-6 h-4 opacity-0 transition-opacity">Access Denied</p>
+            <p id="pinError" class="text-red-500 text-[10px] font-semibold tracking-wider uppercase text-center mt-6 h-4 opacity-0 transition-opacity">Access Denied</p>
         </div>
     </div>
 
-    <header class="h-16 border-b border-border flex items-center justify-between px-6 bg-base shrink-0 z-50">
-        <div class="flex items-center gap-4">
-            <h1 class="text-sm font-black tracking-[0.2em] text-white uppercase">SYNC</h1>
+    <aside class="w-[68px] h-full bg-apple-surface border-r border-apple-border flex flex-col items-center py-6 z-20 shrink-0">
+        <div class="h-10 w-10 bg-apple-primary rounded-xl flex items-center justify-center text-white mb-8 shadow-sm">
+            <i class="fa-solid fa-layer-group text-lg"></i>
         </div>
-        <div class="flex items-center gap-6">
-            <button onclick="openNewTaskModal()" class="h-9 px-5 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded hover:bg-gray-200 transition-colors active:scale-95 flex items-center gap-2 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                <i class="fa-solid fa-plus"></i> New Directive
+        <nav class="flex flex-col gap-6 w-full items-center">
+            <button class="text-apple-blue relative group w-full flex justify-center" title="Dashboard">
+                <i class="fa-solid fa-border-all text-xl"></i>
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
-            <div class="hidden md:block text-right">
-                <p id="activeUserName" class="text-[10px] font-bold text-white tracking-widest uppercase">LOCKED</p>
-            </div>
-            <button onclick="lockStation()" class="text-white/30 hover:text-red-500 transition-colors" title="Lock Station">
-                <i class="fa-solid fa-power-off"></i>
+        </nav>
+        <div class="mt-auto">
+            <button onclick="location.reload()" class="text-apple-secondary hover:text-red-500 transition-colors group w-full flex justify-center" title="Lock Station">
+                <i class="fa-solid fa-power-off text-xl"></i>
             </button>
         </div>
-    </header>
+    </aside>
 
-    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden bg-base">
-        
-        <section class="w-full lg:w-[35%] xl:w-[30%] border-b lg:border-b-0 lg:border-r border-border flex flex-col h-[40vh] lg:h-full shrink-0 bg-surface/30">
-            <div class="p-4 border-b border-border flex justify-between items-center bg-base">
-                <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Incoming / Radar</h2>
-                <span id="count-Incoming" class="text-[10px] font-mono text-white/30">0</span>
+    <div class="flex-1 flex flex-col h-full relative">
+        <header class="h-16 border-b border-apple-border bg-white/70 backdrop-blur-xl z-10 flex items-center justify-between px-8 absolute top-0 left-0 right-0">
+            <div class="flex-1"></div>
+            <div class="w-[400px] h-9 bg-[#E8E8ED] rounded-full flex items-center px-4 border border-transparent focus-within:border-apple-blue focus-within:bg-white transition-all shadow-inner hidden md:flex">
+                <i class="fa-solid fa-magnifying-glass text-apple-secondary text-sm"></i>
+                <input type="text" id="cmdInput" placeholder="Search directives..." class="bg-transparent border-none outline-none text-sm ml-3 w-full placeholder-apple-secondary text-apple-primary">
+                <span class="text-[10px] font-semibold text-apple-secondary tracking-widest bg-white shadow-sm border border-apple-border px-1.5 py-0.5 rounded ml-2">⌘K</span>
             </div>
-            <div id="incomingFeed" class="flex-1 overflow-y-auto scrollbar-hide pb-10">
+            <div class="flex-1 flex justify-end items-center gap-4">
+                <p id="activeUserName" class="text-xs font-semibold text-apple-secondary mr-2">LOCKED</p>
+                <div class="h-8 w-8 rounded-full bg-gradient-to-tr from-gray-200 to-gray-300 shadow-sm border border-apple-border flex items-center justify-center text-apple-primary text-xs font-bold">
+                    <i class="fa-solid fa-user text-white"></i>
                 </div>
-        </section>
-
-        <section class="flex-1 flex flex-col h-[60vh] lg:h-full bg-base">
-            <div class="p-4 border-b border-border flex justify-between items-center">
-                <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Active Floor</h2>
-                <span id="count-Active" class="text-[10px] font-mono text-white/50">0</span>
             </div>
-            <div id="activeGrid" class="flex-1 overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 scrollbar-hide content-start pb-20">
+        </header>
+        <main class="flex-1 mt-16 p-6 md:p-10 overflow-y-auto scrollbar-hide bg-apple-canvas">
+            <div class="max-w-7xl mx-auto">
+                
+                <div class="mb-8 flex justify-between items-end">
+                    <div>
+                        <h1 class="text-2xl font-bold tracking-tight text-apple-primary">Floor Operations</h1>
+                        <p class="text-sm text-apple-secondary mt-1">Live task telemetry.</p>
+                    </div>
+                    <button onclick="openNewTaskModal()" class="bg-apple-blue hover:bg-apple-blueHover text-white px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-colors shadow-sm flex items-center gap-2 active:scale-95">
+                        <i class="fa-solid fa-plus"></i> New Directive
+                    </button>
                 </div>
-        </section>
 
-    </main>
-    <div id="toastAlert" class="fixed top-20 right-6 transform translate-x-[150%] transition-transform duration-300 ease-out bg-surface border border-border px-5 py-4 rounded shadow-2xl z-[90] flex items-center gap-4">
-        <i class="fa-solid fa-satellite-dish text-white/60 text-lg"></i>
-        <div>
-            <p class="text-[9px] font-black uppercase tracking-widest text-white/50">System</p>
-            <p id="toastMessage" class="text-xs font-bold text-white mt-0.5">Action Confirmed</p>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10">
+                    <div class="bg-apple-surface rounded-2xl p-5 md:p-6 shadow-apple-soft border border-apple-border">
+                        <p class="text-[11px] uppercase tracking-wider font-semibold text-apple-secondary mb-2">Total Active</p>
+                        <span id="kpi-total" class="text-3xl font-bold tracking-tight text-apple-primary">0</span>
+                    </div>
+                    <div class="bg-apple-surface rounded-2xl p-5 md:p-6 shadow-apple-soft border border-apple-border">
+                        <p class="text-[11px] uppercase tracking-wider font-semibold text-apple-secondary mb-2">Radar</p>
+                        <span id="kpi-radar" class="text-3xl font-bold tracking-tight text-apple-primary">0</span>
+                    </div>
+                    <div class="bg-apple-surface rounded-2xl p-5 md:p-6 shadow-apple-soft border border-apple-border">
+                        <p class="text-[11px] uppercase tracking-wider font-semibold text-apple-secondary mb-2">In Progress</p>
+                        <span id="kpi-progress" class="text-3xl font-bold tracking-tight text-apple-primary">0</span>
+                    </div>
+                    <div class="bg-apple-surface rounded-2xl p-5 md:p-6 shadow-apple-soft border border-apple-border opacity-60">
+                        <p class="text-[11px] uppercase tracking-wider font-semibold text-apple-secondary mb-2">Completed</p>
+                        <span id="kpi-completed" class="text-3xl font-bold tracking-tight text-apple-primary">0</span>
+                    </div>
+                </div>
+
+                <div class="bg-apple-surface rounded-2xl shadow-apple-soft border border-apple-border overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[800px]">
+                            <thead>
+                                <tr class="bg-[#FBFBFD] border-b border-apple-border">
+                                    <th class="py-4 px-6 text-[10px] uppercase tracking-wider font-semibold text-apple-secondary">Directive</th>
+                                    <th class="py-4 px-6 text-[10px] uppercase tracking-wider font-semibold text-apple-secondary">Target</th>
+                                    <th class="py-4 px-6 text-[10px] uppercase tracking-wider font-semibold text-apple-secondary">Assignee</th>
+                                    <th class="py-4 px-6 text-[10px] uppercase tracking-wider font-semibold text-apple-secondary">Status</th>
+                                    <th class="py-4 px-6 text-[10px] uppercase tracking-wider font-semibold text-apple-secondary text-right">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="taskTableBody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="slideDrawer" class="absolute top-16 right-0 bottom-0 w-full sm:w-[420px] bg-white/90 backdrop-blur-2xl shadow-apple-drawer border-l border-apple-border z-30 transform translate-x-full flex flex-col">
+            <div class="px-8 py-6 border-b border-apple-border flex justify-between items-start bg-white/50">
+                <div>
+                    <p class="text-[10px] font-bold text-apple-secondary uppercase tracking-widest mb-1">Editing Directive</p>
+                    <h2 id="drawerTitle" class="text-lg font-bold text-apple-primary tracking-tight leading-snug">Task Title</h2>
+                </div>
+                <button onclick="closeDrawer()" class="h-8 w-8 rounded-full bg-apple-canvas text-apple-secondary hover:text-apple-primary hover:bg-[#E8E8ED] transition-colors flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-8 flex flex-col gap-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] uppercase tracking-wider font-semibold text-apple-secondary mb-2 block">Status</label>
+                        <select id="drawerStatus" class="w-full bg-apple-canvas border border-apple-border h-10 px-3 text-sm rounded-lg text-apple-primary font-medium outline-none focus:border-apple-blue cursor-pointer">
+                            <option value="Radar">Radar</option>
+                            <option value="Assigned To">Assigned To</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] uppercase tracking-wider font-semibold text-apple-secondary mb-2 block">Priority</label>
+                        <select id="drawerPriority" class="w-full bg-apple-canvas border border-apple-border h-10 px-3 text-sm rounded-lg text-apple-primary font-medium outline-none focus:border-apple-blue cursor-pointer">
+                            <option value="Standard">Standard</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase tracking-wider font-semibold text-apple-secondary mb-2 block">Assigned Leader</label>
+                    <select id="drawerAssignee" class="w-full bg-apple-canvas border border-apple-border h-10 px-3 text-sm rounded-lg text-apple-primary font-medium outline-none focus:border-apple-blue cursor-pointer">
+                        <option value="None">Unassigned</option>
+                    </select>
+                </div>
+                <div class="flex-1 flex flex-col">
+                    <label class="text-[10px] uppercase tracking-wider font-semibold text-apple-secondary mb-2 block">Operational Notes</label>
+                    <textarea id="drawerNotes" class="flex-1 w-full bg-apple-canvas border border-apple-border rounded-lg p-4 text-sm text-apple-primary outline-none focus:border-apple-blue resize-none min-h-[120px]"></textarea>
+                </div>
+            </div>
+            <div class="p-6 border-t border-apple-border bg-white/80 backdrop-blur-md flex gap-3">
+                <button id="archiveBtn" class="px-5 text-red-500 bg-red-50 hover:bg-red-100 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+                <button onclick="saveAndClose()" id="saveDrawerBtn" class="flex-1 bg-apple-blue hover:bg-apple-blueHover text-white h-11 rounded-xl text-sm font-semibold tracking-wide transition-colors shadow-sm active:scale-[0.98]">
+                    Save Changes
+                </button>
+            </div>
         </div>
     </div>
 
-    <div id="newTaskModal" class="fixed inset-0 z-[80] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-base border border-border w-full max-w-md p-8 rounded-lg shadow-2xl">
-            <h3 class="text-xs font-black uppercase tracking-widest mb-6 text-white">Initialize Task</h3>
-            <input type="text" id="newTaskTitle" placeholder="Objective Title..." class="w-full bg-surface border border-border h-12 px-4 text-sm mb-4 rounded outline-none focus:border-white/30 text-white">
-            <input type="text" id="newTaskTarget" list="rosterList" placeholder="Target / Entity..." class="w-full bg-surface border border-border h-12 px-4 text-sm mb-4 rounded outline-none focus:border-white/30 text-white">
-            <datalist id="rosterList"></datalist>
-            <div class="mb-8">
-                <select id="newTaskPriority" class="w-full bg-surface border border-border h-12 px-4 text-xs rounded outline-none text-white font-bold cursor-pointer">
-                    <option value="Standard">Priority: Standard</option>
-                    <option value="High">Priority: High</option>
-                    <option value="Critical">Priority: Critical</option>
-                </select>
+    <div id="newTaskModal" class="fixed inset-0 z-[110] bg-apple-primary/40 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white border border-apple-border w-full max-w-md p-8 rounded-2xl shadow-2xl">
+            <h3 class="text-lg font-bold tracking-tight text-apple-primary mb-6">Create Directive</h3>
+            <div class="space-y-4 mb-8">
+                <input type="text" id="newTitle" placeholder="Task Title" class="w-full bg-apple-canvas border border-apple-border h-11 px-4 text-sm rounded-lg outline-none focus:border-apple-blue text-apple-primary font-medium">
+                <input type="text" id="newTarget" placeholder="Target Entity..." class="w-full bg-apple-canvas border border-apple-border h-11 px-4 text-sm rounded-lg outline-none focus:border-apple-blue text-apple-primary font-medium">
             </div>
             <div class="flex gap-3">
-                <button onclick="closeNewTaskModal()" class="flex-1 h-12 text-[10px] uppercase font-bold tracking-widest border border-border rounded text-white/50 hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
-                <button id="createNewBtn" class="flex-1 h-12 text-[10px] uppercase font-black tracking-widest bg-white text-black rounded hover:bg-gray-200 transition-colors">Transmit</button>
+                <button onclick="closeNewTaskModal()" class="flex-1 h-11 text-sm font-semibold bg-apple-canvas text-apple-secondary rounded-xl hover:bg-[#E8E8ED] transition-colors">Cancel</button>
+                <button id="createTaskBtn" class="flex-1 h-11 text-sm font-semibold bg-apple-blue text-white rounded-xl hover:bg-apple-blueHover shadow-sm transition-colors">Create Task</button>
             </div>
         </div>
     </div>
 
-    <div id="deployModal" class="fixed inset-0 z-[80] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-base border border-border w-full max-w-sm p-6 rounded-lg shadow-2xl">
-            <h3 class="text-xs font-black uppercase tracking-widest mb-2 text-white">Deploy Task</h3>
-            <p id="deployTaskName" class="text-sm font-medium text-white/60 mb-6 truncate">Task Name</p>
-            <select id="deployTLSelect" class="w-full bg-surface border border-border h-12 px-4 text-xs rounded mb-6 outline-none text-white font-bold cursor-pointer">
-                <option value="None">Select Team Leader...</option>
-            </select>
-            <div class="flex gap-3">
-                <button onclick="closeDeployModal()" class="flex-1 h-10 text-[10px] uppercase font-bold tracking-widest border border-border rounded text-white/50 hover:text-white hover:bg-white/5">Cancel</button>
-                <button id="confirmDeployBtn" class="flex-1 h-10 text-[10px] uppercase font-black tracking-widest bg-white text-black rounded hover:bg-gray-200">Deploy Now</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="peekDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-base border-l border-border z-[80] translate-x-full flex flex-col shadow-2xl">
-        <div class="p-6 border-b border-border flex justify-between items-center bg-surface">
-            <span class="text-[10px] font-black uppercase tracking-widest text-white/40" id="peekEntity">#ENTITY</span>
-            <button onclick="closePeek()" class="h-8 w-8 bg-border rounded text-white/50 hover:text-white transition-colors"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="flex-1 p-6 flex flex-col overflow-y-auto scrollbar-hide">
-            <h2 id="peekTitle" class="text-lg font-bold leading-snug text-white mb-8">Task Title</h2>
-            <div class="flex-1 flex flex-col">
-                <label class="text-[9px] font-black uppercase tracking-widest text-white/30 mb-3">Operational Notes</label>
-                <textarea id="peekNotes" class="flex-1 w-full bg-surface border border-border rounded-lg p-4 text-sm text-white outline-none focus:border-white/20 resize-none leading-relaxed min-h-[150px]"></textarea>
-                <button id="commitNoteBtn" class="mt-4 h-12 bg-white/5 border border-border text-[10px] font-black uppercase tracking-widest rounded hover:bg-white/10 transition-colors">Save Notes</button>
-            </div>
-        </div>
+    <div id="toastAlert" class="fixed bottom-6 left-1/2 -translate-x-1/2 transform translate-y-[150%] transition-transform duration-300 ease-out bg-apple-primary px-6 py-3 rounded-full shadow-lg z-[120] flex items-center gap-3">
+        <i class="fa-solid fa-check-circle text-green-400 text-sm"></i>
+        <p id="toastMessage" class="text-sm font-medium text-white">Action Confirmed</p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // --- CORE DATABASE SETUP ---
         const supabaseUrl = 'https://pmhmuzctbstrhtmwxlay.supabase.co';
         const supabaseKey = 'sb_publishable_8dtRYPrztDbEt3bZhU3ibQ_5PAt_FsP';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // State Variables
         let currentUser = null;
         let currentPin = '';
-        let activePeekId = null;
-        let pendingDeployId = null;
-        let rosterNames = [];
+        let activeDrawerId = null;
+        let globalTasks = [];
 
         // --- PIN SECURITY ---
         document.querySelectorAll('.pin-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 if(currentPin.length < 4) {
                     currentPin += e.currentTarget.getAttribute('data-val');
-                    document.getElementById(`dot-${currentPin.length}`).classList.add('bg-white');
+                    document.getElementById(`dot-${currentPin.length}`).classList.replace('border-apple-border', 'bg-apple-primary');
                     if(currentPin.length === 4) verifyPin();
                 }
             });
@@ -203,7 +243,11 @@
 
         document.querySelector('.pin-clear').addEventListener('click', () => { 
             currentPin = ''; 
-            for(let i=1; i<=4; i++) document.getElementById(`dot-${i}`).classList.remove('bg-white');
+            for(let i=1; i<=4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                dot.classList.remove('bg-apple-primary');
+                dot.classList.add('border-apple-border');
+            }
         });
 
         async function verifyPin() {
@@ -213,205 +257,169 @@
                 document.getElementById('lockScreen').style.opacity = '0';
                 setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
                 document.getElementById('activeUserName').innerText = data.name;
-                loadBoard();
+                initRoster();
+                loadTable();
             } else {
                 document.getElementById('pinError').style.opacity = '1';
                 setTimeout(() => { 
-                    currentPin = ''; 
-                    for(let i=1; i<=4; i++) document.getElementById(`dot-${i}`).classList.remove('bg-white');
+                    document.querySelector('.pin-clear').click();
                     document.getElementById('pinError').style.opacity = '0'; 
                 }, 1000);
             }
         }
 
-        function lockStation() { location.reload(); }
-
-        // --- DATA INITIALIZATION ---
+        // --- INIT ROSTER ---
         async function initRoster() {
             const { data } = await supabaseClient.from('floor_users').select('name').eq('status', 'Active');
             if(data) {
-                const dl = document.getElementById('rosterList');
-                const deploySel = document.getElementById('deployTLSelect');
-                rosterNames = data.map(u => u.name);
+                const assignSel = document.getElementById('drawerAssignee');
                 data.forEach(user => {
-                    dl.insertAdjacentHTML('beforeend', `<option value="${user.name}">`);
-                    deploySel.insertAdjacentHTML('beforeend', `<option value="${user.name}">${user.name}</option>`);
+                    assignSel.insertAdjacentHTML('beforeend', `<option value="${user.name}">${user.name}</option>`);
                 });
             }
         }
-        initRoster();
 
+        // --- LOAD DATA ---
         supabaseClient.channel('db-sync').on('postgres_changes', { event: '*', schema: 'public', table: 'pulses' }, () => {
-            if(currentUser) loadBoard();
+            if(currentUser) loadTable();
         }).subscribe();
 
-        // --- CORE RENDERING ENGINE (The Split-Screen Logic) ---
-        async function loadBoard() {
+        async function loadTable() {
             const { data } = await supabaseClient.from('pulses').select('*').order('id', { ascending: false });
-            if (!data) return;
+            if(!data) return;
+            globalTasks = data;
 
-            const incomingFeed = document.getElementById('incomingFeed');
-            const activeGrid = document.getElementById('activeGrid');
+            const tbody = document.getElementById('taskTableBody');
+            tbody.innerHTML = '';
             
-            incomingFeed.innerHTML = '';
-            activeGrid.innerHTML = '';
-
-            let incomingCount = 0;
-            let activeCount = 0;
+            let counts = { total: 0, radar: 0, progress: 0, completed: 0 };
 
             data.forEach(item => {
-                const prioColor = item.priority === 'Critical' ? 'text-red-500' : (item.priority === 'High' ? 'text-yellow-400' : 'text-white/30');
+                counts.total++;
+                if(item.status === 'Radar') counts.radar++;
+                if(item.status === 'In Progress' || item.status === 'Assigned To') counts.progress++;
+                if(item.status === 'Completed') counts.completed++;
 
-                // IF TASK IS NEW (RADAR) -> Render as compact row in Left Panel
-                if (item.status === 'Radar') {
-                    incomingCount++;
-                    const rowHTML = `
-                        <div class="incoming-row p-4 flex justify-between items-center">
-                            <div class="flex-1 pr-4 overflow-hidden">
-                                <p class="text-[10px] font-mono text-white/40 mb-1 truncate">${item.linked_entity}</p>
-                                <p class="text-sm font-semibold text-white truncate">${item.title}</p>
-                            </div>
-                            <button onclick="openDeployModal('${item.id}', '${item.title.replace(/'/g, "\\'")}')" class="h-8 px-4 bg-white/10 hover:bg-white text-[9px] font-black uppercase tracking-widest rounded text-white hover:text-black transition-colors shrink-0">
-                                Deploy
-                            </button>
-                        </div>
-                    `;
-                    incomingFeed.insertAdjacentHTML('beforeend', rowHTML);
-                } 
-                // IF TASK IS ASSIGNED OR IN PROGRESS -> Render as premium card in Right Panel
-                else if (item.status === 'Assigned To' || item.status === 'In Progress') {
-                    activeCount++;
-                    const hasNotes = item.notes && item.notes.trim() !== '' ? `<i class="fa-solid fa-file-lines ml-2 opacity-30"></i>` : '';
-                    const cardHTML = `
-                        <div class="active-card flex flex-col h-full cursor-pointer" onclick="openPeek('${item.id}')">
-                            <div class="p-5 flex-1">
-                                <div class="flex justify-between items-start mb-4">
-                                    <span class="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-surface border border-border text-white/80">${item.assigned_to}</span>
-                                    <i class="fa-solid fa-circle text-[8px] ${prioColor}"></i>
-                                </div>
-                                <p class="text-sm font-semibold text-white leading-relaxed mb-4">${item.title} ${hasNotes}</p>
-                                <p class="text-[10px] font-mono text-white/30 uppercase tracking-widest">${item.linked_entity}</p>
-                            </div>
-                            <div class="border-t border-border p-3 flex justify-end bg-surface/50 rounded-b-lg">
-                                <button onclick="event.stopPropagation(); markComplete('${item.id}')" class="h-8 px-4 bg-transparent border border-border hover:border-green-500 hover:text-green-500 text-[9px] font-black uppercase tracking-widest rounded text-white/40 transition-colors">
-                                    Complete <i class="fa-solid fa-check ml-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    activeGrid.insertAdjacentHTML('beforeend', cardHTML);
-                }
-                // (Tasks marked 'Completed' are naturally hidden from the board to keep it clean)
+                // Badge Logic
+                let statusBadge = '';
+                if(item.status === 'Completed') statusBadge = `<span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-[#F2F2F7] text-[#8E8E93] uppercase">Done</span>`;
+                else if(item.status === 'Radar') statusBadge = `<span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-gray-100 text-gray-600 uppercase">Radar</span>`;
+                else statusBadge = `<span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-widest bg-[#FEF0E3] text-[#E37400] uppercase">${item.status}</span>`;
+
+                let prioColor = item.priority === 'Critical' ? 'text-red-500' : (item.priority === 'High' ? 'text-orange-500' : 'text-apple-secondary');
+                let hasNotes = item.notes && item.notes.trim() !== '' ? `<i class="fa-solid fa-note-sticky ml-2 text-apple-secondary/50 text-[10px]"></i>` : '';
+
+                const rowHTML = `
+                    <tr class="border-b border-apple-border hover:bg-apple-canvas transition-colors cursor-pointer group" onclick="openDrawer('${item.id}')">
+                        <td class="py-4 px-6">
+                            <p class="text-sm font-semibold text-apple-primary">${item.title} ${hasNotes}</p>
+                        </td>
+                        <td class="py-4 px-6 text-sm text-apple-secondary font-mono text-[11px]">${item.linked_entity}</td>
+                        <td class="py-4 px-6 text-sm font-medium text-apple-primary">${item.assigned_to}</td>
+                        <td class="py-4 px-6">${statusBadge}</td>
+                        <td class="py-4 px-6 text-right text-apple-secondary group-hover:text-apple-blue transition-colors">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML('beforeend', rowHTML);
             });
 
-            if(incomingCount === 0) incomingFeed.innerHTML = `<div class="p-6 text-center text-[10px] font-black uppercase tracking-widest text-white/20 border-dashed border border-border m-4 rounded">Feed Clear</div>`;
-            if(activeCount === 0) activeGrid.innerHTML = `<div class="p-6 text-center text-[10px] font-black uppercase tracking-widest text-white/20 border-dashed border border-border rounded h-32 flex items-center justify-center w-full">Floor Clear</div>`;
-
-            document.getElementById('count-Incoming').innerText = incomingCount;
-            document.getElementById('count-Active').innerText = activeCount;
+            document.getElementById('kpi-total').innerText = counts.total;
+            document.getElementById('kpi-radar').innerText = counts.radar;
+            document.getElementById('kpi-progress').innerText = counts.progress;
+            document.getElementById('kpi-completed').innerText = counts.completed;
         }
 
-        // --- NEW DIRECTIVE MODAL ---
+        // --- DRAWER LOGIC ---
+        function openDrawer(id) {
+            activeDrawerId = id;
+            const task = globalTasks.find(t => t.id == id);
+            if(task) {
+                document.getElementById('drawerTitle').innerText = task.title;
+                document.getElementById('drawerStatus').value = task.status;
+                document.getElementById('drawerPriority').value = task.priority;
+                document.getElementById('drawerAssignee').value = task.assigned_to;
+                document.getElementById('drawerNotes').value = task.notes || '';
+                document.getElementById('slideDrawer').classList.add('drawer-open');
+            }
+        }
+
+        function closeDrawer() {
+            activeDrawerId = null;
+            document.getElementById('slideDrawer').classList.remove('drawer-open');
+        }
+
+        async function saveAndClose() {
+            if(!activeDrawerId) return;
+            const btn = document.getElementById('saveDrawerBtn');
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+            
+            const updates = {
+                status: document.getElementById('drawerStatus').value,
+                priority: document.getElementById('drawerPriority').value,
+                assigned_to: document.getElementById('drawerAssignee').value,
+                notes: document.getElementById('drawerNotes').value
+            };
+
+            await supabaseClient.from('pulses').update(updates).eq('id', activeDrawerId);
+            
+            btn.innerHTML = 'Save Changes';
+            showToast('Changes applied successfully');
+            closeDrawer();
+            loadTable();
+        }
+
+        document.getElementById('archiveBtn').addEventListener('click', async () => {
+            if(!activeDrawerId) return;
+            await supabaseClient.from('pulses').delete().eq('id', activeDrawerId);
+            showToast('Task removed from board');
+            closeDrawer();
+            loadTable();
+        });
+
+        // --- NEW TASK MODAL ---
         function openNewTaskModal() { document.getElementById('newTaskModal').style.display = 'flex'; }
         function closeNewTaskModal() { document.getElementById('newTaskModal').style.display = 'none'; }
 
-        document.getElementById('createNewBtn').addEventListener('click', async () => {
-            const title = document.getElementById('newTaskTitle').value;
-            const target = document.getElementById('newTaskTarget').value;
-            const priority = document.getElementById('newTaskPriority').value;
-            if(!title) { alert("Objective Title required."); return; }
+        document.getElementById('createTaskBtn').addEventListener('click', async () => {
+            const title = document.getElementById('newTitle').value;
+            const target = document.getElementById('newTarget').value;
+            if(!title) return;
 
-            document.getElementById('createNewBtn').innerText = "Wait...";
-            await supabaseClient.from('pulses').insert([{ title: title, linked_entity: target || 'Unspecified', assigned_to: 'None', priority: priority, status: 'Radar' }]);
+            const btn = document.getElementById('createTaskBtn');
+            btn.innerText = "Creating...";
+
+            await supabaseClient.from('pulses').insert([{ 
+                title: title, linked_entity: target || 'N/A', 
+                assigned_to: 'None', priority: 'Standard', status: 'Radar' 
+            }]);
             
-            document.getElementById('newTaskTitle').value = '';
-            document.getElementById('newTaskTarget').value = '';
-            document.getElementById('createNewBtn').innerText = "Transmit";
+            document.getElementById('newTitle').value = '';
+            document.getElementById('newTarget').value = '';
+            btn.innerText = "Create Task";
             
             closeNewTaskModal();
-            showToast('System', 'Directive injected to Radar.');
-            loadBoard();
-        });
-
-        // --- DEPLOY MODAL (Move from Left to Right) ---
-        function openDeployModal(id, title) {
-            pendingDeployId = id;
-            document.getElementById('deployTaskName').innerText = title;
-            document.getElementById('deployTLSelect').value = 'None';
-            document.getElementById('deployModal').style.display = 'flex';
-        }
-        function closeDeployModal() {
-            pendingDeployId = null;
-            document.getElementById('deployModal').style.display = 'none';
-        }
-
-        document.getElementById('confirmDeployBtn').addEventListener('click', async () => {
-            const tl = document.getElementById('deployTLSelect').value;
-            if(!pendingDeployId) return;
-            document.getElementById('confirmDeployBtn').innerText = "Wait...";
-            
-            // Updates TL and instantly pushes it to the Active Stage
-            await supabaseClient.from('pulses').update({ assigned_to: tl, status: 'In Progress' }).eq('id', pendingDeployId);
-            
-            document.getElementById('confirmDeployBtn').innerText = "Deploy Now";
-            closeDeployModal();
-            showToast('System', `Deployed to ${tl !== 'None' ? tl : 'Floor'}`);
-            loadBoard();
-        });
-
-        // --- ACTIVE STAGE CONTROLS ---
-        async function markComplete(id) {
-            await supabaseClient.from('pulses').update({ status: 'Completed' }).eq('id', id);
-            showToast('System', 'Task cleared from board.');
-            loadBoard();
-        }
-
-        // --- PEEK DRAWER (For reading notes on active cards) ---
-        async function openPeek(id) {
-            activePeekId = id;
-            const { data } = await supabaseClient.from('pulses').select('*').eq('id', id).single();
-            if(data) {
-                document.getElementById('peekTitle').innerText = data.title;
-                document.getElementById('peekEntity').innerText = `#${data.linked_entity}`;
-                document.getElementById('peekNotes').value = data.notes || '';
-                document.getElementById('peekDrawer').classList.add('drawer-open');
-            }
-        }
-        function closePeek() {
-            activePeekId = null;
-            document.getElementById('peekDrawer').classList.remove('drawer-open');
-        }
-
-        document.getElementById('commitNoteBtn').addEventListener('click', async () => {
-            if(!activePeekId) return;
-            const text = document.getElementById('peekNotes').value;
-            document.getElementById('commitNoteBtn').innerText = "Wait...";
-            await supabaseClient.from('pulses').update({ notes: text }).eq('id', activePeekId);
-            document.getElementById('commitNoteBtn').innerText = "Save Notes";
-            showToast('System', 'Log updated.');
-            loadBoard();
-            closePeek();
+            showToast('New directive initialized');
+            loadTable();
         });
 
         // --- UTILS ---
-        function showToast(header, msg) {
+        function showToast(msg) {
             const toast = document.getElementById('toastAlert');
-            document.getElementById('toastHeader').innerText = header;
             document.getElementById('toastMessage').innerText = msg;
-            toast.classList.remove('translate-x-[150%]');
-            setTimeout(() => toast.classList.add('translate-x-[150%]'), 3000);
+            toast.classList.remove('translate-y-[150%]');
+            setTimeout(() => toast.classList.add('translate-y-[150%]'), 3000);
         }
-        
-        // Auto-purge completed tasks completely off the database to save space
-        let lastPurgeHour = -1;
-        setInterval(() => {
-            const now = new Date();
-            const hr = now.getHours();
-            if ((hr === 6 || hr === 14 || hr === 22) && now.getMinutes() === 0 && hr !== lastPurgeHour) {
-                lastPurgeHour = hr;
-                supabaseClient.from('pulses').delete().eq('status', 'Completed');
+
+        // Cmd+K Search Focus
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                const searchInput = document.getElementById('cmdInput');
+                if(searchInput) searchInput.focus();
             }
-        }, 10000);
+        });
     </script>
 </body>
 </html>
