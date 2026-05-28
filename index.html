@@ -97,11 +97,6 @@
     <div class="flex-1 flex flex-col h-full relative">
         <header class="h-16 border-b border-apple-border bg-white/70 backdrop-blur-xl z-10 flex items-center justify-between px-8 absolute top-0 left-0 right-0">
             <div class="flex-1"></div>
-            <div class="w-[400px] h-9 bg-[#E8E8ED] rounded-full flex items-center px-4 shadow-inner hidden md:flex">
-                <i class="fa-solid fa-magnifying-glass text-apple-secondary text-sm"></i>
-                <input type="text" id="cmdInput" placeholder="Search directives..." class="bg-transparent border-none outline-none text-sm ml-3 w-full placeholder-apple-secondary text-apple-primary">
-                <span class="text-[10px] font-semibold text-apple-secondary tracking-widest bg-white shadow-sm border border-apple-border px-1.5 py-0.5 rounded ml-2">⌘K</span>
-            </div>
             <div class="flex-1 flex justify-end items-center gap-4">
                 <p id="activeUserName" class="text-xs font-semibold text-apple-secondary mr-2">LOCKED</p>
                 <div class="h-8 w-8 rounded-full bg-gradient-to-tr from-gray-200 to-gray-300 shadow-sm border border-apple-border flex items-center justify-center text-apple-primary text-xs font-bold">
@@ -109,7 +104,6 @@
                 </div>
             </div>
         </header>
-
         <main class="flex-1 mt-16 p-6 md:p-10 overflow-y-auto scrollbar-hide bg-apple-canvas">
             <div class="max-w-7xl mx-auto h-full flex flex-col">
                 
@@ -147,15 +141,15 @@
 
                 <div id="view-board" class="hidden gap-6 overflow-x-auto pb-10 flex-1">
                     <div class="w-80 shrink-0 flex flex-col bg-white/40 border border-apple-border rounded-2xl p-4">
-                        <h3 class="text-[10px] uppercase font-bold text-apple-secondary mb-4 flex justify-between">Radar <span id="board-count-radar" class="bg-white px-2 py-0.5 rounded">0</span></h3>
+                        <h3 class="text-[10px] uppercase font-bold text-apple-secondary mb-4 flex justify-between">Radar <span id="board-count-radar" class="bg-white px-2 py-0.5 rounded border border-apple-border">0</span></h3>
                         <div id="col-radar" class="flex-1 space-y-3"></div>
                     </div>
                     <div class="w-80 shrink-0 flex flex-col bg-white/40 border border-apple-border rounded-2xl p-4">
-                        <h3 class="text-[10px] uppercase font-bold text-apple-secondary mb-4 flex justify-between">Assigned <span id="board-count-assigned" class="bg-white px-2 py-0.5 rounded">0</span></h3>
+                        <h3 class="text-[10px] uppercase font-bold text-apple-secondary mb-4 flex justify-between">Assigned <span id="board-count-assigned" class="bg-white px-2 py-0.5 rounded border border-apple-border">0</span></h3>
                         <div id="col-assigned" class="flex-1 space-y-3"></div>
                     </div>
                     <div class="w-80 shrink-0 flex flex-col bg-apple-blue/5 border border-apple-blue/20 rounded-2xl p-4">
-                        <h3 class="text-[10px] uppercase font-bold text-apple-blue mb-4 flex justify-between">In Progress <span id="board-count-progress" class="bg-white px-2 py-0.5 rounded">0</span></h3>
+                        <h3 class="text-[10px] uppercase font-bold text-apple-blue mb-4 flex justify-between">In Progress <span id="board-count-progress" class="bg-white px-2 py-0.5 rounded border border-apple-blue/20 text-apple-blue">0</span></h3>
                         <div id="col-progress" class="flex-1 space-y-3"></div>
                     </div>
                     <div class="w-80 shrink-0 flex flex-col bg-white/40 border border-apple-border rounded-2xl p-4 opacity-60">
@@ -163,10 +157,11 @@
                         <div id="col-completed" class="flex-1 space-y-3"></div>
                     </div>
                 </div>
+
                 <div id="view-team" class="hidden flex-col flex-1">
                     <div class="mb-8">
                         <h1 class="text-2xl font-bold tracking-tight text-apple-primary">Floor Team</h1>
-                        <p class="text-sm text-apple-secondary mt-1">Authorized personnel and live status.</p>
+                        <p class="text-sm text-apple-secondary mt-1">Authorized personnel and access control.</p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6" id="teamGrid"></div>
                 </div>
@@ -177,7 +172,7 @@
                         <p class="text-sm text-apple-secondary mt-1">Live audit trail of floor operations.</p>
                     </div>
                     <div class="bg-white border border-apple-border rounded-2xl p-8 h-full overflow-y-auto scrollbar-hide space-y-4 shadow-sm" id="logContainer">
-                        </div>
+                    </div>
                 </div>
 
                 <div id="view-analytics" class="hidden flex-col flex-1">
@@ -189,17 +184,17 @@
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-apple-border text-center">
                             <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500 mb-4"></i>
                             <h3 class="text-4xl font-bold mb-1" id="stat-critical">0</h3>
-                            <p class="text-[10px] uppercase font-bold text-apple-secondary">Critical Tasks</p>
+                            <p class="text-[10px] uppercase font-bold text-apple-secondary tracking-widest">Critical Tasks</p>
                         </div>
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-apple-border text-center">
                             <i class="fa-solid fa-users-gear text-3xl text-apple-blue mb-4"></i>
                             <h3 class="text-4xl font-bold mb-1" id="stat-rate">0%</h3>
-                            <p class="text-[10px] uppercase font-bold text-apple-secondary">Assignment Rate</p>
+                            <p class="text-[10px] uppercase font-bold text-apple-secondary tracking-widest">Assignment Rate</p>
                         </div>
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-apple-border text-center">
                             <i class="fa-solid fa-circle-check text-3xl text-green-500 mb-4"></i>
                             <h3 class="text-4xl font-bold mb-1" id="stat-completed">0</h3>
-                            <p class="text-[10px] uppercase font-bold text-apple-secondary">Total Completed</p>
+                            <p class="text-[10px] uppercase font-bold text-apple-secondary tracking-widest">Total Completed</p>
                         </div>
                     </div>
                 </div>
@@ -229,29 +224,30 @@
             </div>
             <div class="flex-1 p-8 space-y-6 overflow-y-auto">
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="text-[10px] uppercase font-bold text-apple-secondary mb-2 block">Status</label><select id="drawerStatus" class="w-full bg-apple-canvas border h-11 px-4 text-sm rounded-lg outline-none focus:border-apple-blue"><option value="Radar">Radar</option><option value="Assigned To">Assigned To</option><option value="In Progress">In Progress</option><option value="Completed">Completed</option></select></div>
-                    <div><label class="text-[10px] uppercase font-bold text-apple-secondary mb-2 block">Priority</label><select id="drawerPriority" class="w-full bg-apple-canvas border h-11 px-4 text-sm rounded-lg outline-none focus:border-apple-blue"><option value="Standard">Standard</option><option value="High">High</option><option value="Critical">Critical</option></select></div>
+                    <div><label class="text-[10px] uppercase font-bold text-apple-secondary mb-2 block tracking-widest">Status</label><select id="drawerStatus" class="w-full bg-apple-canvas border h-11 px-4 text-sm rounded-lg outline-none focus:border-apple-blue"><option value="Radar">Radar</option><option value="Assigned To">Assigned To</option><option value="In Progress">In Progress</option><option value="Completed">Completed</option></select></div>
+                    <div><label class="text-[10px] uppercase font-bold text-apple-secondary mb-2 block tracking-widest">Priority</label><select id="drawerPriority" class="w-full bg-apple-canvas border h-11 px-4 text-sm rounded-lg outline-none focus:border-apple-blue"><option value="Standard">Standard</option><option value="High">High</option><option value="Critical">Critical</option></select></div>
                 </div>
-                <div><label class="text-[10px] uppercase font-bold text-apple-secondary mb-2 block">Personnel</label><select id="drawerAssignee" class="w-full bg-apple-canvas border h-11 px-4 text-sm rounded-lg outline-none focus:border-apple-blue"></select></div>
-                <div class="flex-1"><label class="text-[10px] uppercase font-bold text-apple-secondary mb-2 block">Notes</label><textarea id="drawerNotes" class="w-full bg-apple-canvas border rounded-lg p-4 text-sm h-40 outline-none focus:border-apple-blue resize-none"></textarea></div>
+                <div><label class="text-[10px] uppercase font-bold text-apple-secondary mb-2 block tracking-widest">Personnel</label><select id="drawerAssignee" class="w-full bg-apple-canvas border h-11 px-4 text-sm rounded-lg outline-none focus:border-apple-blue"></select></div>
+                <div class="flex-1"><label class="text-[10px] uppercase font-bold text-apple-secondary mb-2 block tracking-widest">Notes</label><textarea id="drawerNotes" class="w-full bg-apple-canvas border rounded-lg p-4 text-sm h-40 outline-none focus:border-apple-blue resize-none"></textarea></div>
             </div>
             <div class="p-6 border-t bg-white flex gap-3">
-                <button id="archiveBtn" class="px-5 text-red-500 bg-red-50 rounded-xl font-bold text-sm"><i class="fa-solid fa-trash-can"></i></button>
-                <button onclick="saveAndClose()" id="saveDrawerBtn" class="flex-1 bg-apple-blue text-white h-12 rounded-xl font-bold text-sm shadow-sm active:scale-95 transition-all">Save Changes</button>
+                <button id="archiveBtn" class="px-5 text-red-500 bg-red-50 rounded-xl font-bold text-sm hover:bg-red-100 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                <button onclick="saveAndClose()" id="saveDrawerBtn" class="flex-1 bg-apple-blue text-white h-12 rounded-xl font-bold text-sm shadow-sm hover:bg-apple-blueHover transition-colors">Save Changes</button>
             </div>
         </div>
     </div>
 
     <div id="addMemberModal" class="fixed inset-0 z-[110] bg-apple-primary/40 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white border p-8 rounded-2xl w-full max-w-sm shadow-2xl">
-            <h3 class="text-lg font-bold mb-6 text-apple-primary">Add Floor Personnel</h3>
+            <h3 class="text-lg font-bold mb-4 text-apple-primary">Add Floor Personnel</h3>
+            <p id="memberError" class="text-red-500 text-xs font-bold mb-4 hidden bg-red-50 p-2 rounded border border-red-100"></p>
             <div class="space-y-4 mb-8">
                 <input type="text" id="newMemberName" placeholder="Full Name" class="w-full bg-apple-canvas border h-11 px-4 rounded-lg outline-none focus:border-apple-blue text-apple-primary font-medium">
                 <input type="text" id="newMemberPin" placeholder="4-Digit PIN" maxlength="4" class="w-full bg-apple-canvas border h-11 px-4 rounded-lg outline-none focus:border-apple-blue text-apple-primary font-medium tracking-widest">
             </div>
             <div class="flex gap-3">
-                <button onclick="closeModal('addMemberModal')" class="flex-1 h-11 font-bold text-sm bg-apple-canvas text-apple-secondary rounded-xl hover:text-apple-primary">Cancel</button>
-                <button id="submitMemberBtn" class="flex-1 h-11 font-bold text-sm bg-apple-blue text-white rounded-xl shadow-sm hover:bg-apple-blueHover">Save User</button>
+                <button onclick="closeModal('addMemberModal')" class="flex-1 h-11 font-bold text-sm bg-apple-canvas text-apple-secondary rounded-xl hover:text-apple-primary transition-colors">Cancel</button>
+                <button id="submitMemberBtn" class="flex-1 h-11 font-bold text-sm bg-apple-blue text-white rounded-xl shadow-sm hover:bg-apple-blueHover transition-colors">Save User</button>
             </div>
         </div>
     </div>
@@ -264,8 +260,8 @@
                 <input type="text" id="newTarget" placeholder="Target Entity..." class="w-full bg-apple-canvas border h-11 px-4 rounded-lg outline-none focus:border-apple-blue font-medium text-apple-primary">
             </div>
             <div class="flex gap-3">
-                <button onclick="closeModal('newTaskModal')" class="flex-1 h-11 font-bold text-sm bg-apple-canvas text-apple-secondary rounded-xl hover:text-apple-primary">Cancel</button>
-                <button id="createTaskBtn" class="flex-1 h-11 font-bold text-sm bg-apple-blue text-white rounded-xl shadow-sm hover:bg-apple-blueHover">Create Task</button>
+                <button onclick="closeModal('newTaskModal')" class="flex-1 h-11 font-bold text-sm bg-apple-canvas text-apple-secondary rounded-xl hover:text-apple-primary transition-colors">Cancel</button>
+                <button id="createTaskBtn" class="flex-1 h-11 font-bold text-sm bg-apple-blue text-white rounded-xl shadow-sm hover:bg-apple-blueHover transition-colors">Create Task</button>
             </div>
         </div>
     </div>
@@ -276,8 +272,8 @@
             <h3 class="text-lg font-bold mb-2 text-apple-primary">Emergency Purge</h3>
             <p class="text-sm text-apple-secondary mb-8">This will instantly delete all operational tasks. This action cannot be undone.</p>
             <div class="flex gap-3">
-                <button onclick="closeModal('purgeModal')" class="flex-1 h-11 font-bold text-sm bg-apple-canvas text-apple-primary rounded-xl">Cancel</button>
-                <button onclick="executePurge()" class="flex-1 h-11 font-bold text-sm bg-red-500 text-white rounded-xl">Wipe Data</button>
+                <button onclick="closeModal('purgeModal')" class="flex-1 h-11 font-bold text-sm bg-apple-canvas text-apple-primary rounded-xl transition-colors">Cancel</button>
+                <button onclick="executePurge()" class="flex-1 h-11 font-bold text-sm bg-red-500 text-white rounded-xl transition-colors hover:bg-red-600">Wipe Data</button>
             </div>
         </div>
     </div>
@@ -296,16 +292,22 @@
         let activeDrawerId = null;
         let globalTasks = [];
 
-        // --- GLOBAL HELPERS ---
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        // --- GLOBAL HELPERS (Optimized input resets) ---
+        function openModal(id) { 
+            document.getElementById(id).style.display = 'flex'; 
+            if(id === 'addMemberModal') document.getElementById('memberError').style.display = 'none';
+        }
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none'; 
+            if(id === 'addMemberModal') { document.getElementById('newMemberName').value = ''; document.getElementById('newMemberPin').value = ''; }
+            if(id === 'newTaskModal') { document.getElementById('newTitle').value = ''; document.getElementById('newTarget').value = ''; }
+        }
         
         function showToast(msg) {
             const t = document.getElementById('toastAlert'); document.getElementById('toastMessage').innerText = msg;
             t.classList.remove('translate-y-[150%]'); setTimeout(() => t.classList.add('translate-y-[150%]'), 3000);
         }
 
-        // --- NAVIGATION ---
         function switchView(viewName) {
             const views = ['table', 'board', 'team', 'log', 'analytics', 'settings'];
             views.forEach(v => {
@@ -355,9 +357,7 @@
                     document.getElementById('lockScreen').style.opacity = '0';
                     setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
                     document.getElementById('activeUserName').innerText = data.name;
-                    initTeam(); 
-                    loadData(); 
-                    logAction("Authenticated Session Start");
+                    initTeam(); loadData(); logAction("Authenticated Session Start");
                 } else { throw new Error("Invalid"); }
             } catch (err) {
                 document.getElementById('pinError').style.opacity = '1';
@@ -365,7 +365,6 @@
             }
         }
 
-        // --- LOG ENGINE ---
         async function logAction(text) {
             if(!currentUser) return;
             await supabaseClient.from('activity_logs').insert([{ action_text: text, performed_by: currentUser.name }]);
@@ -381,47 +380,71 @@
                 container.insertAdjacentHTML('beforeend', `
                     <div class="flex gap-4 items-start border-b border-apple-border pb-4 last:border-0">
                         <div class="h-8 w-8 rounded-full bg-apple-canvas flex items-center justify-center text-apple-secondary shrink-0"><i class="fa-solid fa-bolt text-xs"></i></div>
-                        <div><p class="text-sm font-medium text-apple-primary">${log.action_text}</p><p class="text-[10px] text-apple-secondary font-bold uppercase mt-1">BY ${log.performed_by} • ${time}</p></div>
+                        <div><p class="text-sm font-medium text-apple-primary">${log.action_text}</p><p class="text-[10px] text-apple-secondary font-bold uppercase mt-1 tracking-widest">BY ${log.performed_by} • ${time}</p></div>
                     </div>`);
             });
         }
 
-        // --- TEAM MANAGEMENT ---
         async function initTeam() {
             const { data } = await supabaseClient.from('floor_users').select('*').eq('status', 'Active');
             if(!data) return;
             const select = document.getElementById('drawerAssignee');
             const grid = document.getElementById('teamGrid');
             select.innerHTML = '<option value="None">Unassigned</option>';
-            grid.innerHTML = `<div onclick="openModal('addMemberModal')" class="bg-apple-canvas border-2 border-dashed border-apple-border rounded-2xl p-6 flex flex-col items-center justify-center text-apple-secondary hover:text-apple-blue hover:border-apple-blue transition-all cursor-pointer min-h-[160px]"><i class="fa-solid fa-plus text-2xl mb-2"></i><span class="text-sm font-semibold">Add Member</span></div>`;
+            grid.innerHTML = `<div onclick="openModal('addMemberModal')" class="bg-apple-canvas border-2 border-dashed border-apple-border rounded-2xl p-6 flex flex-col items-center justify-center text-apple-secondary hover:text-apple-blue hover:border-apple-blue transition-all cursor-pointer min-h-[160px]"><i class="fa-solid fa-plus text-2xl mb-2"></i><span class="text-sm font-semibold tracking-wide">Add Member</span></div>`;
             
             data.forEach(user => {
                 select.insertAdjacentHTML('beforeend', `<option value="${user.name}">${user.name}</option>`);
                 const init = user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
                 grid.insertAdjacentHTML('beforeend', `
-                    <div class="bg-white border border-apple-border rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
+                    <div onclick="revokeUser('${user.name}')" class="bg-white border border-apple-border rounded-2xl p-6 shadow-sm flex flex-col items-center text-center cursor-pointer group relative overflow-hidden transition-all hover:border-red-500">
                         <div class="h-16 w-16 rounded-full bg-gradient-to-tr from-gray-50 to-gray-200 border border-apple-border flex items-center justify-center text-xl font-bold mb-4 text-apple-primary shadow-inner">${init}</div>
-                        <h3 class="text-sm font-bold text-apple-primary">${user.name}</h3><p class="text-[9px] text-apple-secondary font-bold uppercase mt-1 mb-4">Auth: Active</p>
-                        <span class="inline-flex px-3 py-1 rounded-full text-[9px] font-black bg-green-50 text-green-600 uppercase border border-green-100">Floor Ready</span>
+                        <h3 class="text-sm font-bold text-apple-primary">${user.name}</h3><p class="text-[9px] text-apple-secondary font-bold uppercase mt-1 mb-4 tracking-widest">Auth: Active</p>
+                        <span class="inline-flex px-3 py-1 rounded-full text-[9px] font-black bg-green-50 text-green-600 uppercase border border-green-100 tracking-widest">Floor Ready</span>
+                        <div class="absolute inset-0 bg-red-500/90 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                            <span class="font-bold tracking-wider text-sm"><i class="fa-solid fa-user-minus mr-2"></i>Revoke Access</span>
+                        </div>
                     </div>`);
             });
         }
 
+        async function revokeUser(name) {
+            if(confirm(`Are you sure you want to revoke floor access for ${name}?`)) {
+                await supabaseClient.from('floor_users').delete().eq('name', name);
+                logAction(`Revoked access for: ${name}`);
+                showToast('Access revoked.');
+                initTeam();
+            }
+        }
+
+        // --- BUTTON PROTECTIONS APPLIED HERE ---
         document.getElementById('submitMemberBtn').addEventListener('click', async () => {
-            const name = document.getElementById('newMemberName').value;
-            const pin = document.getElementById('newMemberPin').value;
-            if(!name || pin.length < 4) { alert("Please provide a name and 4-digit PIN"); return; }
-            document.getElementById('submitMemberBtn').innerText = "Wait...";
-            await supabaseClient.from('floor_users').insert([{ name: name, pin: pin, status: 'Active' }]);
+            const btn = document.getElementById('submitMemberBtn');
+            if(btn.disabled) return; // Spam prevention
+            
+            const name = document.getElementById('newMemberName').value.trim();
+            const pin = document.getElementById('newMemberPin').value.trim();
+            const errEl = document.getElementById('memberError');
+            
+            if(!name || pin.length !== 4) { 
+                errEl.innerText = "Please provide a valid name and a 4-digit PIN."; errEl.style.display = 'block'; return; 
+            }
+            
+            errEl.style.display = 'none';
+            btn.disabled = true; btn.innerText = "Saving...";
+            
+            const { error } = await supabaseClient.from('floor_users').insert([{ name: name, pin: pin, status: 'Active' }]);
+            
+            if(error) {
+                errEl.innerText = "Database Error: " + error.message; errEl.style.display = 'block';
+                btn.disabled = false; btn.innerText = "Save User"; return;
+            }
+
             logAction(`Commissioned new personnel: ${name}`);
-            document.getElementById('newMemberName').value = '';
-            document.getElementById('newMemberPin').value = '';
-            document.getElementById('submitMemberBtn').innerText = "Save User";
-            closeModal('addMemberModal');
-            showToast('Personnel added.'); initTeam();
+            btn.disabled = false; btn.innerText = "Save User";
+            closeModal('addMemberModal'); showToast('Personnel added.'); initTeam();
         });
 
-        // --- SETTINGS (PURGE) ---
         async function executePurge() {
             closeModal('purgeModal');
             await supabaseClient.from('pulses').delete().neq('id', 0);
@@ -429,7 +452,7 @@
             showToast('Operational data wiped.'); loadData();
         }
 
-        // --- CORE OPS LOGIC ---
+        // --- OPTIMIZED KPI MATH ---
         async function loadData() {
             const { data } = await supabaseClient.from('pulses').select('*').order('id', { ascending: false });
             if(!data) return;
@@ -439,17 +462,21 @@
             const cols = { 'Radar': 'col-radar', 'Assigned To': 'col-assigned', 'In Progress': 'col-progress', 'Completed': 'col-completed' };
             Object.values(cols).forEach(id => document.getElementById(id).innerHTML = '');
             
-            let c = { t: 0, r: 0, p: 0, d: 0, crit: 0 };
+            let c = { t: 0, r: 0, a: 0, p: 0, d: 0, crit: 0 };
             const next = { 'Radar': 'Assigned To', 'Assigned To': 'In Progress', 'In Progress': 'Completed' };
 
             data.forEach(item => {
-                c.t++; if(item.status === 'Radar') c.r++; if(item.status === 'In Progress' || item.status === 'Assigned To') c.p++;
-                if(item.status === 'Completed') c.d++; if(item.priority === 'Critical') c.crit++;
+                c.t++; 
+                if(item.status === 'Radar') c.r++; 
+                if(item.status === 'Assigned To') c.a++; 
+                if(item.status === 'In Progress') c.p++;
+                if(item.status === 'Completed') c.d++; 
+                if(item.priority === 'Critical') c.crit++;
 
                 let notesIco = item.notes?.trim() ? `<i class="fa-solid fa-note-sticky ml-2 text-apple-secondary/30 text-[10px]"></i>` : '';
-                let badge = item.status === 'Completed' ? `<span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-[9px] font-bold uppercase">Done</span>` : 
-                    (item.status === 'Radar' ? `<span class="bg-gray-50 text-gray-400 px-2 py-0.5 rounded text-[9px] font-bold uppercase">Radar</span>` : 
-                    `<span class="bg-orange-50 text-orange-500 px-2 py-0.5 rounded text-[9px] font-bold uppercase">${item.status}</span>`);
+                let badge = item.status === 'Completed' ? `<span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Done</span>` : 
+                    (item.status === 'Radar' ? `<span class="bg-gray-50 text-gray-400 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">Radar</span>` : 
+                    `<span class="bg-orange-50 text-orange-500 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">${item.status}</span>`);
 
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr class="border-b border-apple-border hover:bg-apple-canvas transition-colors cursor-pointer group" onclick="openDrawer('${item.id}')">
@@ -465,16 +492,18 @@
                 if(cols[item.status]) {
                     document.getElementById(cols[item.status]).insertAdjacentHTML('beforeend', `
                         <div class="bg-white border border-apple-border ${border} rounded-xl p-4 shadow-sm hover:shadow-apple-soft transition-all cursor-pointer" onclick="openDrawer('${item.id}')">
-                            <div class="flex justify-between items-start mb-3"><span class="bg-gray-50 text-gray-500 px-2 py-0.5 rounded text-[9px] font-bold uppercase">${item.assigned_to}</span>${arrow}</div>
+                            <div class="flex justify-between items-start mb-3"><span class="bg-gray-50 text-gray-500 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest">${item.assigned_to}</span>${arrow}</div>
                             <h4 class="text-sm font-semibold leading-tight text-apple-primary">${item.title} ${notesIco}</h4><p class="text-[10px] font-mono text-apple-secondary uppercase mt-2">${item.linked_entity}</p>
                         </div>`);
                 }
             });
 
             document.getElementById('kpi-total').innerText = c.t; document.getElementById('kpi-radar').innerText = c.r;
-            document.getElementById('kpi-progress').innerText = c.p; document.getElementById('kpi-completed').innerText = c.d;
-            document.getElementById('board-count-radar').innerText = c.r; document.getElementById('board-count-assigned').innerText = data.filter(i => i.status === 'Assigned To').length;
-            document.getElementById('board-count-progress').innerText = c.p - data.filter(i => i.status === 'Assigned To').length;
+            document.getElementById('kpi-progress').innerText = c.p + c.a; document.getElementById('kpi-completed').innerText = c.d;
+            
+            document.getElementById('board-count-radar').innerText = c.r; document.getElementById('board-count-assigned').innerText = c.a;
+            document.getElementById('board-count-progress').innerText = c.p;
+            
             document.getElementById('stat-critical').innerText = c.crit; document.getElementById('stat-completed').innerText = c.d;
             document.getElementById('stat-rate').innerText = c.t > 0 ? Math.round(((c.t - c.r) / c.t) * 100) + '%' : '0%';
         }
@@ -502,12 +531,17 @@
 
         async function saveAndClose() {
             if(!activeDrawerId) return;
-            const b = document.getElementById('saveDrawerBtn'); b.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            const b = document.getElementById('saveDrawerBtn');
+            if(b.disabled) return; // Spam prevention
+
+            b.disabled = true; b.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             const t = globalTasks.find(x => x.id == activeDrawerId);
             const upd = { status: document.getElementById('drawerStatus').value, priority: document.getElementById('drawerPriority').value, assigned_to: document.getElementById('drawerAssignee').value, notes: document.getElementById('drawerNotes').value };
             await supabaseClient.from('pulses').update(upd).eq('id', activeDrawerId);
             logAction(`Updated task parameters: "${t.title}"`);
-            b.innerHTML = 'Save Changes'; showToast('Task updated.'); closeDrawer(); loadData();
+            
+            b.disabled = false; b.innerHTML = 'Save Changes'; 
+            showToast('Task updated.'); closeDrawer(); loadData();
         }
 
         document.getElementById('archiveBtn').addEventListener('click', async () => {
@@ -519,14 +553,19 @@
         });
 
         document.getElementById('createTaskBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('createTaskBtn');
+            if(btn.disabled) return; // Spam prevention
+            
             const tit = document.getElementById('newTitle').value;
             const tar = document.getElementById('newTarget').value;
             if(!tit) return;
-            const btn = document.getElementById('createTaskBtn'); btn.innerText = "Creating...";
+            
+            btn.disabled = true; btn.innerText = "Creating...";
             await supabaseClient.from('pulses').insert([{ title: tit, linked_entity: tar || 'N/A', assigned_to: 'None', priority: 'Standard', status: 'Radar' }]);
             logAction(`Injected directive: "${tit}"`);
-            document.getElementById('newTitle').value = ''; document.getElementById('newTarget').value = '';
-            btn.innerText = "Create Task"; closeModal('newTaskModal'); showToast('Directive created.'); loadData();
+            
+            btn.disabled = false; btn.innerText = "Create Task"; 
+            closeModal('newTaskModal'); showToast('Directive created.'); loadData();
         });
 
         document.addEventListener('keydown', (e) => {
