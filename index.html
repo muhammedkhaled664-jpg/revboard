@@ -103,6 +103,10 @@
                 <i class="fa-solid fa-chart-line text-xl"></i>
                 <div id="indicator-analytics" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
+            <button onclick="switchView('qa')" id="nav-qa" class="qa-only text-apple-secondary dark:text-gray-400 p-2 md:w-full flex justify-center transition-colors relative">
+                <i class="fa-solid fa-magnifying-glass-chart text-xl"></i>
+                <div id="indicator-qa" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-purple-500 rounded-r-md"></div>
+            </button>
         </nav>
         <div class="md:mt-auto flex flex-row md:flex-col gap-2 md:gap-6 items-center">
             <button onclick="toggleTheme()" class="text-apple-secondary dark:text-gray-400 p-2 md:w-full flex justify-center transition-colors">
@@ -289,6 +293,120 @@
                     </div>
                 </div>
 
+                <!-- QA MODULE -->
+                <div id="view-qa" class="hidden flex-col gap-4">
+
+                    <!-- QA Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-xl font-bold dark:text-white">QA Case Tracker</h2>
+                            <p class="text-[10px] text-apple-secondary uppercase tracking-widest">Log · Coach · Document</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="switchQATab('cases')" id="qa-tab-cases" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-purple-600 text-white shadow-sm transition-all">Case Log</button>
+                            <button onclick="switchQATab('coaching')" id="qa-tab-coaching" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary dark:text-gray-400 transition-all">Coaching Board</button>
+                            <button onclick="switchQATab('qaanalytics')" id="qa-tab-qaanalytics" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary dark:text-gray-400 transition-all">Analytics</button>
+                            <button onclick="openModal('newQACaseModal')" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-purple-600 text-white shadow-sm flex items-center gap-2 hover:opacity-80 transition-all">
+                                <i class="fa-solid fa-plus"></i> New Case
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI bar -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-red-500">
+                            <p class="text-[9px] uppercase font-bold text-apple-secondary mb-1">Total Cases</p>
+                            <span id="qa-kpi-total" class="text-2xl font-bold dark:text-white">0</span>
+                        </div>
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-orange-500">
+                            <p class="text-[9px] uppercase font-bold text-apple-secondary mb-1">Fatal Cases</p>
+                            <span id="qa-kpi-fatal" class="text-2xl font-bold dark:text-white">0</span>
+                        </div>
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-yellow-500">
+                            <p class="text-[9px] uppercase font-bold text-apple-secondary mb-1">Pending Coaching</p>
+                            <span id="qa-kpi-coaching" class="text-2xl font-bold dark:text-white">0</span>
+                        </div>
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-purple-500">
+                            <p class="text-[9px] uppercase font-bold text-apple-secondary mb-1">Warnings Issued</p>
+                            <span id="qa-kpi-warnings" class="text-2xl font-bold dark:text-white">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Case Log Tab -->
+                    <div id="qa-view-cases" class="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-apple-border dark:border-[#2C2C2E] overflow-hidden shadow-sm">
+                        <div class="flex items-center gap-3 p-4 border-b border-apple-border dark:border-[#2C2C2E]">
+                            <input type="text" id="qaSearchInput" oninput="renderQACases()" placeholder="Search agent, issue, team..." class="flex-1 bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-9 px-4 rounded-lg text-xs dark:text-white outline-none focus:border-purple-500">
+                            <select id="qaFilterIssue" onchange="renderQACases()" class="bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-9 px-3 rounded-lg text-xs dark:text-white">
+                                <option value="">All Issues</option>
+                                <option>#Fatal</option><option>#Feedback</option><option>#Sticking</option>
+                                <option>#SystemFocus</option><option>#Interaction</option><option>#CallFocus</option><option>#Brand</option>
+                            </select>
+                            <select id="qaFilterStatus" onchange="renderQACases()" class="bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-9 px-3 rounded-lg text-xs dark:text-white">
+                                <option value="">All Statuses</option>
+                                <option>Verbal</option><option>1st Documentation</option><option>2nd Documentation</option>
+                                <option>3rd Documentation</option><option>Fatal Documentation</option><option>Final Documentation</option>
+                            </select>
+                            <button onclick="exportQAToCSV()" class="h-9 px-3 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-green-600 dark:text-green-400 flex items-center gap-1 hover:opacity-80">
+                                <i class="fa-solid fa-file-csv"></i> Export
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto scrollbar-hide">
+                            <table class="w-full text-left border-collapse min-w-[900px]">
+                                <thead><tr class="bg-[#FBFBFD] dark:bg-[#242426] border-b border-apple-border dark:border-[#2C2C2E]">
+                                    <th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary">Agent</th>
+                                    <th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary">Date</th>
+                                    <th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary">Issue</th>
+                                    <th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary">Comment</th>
+                                    <th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary">Team</th>
+                                    <th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary">Coaching Status</th>
+                                    <th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary">Warning Sent</th>
+                                    <th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary">Coaching Date</th>
+                                    <th class="py-3 px-4 text-right"></th>
+                                </tr></thead>
+                                <tbody id="qaCaseTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Coaching Board Tab -->
+                    <div id="qa-view-coaching" class="hidden">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="qaCoachingGrid"></div>
+                    </div>
+
+                    <!-- QA Analytics Tab -->
+                    <div id="qa-view-qaanalytics" class="hidden flex-col gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm">
+                                <p class="text-[10px] uppercase font-black text-apple-secondary tracking-widest mb-4">Issues by Type</p>
+                                <div id="qa-chart-issues" class="flex items-end justify-between gap-2 h-32"></div>
+                            </div>
+                            <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm">
+                                <p class="text-[10px] uppercase font-black text-apple-secondary tracking-widest mb-4">Issues by Team</p>
+                                <div id="qa-chart-teams" class="space-y-2"></div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm overflow-hidden">
+                            <div class="p-5 border-b border-apple-border dark:border-[#2C2C2E]">
+                                <p class="text-[10px] uppercase font-black text-apple-secondary tracking-widest">Most Flagged Agents</p>
+                            </div>
+                            <div class="overflow-x-auto scrollbar-hide">
+                                <table class="w-full text-left border-collapse min-w-[400px]">
+                                    <thead><tr class="bg-[#FBFBFD] dark:bg-[#242426] border-b border-apple-border dark:border-[#2C2C2E]">
+                                        <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">#</th>
+                                        <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">Agent</th>
+                                        <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary text-center">Cases</th>
+                                        <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary text-center">Fatals</th>
+                                        <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">Highest Status</th>
+                                    </tr></thead>
+                                    <tbody id="qaAgentLeaderboard"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- END QA MODULE -->
+
             </div>
         </main>
 
@@ -379,6 +497,129 @@
             <div class="flex gap-2">
                 <button onclick="closeModal('newTaskModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
                 <button id="createTaskBtn" class="flex-1 h-11 text-xs font-bold bg-apple-blue text-white rounded-xl shadow-sm">Create Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New QA Case Modal -->
+    <div id="newQACaseModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-6 rounded-2xl w-full max-w-lg shadow-2xl">
+            <h3 class="text-lg font-bold mb-4 dark:text-white">Log QA Case</h3>
+            <div class="space-y-3 mb-6">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Agent Name</label>
+                        <input type="text" id="qa-agent-name" placeholder="Full name" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Date of Call</label>
+                        <input type="date" id="qa-call-date" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Issue Type</label>
+                        <select id="qa-issue-type" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                            <option>#Fatal</option><option>#Feedback</option><option>#Sticking</option>
+                            <option>#SystemFocus</option><option>#Interaction</option><option>#CallFocus</option><option>#Brand</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Team / Supervisor</label>
+                        <input type="text" id="qa-team" placeholder="e.g. David" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Coaching Status</label>
+                        <select id="qa-coaching-status" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                            <option>Verbal</option><option>1st Documentation</option><option>2nd Documentation</option>
+                            <option>3rd Documentation</option><option>Fatal Documentation</option><option>Final Documentation</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Coaching Date</label>
+                        <input type="date" id="qa-coaching-date" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Comment / Notes</label>
+                    <textarea id="qa-comment" placeholder="What went wrong on the call?" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] rounded-lg p-3 text-sm h-20 resize-none dark:text-white"></textarea>
+                </div>
+                <div class="flex gap-6">
+                    <label class="flex items-center gap-2 text-xs dark:text-white cursor-pointer">
+                        <input type="checkbox" id="qa-wrong-dispo" class="rounded"> Wrong Disposition
+                    </label>
+                    <label class="flex items-center gap-2 text-xs dark:text-white cursor-pointer">
+                        <input type="checkbox" id="qa-warning-sent" class="rounded"> Warning Email Sent
+                    </label>
+                    <label class="flex items-center gap-2 text-xs dark:text-white cursor-pointer">
+                        <input type="checkbox" id="qa-deduction" class="rounded"> Deduction Sheet
+                    </label>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeModal('newQACaseModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
+                <button id="submitQACaseBtn" class="flex-1 h-11 text-xs font-bold bg-purple-600 text-white rounded-xl shadow-sm">Log Case</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit QA Case Modal -->
+    <div id="editQACaseModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-6 rounded-2xl w-full max-w-lg shadow-2xl">
+            <h3 class="text-lg font-bold mb-4 dark:text-white">Edit QA Case</h3>
+            <div class="space-y-3 mb-6">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Agent Name</label>
+                        <input type="text" id="edit-qa-agent-name" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Date of Call</label>
+                        <input type="date" id="edit-qa-call-date" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Issue Type</label>
+                        <select id="edit-qa-issue-type" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                            <option>#Fatal</option><option>#Feedback</option><option>#Sticking</option>
+                            <option>#SystemFocus</option><option>#Interaction</option><option>#CallFocus</option><option>#Brand</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Team / Supervisor</label>
+                        <input type="text" id="edit-qa-team" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Coaching Status</label>
+                        <select id="edit-qa-coaching-status" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                            <option>Verbal</option><option>1st Documentation</option><option>2nd Documentation</option>
+                            <option>3rd Documentation</option><option>Fatal Documentation</option><option>Final Documentation</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Coaching Date</label>
+                        <input type="date" id="edit-qa-coaching-date" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Comment / Notes</label>
+                    <textarea id="edit-qa-comment" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] rounded-lg p-3 text-sm h-20 resize-none dark:text-white"></textarea>
+                </div>
+                <div class="flex gap-6">
+                    <label class="flex items-center gap-2 text-xs dark:text-white cursor-pointer"><input type="checkbox" id="edit-qa-wrong-dispo" class="rounded"> Wrong Disposition</label>
+                    <label class="flex items-center gap-2 text-xs dark:text-white cursor-pointer"><input type="checkbox" id="edit-qa-warning-sent" class="rounded"> Warning Email Sent</label>
+                    <label class="flex items-center gap-2 text-xs dark:text-white cursor-pointer"><input type="checkbox" id="edit-qa-deduction" class="rounded"> Deduction Sheet</label>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button id="deleteQACaseBtn" class="h-11 px-4 text-red-500 bg-red-50 dark:bg-red-900/20 rounded-xl"><i class="fa-solid fa-trash-can"></i></button>
+                <button onclick="closeModal('editQACaseModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
+                <button id="updateQACaseBtn" class="flex-1 h-11 text-xs font-bold bg-purple-600 text-white rounded-xl shadow-sm">Save Changes</button>
             </div>
         </div>
     </div>
@@ -495,7 +736,7 @@
         }
 
         function switchView(viewName) {
-            const views = ['table', 'board', 'team', 'log', 'analytics'];
+            const views = ['table', 'board', 'team', 'log', 'analytics', 'qa'];
             views.forEach(v => {
                 const nav = document.getElementById('nav-' + v);
                 const ind = document.getElementById('indicator-' + v);
@@ -510,11 +751,15 @@
             });
             if(viewName === 'log') fetchLogs();
             if(viewName === 'analytics') { fetchLogs(); renderAnalytics(); }
+            if(viewName === 'qa') { loadQACases(); switchQATab('cases'); }
+            const opsHeader = document.getElementById('ops-header');
+            if(opsHeader) opsHeader.style.display = (viewName === 'table' || viewName === 'board') ? 'block' : 'none';
         }
 
         function applyRolePermissions() {
             const isAdmin = currentUser && (currentUser.role.includes('Manager') || currentUser.role === 'Admin');
             document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? '' : 'none');
+            applyQAPermissions();
             
             if(isAdmin) {
                 setFilter('All');
@@ -1140,6 +1385,287 @@
                 }
             }
         });
+
+        // ── QA MODULE ────────────────────────────────────────────────
+
+        let globalQACases = [];
+        let activeQACaseId = null;
+
+        const QA_COACHING_STATUSES = ['Verbal','1st Documentation','2nd Documentation','3rd Documentation','Fatal Documentation','Final Documentation'];
+        const QA_ISSUE_COLORS = { '#Fatal':'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', '#Feedback':'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', '#Sticking':'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', '#SystemFocus':'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400', '#Interaction':'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', '#CallFocus':'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400', '#Brand':'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400' };
+        const STATUS_COLORS = { 'Verbal':'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300', '1st Documentation':'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', '2nd Documentation':'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', '3rd Documentation':'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', 'Fatal Documentation':'bg-red-200 text-red-800 dark:bg-red-900/50 dark:text-red-300', 'Final Documentation':'bg-black/10 text-black dark:bg-white/10 dark:text-white' };
+
+        function isQAUser() {
+            if(!currentUser) return false;
+            const r = currentUser.role || '';
+            return r.includes('Manager') || r === 'Admin' || r.toLowerCase().includes('quality') || r.toLowerCase().includes('qa');
+        }
+
+        function applyQAPermissions() {
+            document.querySelectorAll('.qa-only').forEach(el => {
+                el.style.display = isQAUser() ? '' : 'none';
+            });
+        }
+
+        function switchQATab(tab) {
+            ['cases','coaching','qaanalytics'].forEach(t => {
+                const view = document.getElementById('qa-view-' + t);
+                const btn = document.getElementById('qa-tab-' + t);
+                if(view && btn) {
+                    const isActive = t === tab;
+                    view.style.display = isActive ? (t === 'qaanalytics' ? 'flex' : 'block') : 'none';
+                    btn.className = isActive
+                        ? 'h-9 px-4 rounded-lg text-[11px] font-bold bg-purple-600 text-white shadow-sm transition-all'
+                        : 'h-9 px-4 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary dark:text-gray-400 transition-all';
+                }
+            });
+            if(tab === 'coaching') renderQACoachingBoard();
+            if(tab === 'qaanalytics') renderQAAnalytics();
+        }
+
+        async function loadQACases() {
+            const { data } = await supabaseClient.from('qa_cases').select('*').eq('department', currentUser.department).order('call_date', { ascending: false });
+            if(!data) return;
+            globalQACases = data;
+            renderQACases();
+            renderQAKPIs();
+        }
+
+        function renderQAKPIs() {
+            const total = globalQACases.length;
+            const fatals = globalQACases.filter(c => c.issue_type === '#Fatal').length;
+            const pendingCoaching = globalQACases.filter(c => !c.coaching_date).length;
+            const warnings = globalQACases.filter(c => c.warning_sent).length;
+            const s = (id, v) => { const el = document.getElementById(id); if(el) el.innerText = v; };
+            s('qa-kpi-total', total); s('qa-kpi-fatal', fatals); s('qa-kpi-coaching', pendingCoaching); s('qa-kpi-warnings', warnings);
+        }
+
+        function renderQACases() {
+            const tbody = document.getElementById('qaCaseTableBody');
+            if(!tbody) return;
+            const search = (document.getElementById('qaSearchInput')?.value || '').toLowerCase();
+            const filterIssue = document.getElementById('qaFilterIssue')?.value || '';
+            const filterStatus = document.getElementById('qaFilterStatus')?.value || '';
+
+            let cases = globalQACases.filter(c => {
+                const matchSearch = !search || (c.agent_name||'').toLowerCase().includes(search) || (c.issue_type||'').toLowerCase().includes(search) || (c.team||'').toLowerCase().includes(search) || (c.comment||'').toLowerCase().includes(search);
+                const matchIssue = !filterIssue || c.issue_type === filterIssue;
+                const matchStatus = !filterStatus || c.coaching_status === filterStatus;
+                return matchSearch && matchIssue && matchStatus;
+            });
+
+            tbody.innerHTML = '';
+            if(!cases.length) {
+                tbody.innerHTML = `<tr><td colspan="9" class="py-10 text-center text-xs text-apple-secondary italic">No cases found.</td></tr>`;
+                return;
+            }
+            cases.forEach(c => {
+                const issueBadge = `<span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${QA_ISSUE_COLORS[c.issue_type] || ''}">${c.issue_type}</span>`;
+                const statusBadge = `<span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${STATUS_COLORS[c.coaching_status] || ''}">${c.coaching_status}</span>`;
+                const warnIcon = c.warning_sent ? `<i class="fa-solid fa-envelope-circle-check text-orange-500" title="Warning sent"></i>` : `<i class="fa-regular fa-envelope text-apple-secondary opacity-30"></i>`;
+                const callDate = c.call_date ? new Date(c.call_date).toLocaleDateString([], {month:'short', day:'numeric'}) : '—';
+                const coachDate = c.coaching_date ? new Date(c.coaching_date).toLocaleDateString([], {month:'short', day:'numeric'}) : '—';
+                tbody.insertAdjacentHTML('beforeend', `<tr class="border-b border-apple-border dark:border-[#2C2C2E] hover:bg-apple-canvas dark:hover:bg-[#242426] cursor-pointer transition-colors" onclick="openEditQACase('${c.id}')">
+                    <td class="py-3 px-4 text-xs font-bold dark:text-white">${c.agent_name}</td>
+                    <td class="py-3 px-4 text-xs dark:text-gray-300">${callDate}</td>
+                    <td class="py-3 px-4">${issueBadge}</td>
+                    <td class="py-3 px-4 text-xs dark:text-gray-300 max-w-[200px] truncate">${c.comment || '—'}</td>
+                    <td class="py-3 px-4 text-xs font-bold dark:text-gray-300">${c.team || '—'}</td>
+                    <td class="py-3 px-4">${statusBadge}</td>
+                    <td class="py-3 px-4 text-center">${warnIcon}</td>
+                    <td class="py-3 px-4 text-xs dark:text-gray-300">${coachDate}</td>
+                    <td class="py-3 px-4 text-right"><i class="fa-solid fa-chevron-right text-[8px] opacity-20 dark:text-white"></i></td>
+                </tr>`);
+            });
+        }
+
+        function renderQACoachingBoard() {
+            const grid = document.getElementById('qaCoachingGrid');
+            if(!grid) return;
+            const agents = {};
+            globalQACases.forEach(c => {
+                if(!agents[c.agent_name]) agents[c.agent_name] = { cases: [], team: c.team };
+                agents[c.agent_name].cases.push(c);
+            });
+            const entries = Object.entries(agents).sort((a, b) => b[1].cases.length - a[1].cases.length);
+            if(!entries.length) { grid.innerHTML = `<p class="text-xs text-apple-secondary italic col-span-3 text-center py-8">No cases logged yet.</p>`; return; }
+            grid.innerHTML = entries.map(([name, data]) => {
+                const fatals = data.cases.filter(c => c.issue_type === '#Fatal').length;
+                const latest = data.cases.reduce((a, b) => QA_COACHING_STATUSES.indexOf(b.coaching_status) > QA_COACHING_STATUSES.indexOf(a.coaching_status) ? b : a, data.cases[0]);
+                const statusIdx = QA_COACHING_STATUSES.indexOf(latest.coaching_status);
+                const progressPct = Math.round(((statusIdx + 1) / QA_COACHING_STATUSES.length) * 100);
+                const isCritical = latest.coaching_status === 'Fatal Documentation' || latest.coaching_status === 'Final Documentation';
+                const init = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                return `<div class="bg-white dark:bg-[#1C1C1E] border ${isCritical ? 'border-red-500' : 'border-apple-border dark:border-[#2C2C2E]'} rounded-2xl p-5 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="h-10 w-10 rounded-full ${isCritical ? 'bg-red-100 dark:bg-red-900/30' : 'bg-apple-canvas dark:bg-[#2C2C2E]'} flex items-center justify-center font-bold text-xs ${isCritical ? 'text-red-600' : 'dark:text-white'}">${init}</div>
+                        <div>
+                            <h4 class="text-sm font-bold dark:text-white">${name}</h4>
+                            <p class="text-[9px] uppercase text-apple-secondary">Team: ${data.team || '—'}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+                        <div><p class="text-lg font-bold dark:text-white">${data.cases.length}</p><p class="text-[8px] uppercase text-apple-secondary">Cases</p></div>
+                        <div><p class="text-lg font-bold text-red-500">${fatals}</p><p class="text-[8px] uppercase text-apple-secondary">Fatals</p></div>
+                        <div><p class="text-lg font-bold text-orange-500">${data.cases.filter(c => c.warning_sent).length}</p><p class="text-[8px] uppercase text-apple-secondary">Warnings</p></div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[9px] uppercase font-bold text-apple-secondary">Status</span>
+                            <span class="text-[9px] font-bold ${isCritical ? 'text-red-500' : 'text-apple-secondary dark:text-gray-300'}">${latest.coaching_status}</span>
+                        </div>
+                        <div class="h-1.5 bg-apple-canvas dark:bg-[#2C2C2E] rounded-full overflow-hidden">
+                            <div class="h-full ${isCritical ? 'bg-red-500' : 'bg-purple-500'} rounded-full" style="width:${progressPct}%"></div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderQAAnalytics() {
+            const issueTypes = ['#Fatal','#Feedback','#Sticking','#SystemFocus','#Interaction','#CallFocus','#Brand'];
+            const issueCounts = {};
+            issueTypes.forEach(t => issueCounts[t] = 0);
+            const teamCounts = {};
+            globalQACases.forEach(c => {
+                if(c.issue_type) issueCounts[c.issue_type] = (issueCounts[c.issue_type] || 0) + 1;
+                if(c.team) teamCounts[c.team] = (teamCounts[c.team] || 0) + 1;
+            });
+
+            // Issues bar chart
+            const chartEl = document.getElementById('qa-chart-issues');
+            if(chartEl) {
+                const maxI = Math.max(...Object.values(issueCounts), 1);
+                chartEl.innerHTML = issueTypes.map(t => {
+                    const v = issueCounts[t] || 0;
+                    const h = Math.max((v / maxI) * 100, 4);
+                    return `<div class="flex-1 flex flex-col items-center justify-end h-full gap-1">
+                        <span class="text-[9px] font-bold dark:text-white ${v===0?'opacity-30':''}">${v}</span>
+                        <div class="w-full rounded-t-md bg-purple-500/60" style="height:${h}%"></div>
+                        <span class="text-[7px] uppercase font-bold text-apple-secondary" style="writing-mode:vertical-lr;transform:rotate(180deg)">${t.replace('#','')}</span>
+                    </div>`;
+                }).join('');
+            }
+
+            // Team bar chart
+            const teamEl = document.getElementById('qa-chart-teams');
+            if(teamEl) {
+                const maxT = Math.max(...Object.values(teamCounts), 1);
+                const sorted = Object.entries(teamCounts).sort((a,b) => b[1]-a[1]);
+                teamEl.innerHTML = sorted.length ? sorted.map(([team, count]) => `
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold dark:text-white w-20 truncate">${team}</span>
+                        <div class="flex-1 h-2 bg-apple-canvas dark:bg-[#2C2C2E] rounded-full overflow-hidden">
+                            <div class="h-full bg-purple-500 rounded-full" style="width:${(count/maxT)*100}%"></div>
+                        </div>
+                        <span class="text-xs font-bold dark:text-gray-300 w-5 text-right">${count}</span>
+                    </div>`).join('') : '<p class="text-xs text-apple-secondary italic">No data yet.</p>';
+            }
+
+            // Agent leaderboard
+            const agents = {};
+            globalQACases.forEach(c => {
+                if(!agents[c.agent_name]) agents[c.agent_name] = { count: 0, fatals: 0, topStatus: 'Verbal' };
+                agents[c.agent_name].count++;
+                if(c.issue_type === '#Fatal') agents[c.agent_name].fatals++;
+                if(QA_COACHING_STATUSES.indexOf(c.coaching_status) > QA_COACHING_STATUSES.indexOf(agents[c.agent_name].topStatus))
+                    agents[c.agent_name].topStatus = c.coaching_status;
+            });
+            const lb = document.getElementById('qaAgentLeaderboard');
+            if(lb) {
+                const rows = Object.entries(agents).sort((a,b) => b[1].count - a[1].count);
+                lb.innerHTML = rows.length ? rows.map(([name, d], i) => `
+                    <tr class="border-b border-apple-border dark:border-[#2C2C2E]">
+                        <td class="py-3 px-5 text-xs font-bold dark:text-white">${i+1}</td>
+                        <td class="py-3 px-5 text-xs font-bold dark:text-white">${name}</td>
+                        <td class="py-3 px-5 text-center text-sm font-bold dark:text-white">${d.count}</td>
+                        <td class="py-3 px-5 text-center text-sm font-bold text-red-500">${d.fatals}</td>
+                        <td class="py-3 px-5"><span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${STATUS_COLORS[d.topStatus]||''}">${d.topStatus}</span></td>
+                    </tr>`).join('') : `<tr><td colspan="5" class="py-8 text-center text-xs text-apple-secondary italic">No cases yet.</td></tr>`;
+            }
+        }
+
+        function openEditQACase(id) {
+            activeQACaseId = id;
+            const c = globalQACases.find(x => x.id == id);
+            if(!c) return;
+            document.getElementById('edit-qa-agent-name').value = c.agent_name || '';
+            document.getElementById('edit-qa-call-date').value = c.call_date || '';
+            document.getElementById('edit-qa-issue-type').value = c.issue_type || '#Fatal';
+            document.getElementById('edit-qa-team').value = c.team || '';
+            document.getElementById('edit-qa-coaching-status').value = c.coaching_status || 'Verbal';
+            document.getElementById('edit-qa-coaching-date').value = c.coaching_date || '';
+            document.getElementById('edit-qa-comment').value = c.comment || '';
+            document.getElementById('edit-qa-wrong-dispo').checked = !!c.wrong_dispo;
+            document.getElementById('edit-qa-warning-sent').checked = !!c.warning_sent;
+            document.getElementById('edit-qa-deduction').checked = !!c.deduction_sheet;
+            openModal('editQACaseModal');
+        }
+
+        document.getElementById('submitQACaseBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('submitQACaseBtn'); if(btn.disabled) return;
+            const agentName = document.getElementById('qa-agent-name').value.trim();
+            if(!agentName) { showToast('Agent name is required'); return; }
+            btn.disabled = true; btn.innerText = 'Logging...';
+            const { error } = await supabaseClient.from('qa_cases').insert([{
+                agent_name: agentName,
+                call_date: document.getElementById('qa-call-date').value || null,
+                issue_type: document.getElementById('qa-issue-type').value,
+                team: document.getElementById('qa-team').value.trim(),
+                coaching_status: document.getElementById('qa-coaching-status').value,
+                coaching_date: document.getElementById('qa-coaching-date').value || null,
+                comment: document.getElementById('qa-comment').value.trim(),
+                wrong_dispo: document.getElementById('qa-wrong-dispo').checked,
+                warning_sent: document.getElementById('qa-warning-sent').checked,
+                deduction_sheet: document.getElementById('qa-deduction').checked,
+                department: currentUser.department,
+                logged_by: currentUser.name
+            }]);
+            btn.disabled = false; btn.innerText = 'Log Case';
+            if(error) { showToast('Error: ' + error.message); return; }
+            closeModal('newQACaseModal');
+            // reset form
+            ['qa-agent-name','qa-call-date','qa-team','qa-coaching-date','qa-comment'].forEach(id => document.getElementById(id).value = '');
+            ['qa-wrong-dispo','qa-warning-sent','qa-deduction'].forEach(id => document.getElementById(id).checked = false);
+            showToast('Case logged.'); playSound('pop'); loadQACases();
+        });
+
+        document.getElementById('updateQACaseBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('updateQACaseBtn'); if(btn.disabled || !activeQACaseId) return;
+            btn.disabled = true; btn.innerText = 'Saving...';
+            const { error } = await supabaseClient.from('qa_cases').update({
+                agent_name: document.getElementById('edit-qa-agent-name').value.trim(),
+                call_date: document.getElementById('edit-qa-call-date').value || null,
+                issue_type: document.getElementById('edit-qa-issue-type').value,
+                team: document.getElementById('edit-qa-team').value.trim(),
+                coaching_status: document.getElementById('edit-qa-coaching-status').value,
+                coaching_date: document.getElementById('edit-qa-coaching-date').value || null,
+                comment: document.getElementById('edit-qa-comment').value.trim(),
+                wrong_dispo: document.getElementById('edit-qa-wrong-dispo').checked,
+                warning_sent: document.getElementById('edit-qa-warning-sent').checked,
+                deduction_sheet: document.getElementById('edit-qa-deduction').checked,
+            }).eq('id', activeQACaseId);
+            btn.disabled = false; btn.innerText = 'Save Changes';
+            if(error) { showToast('Error: ' + error.message); return; }
+            closeModal('editQACaseModal'); showToast('Updated.'); playSound('pop'); loadQACases();
+        });
+
+        document.getElementById('deleteQACaseBtn').addEventListener('click', async () => {
+            if(!activeQACaseId || !confirm('Delete this QA case?')) return;
+            await supabaseClient.from('qa_cases').delete().eq('id', activeQACaseId);
+            closeModal('editQACaseModal'); showToast('Deleted.'); loadQACases();
+        });
+
+        function exportQAToCSV() {
+            if(!globalQACases.length) return;
+            let csv = "Agent,Date,Issue,Comment,Team,Coaching Status,Warning Sent,Coaching Date,Wrong Dispo,Deduction Sheet\n";
+            globalQACases.forEach(c => csv += `"${c.agent_name}","${c.call_date||''}","${c.issue_type}","${(c.comment||'').replace(/"/g,'""')}","${c.team||''}","${c.coaching_status}","${c.warning_sent?'Yes':'No'}","${c.coaching_date||''}","${c.wrong_dispo?'Yes':'No'}","${c.deduction_sheet?'Yes':'No'}"\n`);
+            const blob = new Blob([csv], {type:'text/csv'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'QA_Cases.csv'; a.click();
+            showToast('Exported.');
+        }
+
+        // ── END QA MODULE ─────────────────────────────────────────────
 
         supabaseClient.channel('db-sync-logs').on('postgres_changes', { event: '*', schema: 'public', table: 'activity_logs' }, () => fetchLogs()).subscribe();
         
