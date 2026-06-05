@@ -229,28 +229,62 @@
                 </div>
 
                 <div id="view-analytics" class="hidden flex-col gap-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl border border-apple-border dark:border-[#2C2C2E] text-center shadow-sm">
-                            <i class="fa-solid fa-triangle-exclamation text-2xl text-red-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="stat-critical">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">System Criticals</p>
+                    <div class="flex items-center justify-between mb-1">
+                        <div>
+                            <h2 class="text-lg font-bold dark:text-white">Performance Dashboard</h2>
+                            <p class="text-[10px] text-apple-secondary uppercase tracking-widest">Impact snapshot for <span id="perf-dept">your floor</span> • Today</p>
                         </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl border border-apple-border dark:border-[#2C2C2E] text-center shadow-sm">
-                            <i class="fa-solid fa-users-gear text-2xl text-apple-blue mb-2"></i>
+                        <button onclick="copyPerformanceReport()" class="h-9 px-3 rounded-lg text-[11px] font-bold bg-apple-blue text-white shadow-sm transition-all flex items-center justify-center gap-2 hover:opacity-80">
+                            <i class="fa-solid fa-clipboard"></i> COPY REPORT
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-green-500">
+                            <i class="fa-solid fa-circle-check text-xl text-green-500 mb-2"></i>
+                            <h3 class="text-3xl font-bold dark:text-white" id="stat-done-today">0</h3>
+                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Completed Today</p>
+                        </div>
+                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-apple-blue">
+                            <i class="fa-solid fa-stopwatch text-xl text-apple-blue mb-2"></i>
+                            <h3 class="text-3xl font-bold dark:text-white" id="stat-avg-time">—</h3>
+                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Avg Resolution Time</p>
+                        </div>
+                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-indigo-500">
+                            <i class="fa-solid fa-gauge-high text-xl text-indigo-500 mb-2"></i>
                             <h3 class="text-3xl font-bold dark:text-white" id="stat-rate">0%</h3>
                             <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Resolution Rate</p>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl border border-apple-border dark:border-[#2C2C2E] text-center shadow-sm border-t-4 border-t-purple-500">
-                            <i class="fa-solid fa-chalkboard-user text-2xl text-purple-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="stat-coaching">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Active Coaching Sessions</p>
+                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-red-500">
+                            <i class="fa-solid fa-triangle-exclamation text-xl text-red-500 mb-2"></i>
+                            <h3 class="text-3xl font-bold dark:text-white" id="stat-critical">0</h3>
+                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Open Criticals</p>
                         </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl border border-apple-border dark:border-[#2C2C2E] text-center shadow-sm border-t-4 border-t-teal-500">
-                            <i class="fa-solid fa-file-contract text-2xl text-teal-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="stat-reports">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Active Reports</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <p class="text-[10px] uppercase font-black text-apple-secondary tracking-widest">Throughput — Last 7 Days</p>
+                            <p class="text-[9px] text-apple-secondary uppercase">Tasks completed per day</p>
+                        </div>
+                        <div id="throughputChart" class="flex items-end justify-between gap-2 h-40"></div>
+                    </div>
+
+                    <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm overflow-hidden">
+                        <div class="p-5 border-b border-apple-border dark:border-[#2C2C2E] flex items-center justify-between">
+                            <p class="text-[10px] uppercase font-black text-apple-secondary tracking-widest">Team Leaderboard — Today</p>
+                            <i class="fa-solid fa-ranking-star text-apple-secondary"></i>
+                        </div>
+                        <div class="overflow-x-auto scrollbar-hide">
+                            <table class="w-full text-left border-collapse min-w-[420px]">
+                                <thead><tr class="bg-[#FBFBFD] dark:bg-[#242426] border-b border-apple-border dark:border-[#2C2C2E]">
+                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">#</th>
+                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">Team Member</th>
+                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary text-center">Completed</th>
+                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary text-center">Active Load</th>
+                                </tr></thead>
+                                <tbody id="leaderboardBody"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -473,6 +507,7 @@
                 }
             });
             if(viewName === 'log') fetchLogs();
+            if(viewName === 'analytics') { fetchLogs(); renderAnalytics(); }
         }
 
         function applyRolePermissions() {
@@ -748,10 +783,143 @@
             document.getElementById('board-count-review').innerText = c.rev; 
             document.getElementById('board-count-done').innerText = c.d;
             
-            document.getElementById('stat-critical').innerText = c.crit; 
-            document.getElementById('stat-rate').innerText = c.t > 0 ? Math.round(((c.t - (c.r + c.a + c.p + c.rev)) / c.t) * 100) + '%' : '0%';
-            document.getElementById('stat-coaching').innerText = c.coach;
-            document.getElementById('stat-reports').innerText = c.rep;
+            const openCrit = globalTasks.filter(t => t.priority === 'Critical' && t.status !== 'Completed').length;
+            const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.innerText = v; };
+            setTxt('stat-critical', openCrit);
+            setTxt('stat-rate', c.t > 0 ? Math.round(((c.t - (c.r + c.a + c.p + c.rev)) / c.t) * 100) + '%' : '0%');
+
+            renderAnalytics();
+        }
+
+        // ---- Performance Dashboard ----
+        function isToday(dateStr) {
+            const d = new Date(dateStr); const n = new Date();
+            return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && d.getDate() === n.getDate();
+        }
+
+        // Pairs each "Created:" log with the matching "to Completed" log (by quoted title) to estimate resolution time.
+        function computeResolutionStats() {
+            const created = {}, completed = {};
+            // logs are newest-first; walk oldest-first so first-seen = earliest
+            [...globalLogs].reverse().forEach(log => {
+                const m = log.action_text.match(/"([^"]+)"/);
+                if(!m) return;
+                const title = m[1];
+                if(log.action_text.startsWith('Created:') && !(title in created)) created[title] = new Date(log.created_at);
+                if(log.action_text.includes('to Completed')) completed[title] = new Date(log.created_at);
+            });
+            const durations = [];
+            Object.keys(completed).forEach(title => {
+                if(created[title]) {
+                    const mins = (completed[title] - created[title]) / 60000;
+                    if(mins >= 0) durations.push(mins);
+                }
+            });
+            if(!durations.length) return '—';
+            const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
+            if(avg < 60) return Math.round(avg) + 'm';
+            return (avg / 60).toFixed(1) + 'h';
+        }
+
+        function renderAnalytics() {
+            const deptEl = document.getElementById('perf-dept');
+            if(deptEl && currentUser) deptEl.innerText = currentUser.department || 'your floor';
+
+            // Completed today (from logs — survives even if task later edited)
+            const doneToday = globalLogs.filter(l => l.action_text.includes('to Completed') && isToday(l.created_at)).length;
+            const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.innerText = v; };
+            setTxt('stat-done-today', doneToday);
+            setTxt('stat-avg-time', computeResolutionStats());
+
+            // 7-day throughput
+            const chart = document.getElementById('throughputChart');
+            if(chart) {
+                const days = new Array(7).fill(0);
+                const labels = [];
+                const now = new Date();
+                for(let i = 6; i >= 0; i--) {
+                    const d = new Date(now); d.setDate(now.getDate() - i);
+                    labels.push(d.toLocaleDateString([], { weekday: 'short' }));
+                }
+                globalLogs.forEach(l => {
+                    if(!l.action_text.includes('to Completed')) return;
+                    const diff = Math.floor((now.setHours(23,59,59,999) - new Date(l.created_at)) / 86400000);
+                    if(diff >= 0 && diff < 7) days[6 - diff]++;
+                });
+                const max = Math.max(...days, 1);
+                chart.innerHTML = days.map((v, i) => {
+                    const h = Math.max((v / max) * 100, 4);
+                    const isLast = i === 6;
+                    return `<div class="flex-1 flex flex-col items-center justify-end h-full gap-1">
+                        <span class="text-[10px] font-bold dark:text-white ${v === 0 ? 'opacity-30' : ''}">${v}</span>
+                        <div class="w-full rounded-t-md ${isLast ? 'bg-apple-blue' : 'bg-apple-blue/40'}" style="height:${h}%"></div>
+                        <span class="text-[8px] uppercase font-bold text-apple-secondary tracking-wider">${labels[i]}</span>
+                    </div>`;
+                }).join('');
+            }
+
+            // Leaderboard
+            const body = document.getElementById('leaderboardBody');
+            if(body) {
+                const stats = {};
+                globalUsers.forEach(u => { stats[u.name] = { done: 0, load: 0 }; });
+                globalLogs.forEach(l => {
+                    if(l.action_text.includes('to Completed') && isToday(l.created_at)) {
+                        if(!stats[l.performed_by]) stats[l.performed_by] = { done: 0, load: 0 };
+                        stats[l.performed_by].done++;
+                    }
+                });
+                globalTasks.forEach(t => {
+                    if(t.status !== 'Completed' && t.assigned_to && t.assigned_to !== 'None') {
+                        if(!stats[t.assigned_to]) stats[t.assigned_to] = { done: 0, load: 0 };
+                        stats[t.assigned_to].load++;
+                    }
+                });
+                const rows = Object.keys(stats).map(name => ({ name, ...stats[name] }))
+                    .sort((a, b) => b.done - a.done || b.load - a.load);
+                if(!rows.length) {
+                    body.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-xs text-apple-secondary italic">No team activity yet.</td></tr>`;
+                } else {
+                    const medals = ['🥇', '🥈', '🥉'];
+                    body.innerHTML = rows.map((r, i) => {
+                        const init = r.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                        return `<tr class="border-b border-apple-border dark:border-[#2C2C2E]">
+                            <td class="py-3 px-5 text-xs font-bold dark:text-white">${medals[i] || (i + 1)}</td>
+                            <td class="py-3 px-5"><div class="flex items-center gap-2"><div class="h-7 w-7 rounded-full bg-apple-canvas dark:bg-[#2C2C2E] flex items-center justify-center text-[9px] font-bold dark:text-white">${init}</div><span class="text-xs font-bold dark:text-white">${r.name}</span></div></td>
+                            <td class="py-3 px-5 text-center text-sm font-bold text-green-600 dark:text-green-400">${r.done}</td>
+                            <td class="py-3 px-5 text-center text-xs font-bold dark:text-gray-300">${r.load}</td>
+                        </tr>`;
+                    }).join('');
+                }
+            }
+        }
+
+        async function copyPerformanceReport() {
+            const doneToday = globalLogs.filter(l => l.action_text.includes('to Completed') && isToday(l.created_at)).length;
+            const active = globalTasks.filter(t => t.status !== 'Completed').length;
+            const openCrit = globalTasks.filter(t => t.priority === 'Critical' && t.status !== 'Completed').length;
+            const avg = computeResolutionStats();
+            const dept = (currentUser?.department || 'FLOOR').toUpperCase();
+            const date = new Date().toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+
+            const stats = {};
+            globalLogs.forEach(l => {
+                if(l.action_text.includes('to Completed') && isToday(l.created_at)) stats[l.performed_by] = (stats[l.performed_by] || 0) + 1;
+            });
+            const top = Object.entries(stats).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+            let report = `📊 ${dept} PERFORMANCE REPORT — ${date}\n`;
+            report += `————————————————————\n`;
+            report += `✅ Completed Today: ${doneToday}\n`;
+            report += `⏱  Avg Resolution Time: ${avg}\n`;
+            report += `📋 Currently Active: ${active}\n`;
+            report += `🚨 Open Criticals: ${openCrit}\n`;
+            if(top.length) {
+                report += `\n🏆 TOP PERFORMERS\n`;
+                top.forEach(([name, n], i) => { report += `${i + 1}. ${name} — ${n} completed\n`; });
+            }
+            try { await navigator.clipboard.writeText(report); showToast('Performance report copied!'); }
+            catch(e) { showToast('Copy failed — check permissions'); }
         }
 
         async function quickMove(id, nextStat) {
