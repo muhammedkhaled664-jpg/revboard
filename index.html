@@ -64,8 +64,8 @@
             
             <div class="space-y-4 mb-6 w-full text-left">
                 <div>
-                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Username</label>
-                    <input type="text" id="loginUsername" placeholder="e.g. Abdelrahman Hany" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-12 px-4 rounded-xl text-sm dark:text-white transition-colors focus:border-apple-blue outline-none" onkeypress="if(event.key === 'Enter') document.getElementById('loginPassword').focus()">
+                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Email</label>
+                    <input type="email" id="loginUsername" autocomplete="email" placeholder="e.g. you@company.com" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-12 px-4 rounded-xl text-sm dark:text-white transition-colors focus:border-apple-blue outline-none" onkeypress="if(event.key === 'Enter') document.getElementById('loginPassword').focus()">
                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Password</label>
@@ -351,7 +351,8 @@
             <p id="memberError" class="text-red-500 text-[10px] font-bold mb-4 hidden bg-red-50 dark:bg-red-900/20 p-2 rounded border border-red-100"></p>
             <div class="space-y-4 mb-6">
                 <input type="text" id="newMemberName" placeholder="Full Name" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white">
-                <input type="text" id="newMemberPassword" placeholder="Initial Password" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white font-mono">
+                <input type="email" id="newMemberEmail" placeholder="Email Address" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white">
+                <input type="text" id="newMemberPassword" placeholder="Initial Password (min 6 chars)" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white font-mono">
             </div>
             <div class="flex gap-2">
                 <button onclick="closeModal('addMemberModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
@@ -451,6 +452,7 @@
         }
         function lockSystem() {
             if(!currentUser) return;
+            supabaseClient.auth.signOut();
             currentUser = null;
             document.getElementById('loginUsername').value = '';
             document.getElementById('loginPassword').value = '';
@@ -475,7 +477,7 @@
         }
         function closeModal(id) { 
             document.getElementById(id).style.display = 'none'; 
-            if(id === 'addMemberModal') { document.getElementById('newMemberName').value = ''; document.getElementById('newMemberPassword').value = ''; }
+            if(id === 'addMemberModal') { document.getElementById('newMemberName').value = ''; document.getElementById('newMemberEmail').value = ''; document.getElementById('newMemberPassword').value = ''; }
             if(id === 'newTaskModal') { 
                 document.getElementById('newTitle').value = ''; 
                 document.getElementById('newTarget').value = ''; 
@@ -530,39 +532,48 @@
 
         async function verifyLogin() {
             if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            
-            const userVal = document.getElementById('loginUsername').value.trim();
+
+            const emailVal = document.getElementById('loginUsername').value.trim();
             const passVal = document.getElementById('loginPassword').value.trim();
             const btn = document.getElementById('loginBtn');
             const errEl = document.getElementById('pinError');
-            
-            if(!userVal || !passVal) {
-                errEl.innerText = "Enter Username and Password";
+
+            if(!emailVal || !passVal) {
+                errEl.innerText = "Enter Email and Password";
                 errEl.style.opacity = '1'; setTimeout(() => errEl.style.opacity = '0', 2000); return;
             }
-            
+
             btn.innerText = "Verifying..."; btn.disabled = true;
 
             try {
-                const { data, error } = await supabaseClient.from('floor_users')
+                // 1. Authenticate against Supabase Auth (passwords are hashed server-side).
+                const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+                    email: emailVal, password: passVal
+                });
+                if (authError || !authData.user) throw new Error("Invalid credentials");
+
+                // 2. Load this user's profile (role / department / status).
+                const { data: profile, error: profileError } = await supabaseClient.from('floor_users')
                     .select('*')
-                    .ilike('name', userVal)
-                    .eq('password', passVal)
+                    .eq('user_id', authData.user.id)
                     .single();
 
-                if (data && !error) {
-                    currentUser = data;
-                    document.getElementById('lockScreen').style.opacity = '0';
-                    setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
-                    document.getElementById('activeUserName').innerText = data.name + ' (' + (data.department || 'SYS') + ')';
-                    document.getElementById('searchContainer').classList.remove('hidden'); 
-                    
-                    document.getElementById('loginUsername').value = '';
-                    document.getElementById('loginPassword').value = '';
-                    
-                    applyRolePermissions(); switchView('table'); initTeam(); loadData(); fetchLogs(); logAction("Session Start"); resetIdleTimer();
-                    playSound('pop');
-                } else { throw new Error("Invalid"); }
+                if (profileError || !profile || profile.status !== 'Active') {
+                    await supabaseClient.auth.signOut();
+                    throw new Error("No active profile / access revoked");
+                }
+
+                currentUser = profile;
+                document.getElementById('lockScreen').style.opacity = '0';
+                setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
+                document.getElementById('activeUserName').innerText = profile.name + ' (' + (profile.department || 'SYS') + ')';
+                document.getElementById('searchContainer').classList.remove('hidden');
+
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+
+                applyRolePermissions(); switchView('table'); initTeam(); loadData(); fetchLogs(); logAction("Session Start"); resetIdleTimer();
+                playSound('pop');
             } catch (err) {
                 errEl.innerText = "Access Denied";
                 errEl.style.opacity = '1';
@@ -651,16 +662,44 @@
         document.getElementById('submitMemberBtn').addEventListener('click', async () => {
             const btn = document.getElementById('submitMemberBtn'); if(btn.disabled) return;
             const name = document.getElementById('newMemberName').value.trim();
+            const email = document.getElementById('newMemberEmail').value.trim();
             const password = document.getElementById('newMemberPassword').value.trim();
             const errEl = document.getElementById('memberError');
-            
-            if(!name || !password) { errEl.innerText = "Check Name & Password"; errEl.style.display = 'block'; return; }
-            btn.disabled = true; btn.innerText = "Saving...";
-            
-            const { error } = await supabaseClient.from('floor_users').insert([{ name, password: password, status: 'Active', role: 'Team Leader', department: currentUser.department }]);
-            if(error) { errEl.innerText = error.message; errEl.style.display = 'block'; btn.disabled = false; btn.innerText = "Save User"; return; }
-            
-            logAction(`Added Member: ${name}`); btn.disabled = false; btn.innerText = "Save User"; closeModal('addMemberModal'); showToast('Success.'); initTeam();
+
+            if(!name || !email || !password) { errEl.innerText = "Name, email and password are all required"; errEl.style.display = 'block'; return; }
+            if(password.length < 6) { errEl.innerText = "Password must be at least 6 characters"; errEl.style.display = 'block'; return; }
+            btn.disabled = true; btn.innerText = "Creating account...";
+
+            try {
+                // Preserve the manager's session — signUp would otherwise swap us
+                // into the new user's session.
+                const { data: { session: adminSession } } = await supabaseClient.auth.getSession();
+
+                // 1. Create the real auth account.
+                const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+                if(signUpError || !signUpData.user) throw new Error(signUpError?.message || "Could not create account");
+
+                // 2. Restore the manager's session immediately.
+                if(adminSession) {
+                    await supabaseClient.auth.setSession({
+                        access_token: adminSession.access_token,
+                        refresh_token: adminSession.refresh_token
+                    });
+                }
+
+                // 3. Create the linked profile (RLS allows managers to do this).
+                const { error: profileError } = await supabaseClient.from('floor_users').insert([{
+                    user_id: signUpData.user.id, name, email,
+                    status: 'Active', role: 'Team Leader', department: currentUser.department
+                }]);
+                if(profileError) throw new Error(profileError.message);
+
+                logAction(`Added Member: ${name}`);
+                btn.disabled = false; btn.innerText = "Save User"; closeModal('addMemberModal'); showToast('Member created.'); initTeam();
+            } catch(err) {
+                errEl.innerText = err.message; errEl.style.display = 'block';
+                btn.disabled = false; btn.innerText = "Save User";
+            }
         });
 
         function exportToCSV() {
