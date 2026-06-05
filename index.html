@@ -306,6 +306,9 @@
                             <button onclick="switchQATab('cases')" id="qa-tab-cases" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-purple-600 text-white shadow-sm transition-all">Case Log</button>
                             <button onclick="switchQATab('coaching')" id="qa-tab-coaching" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary dark:text-gray-400 transition-all">Coaching Board</button>
                             <button onclick="switchQATab('qaanalytics')" id="qa-tab-qaanalytics" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary dark:text-gray-400 transition-all">Analytics</button>
+                            <button onclick="openModal('bulkQAModal')" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-purple-300 dark:border-purple-800 text-purple-600 dark:text-purple-400 shadow-sm flex items-center gap-2 hover:opacity-80 transition-all">
+                                <i class="fa-solid fa-paste"></i> Bulk Paste
+                            </button>
                             <button onclick="openModal('newQACaseModal')" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-purple-600 text-white shadow-sm flex items-center gap-2 hover:opacity-80 transition-all">
                                 <i class="fa-solid fa-plus"></i> New Case
                             </button>
@@ -565,6 +568,23 @@
         </div>
     </div>
 
+    <!-- Bulk QA Paste Modal -->
+    <div id="bulkQAModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-6 rounded-2xl w-full max-w-2xl shadow-2xl">
+            <h3 class="text-lg font-bold mb-2 dark:text-white">Bulk Paste QA Cases</h3>
+            <p class="text-xs text-apple-secondary dark:text-gray-400 mb-3">Copy rows directly from Excel and paste below. Each row becomes a case. Use this exact column order (tab-separated — Excel does this automatically):</p>
+            <div class="bg-apple-canvas dark:bg-[#2C2C2E] rounded-lg p-3 mb-3 text-[10px] font-mono text-apple-secondary dark:text-gray-400 overflow-x-auto">
+                Agent Name &nbsp;|&nbsp; Date (e.g. 5/28/2026) &nbsp;|&nbsp; Issue (#Fatal) &nbsp;|&nbsp; Comment &nbsp;|&nbsp; Team &nbsp;|&nbsp; Coaching Status
+            </div>
+            <textarea id="bulkQAInput" placeholder="Vera Istrefi&#9;5/28/2026&#9;#Fatal&#9;Did not transfer to an agent&#9;David&#9;Verbal&#10;Beatrice Culaj&#9;5/28/2026&#9;#Fatal&#9;Did not transfer&#9;David&#9;1st Documentation" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-40 p-3 rounded-lg text-xs dark:text-white font-mono resize-none mb-1"></textarea>
+            <p class="text-[10px] text-apple-secondary mb-5">Only <b>Agent Name</b> is required. Missing columns are left blank. Unknown issue types default to #Feedback; unknown statuses default to Verbal.</p>
+            <div class="flex gap-2">
+                <button onclick="closeModal('bulkQAModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
+                <button id="submitBulkQABtn" class="flex-1 h-11 text-xs font-bold bg-purple-600 text-white rounded-xl shadow-sm">Import Cases</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Edit QA Case Modal -->
     <div id="editQACaseModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-6 rounded-2xl w-full max-w-lg shadow-2xl">
@@ -726,9 +746,10 @@
                 document.getElementById('newAssignee').value = 'None';
             }
             if(id === 'bulkPasteModal') {
-                document.getElementById('bulkPasteInput').value = ''; 
+                document.getElementById('bulkPasteInput').value = '';
                 document.getElementById('bulkPasteZone').value = 'General';
             }
+            if(id === 'bulkQAModal') document.getElementById('bulkQAInput').value = '';
         }
         function showToast(msg) {
             const t = document.getElementById('toastAlert'); document.getElementById('toastMessage').innerText = msg;
@@ -1654,6 +1675,59 @@
             if(!activeQACaseId || !confirm('Delete this QA case?')) return;
             await supabaseClient.from('qa_cases').delete().eq('id', activeQACaseId);
             closeModal('editQACaseModal'); showToast('Deleted.'); loadQACases();
+        });
+
+        // Parse a date in M/D/YYYY (Excel style) or ISO into YYYY-MM-DD, else null.
+        function parseQADate(str) {
+            if(!str) return null;
+            str = str.trim();
+            if(/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+            const m = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+            if(m) {
+                let [, mo, d, y] = m;
+                if(y.length === 2) y = '20' + y;
+                return `${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            }
+            const parsed = new Date(str);
+            return isNaN(parsed) ? null : parsed.toISOString().slice(0, 10);
+        }
+
+        document.getElementById('submitBulkQABtn').addEventListener('click', async () => {
+            const btn = document.getElementById('submitBulkQABtn'); if(btn.disabled) return;
+            const raw = document.getElementById('bulkQAInput').value;
+            const lines = raw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if(!lines.length) return;
+            if(lines.length > 200) { alert('Please paste 200 rows or fewer at a time.'); return; }
+
+            const validIssues = ['#Fatal','#Feedback','#Sticking','#SystemFocus','#Interaction','#CallFocus','#Brand'];
+            btn.disabled = true; btn.innerText = `Importing ${lines.length}...`;
+
+            const rows = lines.map(line => {
+                const cols = line.split('\t').map(c => c.trim());
+                // tab-separated preferred; fall back to comma if no tabs present
+                const parts = cols.length > 1 ? cols : line.split(',').map(c => c.trim());
+                const [agent, date, issue, comment, team, status] = parts;
+                let issueType = validIssues.find(v => v.toLowerCase() === (issue||'').toLowerCase()) || '#Feedback';
+                let coachingStatus = QA_COACHING_STATUSES.find(s => s.toLowerCase() === (status||'').toLowerCase()) || 'Verbal';
+                return {
+                    agent_name: agent || 'Unknown',
+                    call_date: parseQADate(date),
+                    issue_type: issueType,
+                    comment: comment || '',
+                    team: team || '',
+                    coaching_status: coachingStatus,
+                    department: currentUser.department,
+                    logged_by: currentUser.name
+                };
+            }).filter(r => r.agent_name && r.agent_name !== 'Unknown');
+
+            if(!rows.length) { btn.disabled = false; btn.innerText = 'Import Cases'; alert('No valid rows found — make sure each row starts with an agent name.'); return; }
+
+            const { error } = await supabaseClient.from('qa_cases').insert(rows);
+            btn.disabled = false; btn.innerText = 'Import Cases';
+            if(error) { alert('Import error: ' + error.message); return; }
+            document.getElementById('bulkQAInput').value = '';
+            closeModal('bulkQAModal'); playSound('chime'); showToast(`Imported ${rows.length} cases.`); loadQACases();
         });
 
         function exportQAToCSV() {
