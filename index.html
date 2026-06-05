@@ -448,7 +448,7 @@
 
         function resetIdleTimer() {
             clearTimeout(idleTimer);
-            idleTimer = setTimeout(lockSystem, 60000);
+            idleTimer = setTimeout(lockSystem, 300000);
         }
         function lockSystem() {
             if(!currentUser) return;
