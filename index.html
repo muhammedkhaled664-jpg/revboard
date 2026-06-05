@@ -1706,16 +1706,20 @@
                 const cols = line.split('\t').map(c => c.trim());
                 // tab-separated preferred; fall back to comma if no tabs present
                 const parts = cols.length > 1 ? cols : line.split(',').map(c => c.trim());
-                const [agent, date, issue, comment, team, status] = parts;
+                // Excel column order: Agent | Date | Issue | Comment | WrongDispo | Repetitive | NeedCoaching | Team | CoachingNotes | CoachingStatus | CoachingDate | WarningSent
+                const [agent, date, issue, comment, wrongDispoRaw, , , team, coachingNotes, statusRaw, coachingDateRaw, warningSentRaw] = parts;
                 let issueType = validIssues.find(v => v.toLowerCase() === (issue||'').toLowerCase()) || '#Feedback';
-                let coachingStatus = QA_COACHING_STATUSES.find(s => s.toLowerCase() === (status||'').toLowerCase()) || 'Verbal';
+                let coachingStatus = QA_COACHING_STATUSES.find(s => s.toLowerCase() === (statusRaw||'').toLowerCase()) || 'Verbal';
                 return {
                     agent_name: agent || 'Unknown',
                     call_date: parseQADate(date),
                     issue_type: issueType,
-                    comment: comment || '',
+                    comment: (comment || '') + (coachingNotes ? ' | ' + coachingNotes : ''),
                     team: team || '',
                     coaching_status: coachingStatus,
+                    wrong_dispo: (wrongDispoRaw||'').toLowerCase() === 'yes',
+                    warning_sent: (warningSentRaw||'').toLowerCase() === 'yes',
+                    coaching_date: parseQADate(coachingDateRaw),
                     department: currentUser.department,
                     logged_by: currentUser.name
                 };
