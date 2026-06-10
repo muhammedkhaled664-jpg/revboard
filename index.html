@@ -1176,7 +1176,6 @@
         });
 
         function exportToCSV() {
-            if(!globalTasks.length) return;
             let csv = "ID,Directive,Reference,Department,Assignee,Priority,Status\n";
             globalTasks.forEach(t => csv += `"${t.id}","${t.title}","${t.linked_entity}","${t.zone || 'General'}","${t.assigned_to}","${t.priority}","${t.status}"\n`);
             // UTF-8 BOM so Excel recognizes the encoding and skips the "format mismatch" warning
@@ -1189,18 +1188,20 @@
         }
 
         async function exportToSheets() {
-            if(!globalTasks.length) { showToast("No data to export."); return; }
             const header = ["ID","Directive","Reference","Department","Assignee","Priority","Status"];
             const rows = globalTasks.map(t => [
                 t.id, t.title || '', t.linked_entity || '', t.zone || 'General',
                 t.assigned_to || '', t.priority || '', t.status || ''
             ].map(c => String(c).replace(/\t/g, ' ').replace(/\r?\n/g, ' ')).join('\t'));
+            // Always include the header row — even with zero directives the columns get laid out
             const tsv = [header.join('\t'), ...rows].join('\n');
             try {
                 await navigator.clipboard.writeText(tsv);
-                showToast("Copied! Opening Google Sheets — press Ctrl+V to paste.");
+                showToast(globalTasks.length
+                    ? "Copied! Opening Google Sheets — press Ctrl+V to paste."
+                    : "Headers copied — opening Sheets, press Ctrl+V to paste.");
             } catch(e) {
-                showToast("Opening Sheets — use Ctrl+V to paste your data.");
+                showToast("Opening Sheets — use Ctrl+V to paste.");
             }
             window.open('https://sheets.new', '_blank');
         }
