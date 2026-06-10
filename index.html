@@ -1179,9 +1179,12 @@
             if(!globalTasks.length) return;
             let csv = "ID,Directive,Reference,Department,Assignee,Priority,Status\n";
             globalTasks.forEach(t => csv += `"${t.id}","${t.title}","${t.linked_entity}","${t.zone || 'General'}","${t.assigned_to}","${t.priority}","${t.status}"\n`);
-            const blob = new Blob([csv], { type: 'text/csv' });
+            // UTF-8 BOM so Excel recognizes the encoding and skips the "format mismatch" warning
+            const blob = new Blob(["﻿" + csv], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.setAttribute('href', url); a.setAttribute('download', 'Sync_Report.csv'); a.click();
+            const stamp = new Date().toISOString().slice(0, 10);
+            const a = document.createElement('a'); a.setAttribute('href', url); a.setAttribute('download', `LogiSync_Report_${stamp}.csv`); a.click();
+            window.URL.revokeObjectURL(url);
             showToast("Exported.");
         }
 
