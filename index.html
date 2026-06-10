@@ -74,62 +74,50 @@
         <i class="fa-solid fa-triangle-exclamation mr-1"></i>Offline Mode
     </div>
 
-    <div id="lockScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center select-none overflow-hidden" style="background: linear-gradient(135deg, #0a0a0f 0%, #0d1b2e 40%, #0a1628 70%, #0d0f1a 100%);">
-        <!-- animated grid background -->
-        <div class="absolute inset-0 opacity-[0.06]" style="background-image: linear-gradient(#3b82f6 1px, transparent 1px), linear-gradient(90deg, #3b82f6 1px, transparent 1px); background-size: 40px 40px;"></div>
-        <!-- glow blobs -->
-        <div class="absolute top-[-80px] left-[-80px] w-[340px] h-[340px] rounded-full opacity-20" style="background: radial-gradient(circle, #3b82f6 0%, transparent 70%); filter: blur(40px);"></div>
-        <div class="absolute bottom-[-100px] right-[-80px] w-[400px] h-[400px] rounded-full opacity-15" style="background: radial-gradient(circle, #6366f1 0%, transparent 70%); filter: blur(50px);"></div>
+    <div id="lockScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center select-none p-6 bg-[#F5F5F7] dark:bg-[#0B0B0C] transition-colors">
+        <!-- very subtle ambient tint -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] opacity-30 dark:opacity-20 pointer-events-none" style="background: radial-gradient(ellipse at top, rgba(99,102,241,0.18) 0%, transparent 65%);"></div>
 
-        <!-- card -->
-        <div class="relative z-10 w-full max-w-[360px] mx-auto px-6">
-            <!-- logo mark -->
-            <div class="flex flex-col items-center mb-8">
-                <div class="h-16 w-16 rounded-2xl flex items-center justify-center mb-4 shadow-2xl" style="background: linear-gradient(135deg, #2563eb, #4f46e5); box-shadow: 0 0 40px rgba(59,130,246,0.45);">
-                    <i class="fa-solid fa-bolt text-white text-2xl"></i>
+        <div class="relative z-10 w-full max-w-[380px]">
+            <!-- brand -->
+            <div class="flex flex-col items-center mb-9">
+                <div class="h-14 w-14 rounded-2xl flex items-center justify-center mb-5 bg-gradient-to-br from-apple-blue to-indigo-500" style="box-shadow: 0 10px 30px rgba(79,70,229,0.25);">
+                    <i class="fa-solid fa-layer-group text-white text-xl"></i>
                 </div>
-                <h1 class="text-3xl font-black tracking-tight text-white">LogiSync</h1>
-                <div class="flex items-center gap-2 mt-2">
-                    <span class="h-px w-8 bg-blue-500/50"></span>
-                    <p class="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em]">Ops Command Center</p>
-                    <span class="h-px w-8 bg-blue-500/50"></span>
-                </div>
+                <h1 class="text-[28px] font-bold tracking-tight text-apple-primary dark:text-white">LogiSync</h1>
+                <p class="text-[13px] text-apple-secondary dark:text-gray-400 mt-1">Floor Operations Platform</p>
             </div>
 
-            <!-- form card -->
-            <div class="rounded-2xl p-6 space-y-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px);">
-                <div>
-                    <label class="text-[9px] font-black text-blue-400 mb-1.5 block uppercase tracking-widest">Email</label>
-                    <input type="email" id="loginUsername" autocomplete="email" placeholder="you@company.com"
-                        class="w-full h-12 px-4 rounded-xl text-sm text-white placeholder-white/30 outline-none transition-all"
-                        style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);"
-                        onfocus="this.style.borderColor='rgba(59,130,246,0.7)'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.15)'"
-                        onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none'"
-                        onkeypress="if(event.key === 'Enter') document.getElementById('loginPassword').focus()">
+            <!-- card -->
+            <div class="bg-white dark:bg-[#161618] rounded-[22px] p-7 border border-apple-border dark:border-[#2A2A2C]" style="box-shadow: 0 20px 50px rgba(0,0,0,0.08);">
+                <h2 class="text-base font-semibold text-apple-primary dark:text-white mb-1">Welcome back</h2>
+                <p class="text-[12px] text-apple-secondary dark:text-gray-500 mb-6">Sign in to your floor dashboard</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[11px] font-semibold text-apple-secondary dark:text-gray-400 mb-1.5 block">Email</label>
+                        <input type="email" id="loginUsername" autocomplete="email" placeholder="you@company.com"
+                            class="w-full h-12 px-4 rounded-xl text-sm bg-apple-canvas dark:bg-[#202022] border border-apple-border dark:border-[#3A3A3C] text-apple-primary dark:text-white placeholder-apple-secondary/50 outline-none transition-all focus:border-apple-blue focus:ring-2 focus:ring-apple-blue/15"
+                            onkeypress="if(event.key === 'Enter') document.getElementById('loginPassword').focus()">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-semibold text-apple-secondary dark:text-gray-400 mb-1.5 block">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password"
+                            class="w-full h-12 px-4 rounded-xl text-sm bg-apple-canvas dark:bg-[#202022] border border-apple-border dark:border-[#3A3A3C] text-apple-primary dark:text-white placeholder-apple-secondary/50 outline-none transition-all focus:border-apple-blue focus:ring-2 focus:ring-apple-blue/15"
+                            onkeypress="if(event.key === 'Enter') verifyLogin()">
+                    </div>
+                    <button onclick="verifyLogin()" id="loginBtn"
+                        class="w-full h-12 text-sm font-semibold text-white rounded-xl bg-apple-blue hover:bg-apple-blueHover transition-all active:scale-[0.98] mt-2 shadow-sm">
+                        Sign In
+                    </button>
                 </div>
-                <div>
-                    <label class="text-[9px] font-black text-blue-400 mb-1.5 block uppercase tracking-widest">Password</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••"
-                        class="w-full h-12 px-4 rounded-xl text-sm text-white placeholder-white/30 outline-none transition-all"
-                        style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);"
-                        onfocus="this.style.borderColor='rgba(59,130,246,0.7)'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.15)'"
-                        onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none'"
-                        onkeypress="if(event.key === 'Enter') verifyLogin()">
-                </div>
-                <button onclick="verifyLogin()" id="loginBtn"
-                    class="w-full h-12 text-sm font-black text-white rounded-xl transition-all active:scale-95 mt-1"
-                    style="background: linear-gradient(135deg, #2563eb, #4f46e5); box-shadow: 0 4px 24px rgba(59,130,246,0.4);"
-                    onmouseover="this.style.boxShadow='0 4px 32px rgba(59,130,246,0.6)'"
-                    onmouseout="this.style.boxShadow='0 4px 24px rgba(59,130,246,0.4)'">
-                    <i class="fa-solid fa-arrow-right-to-bracket mr-2 text-xs"></i>ACCESS THE FLOOR
-                </button>
+
+                <p id="pinError" class="text-red-500 text-[11px] font-semibold text-center mt-4 h-4 opacity-0 transition-opacity">
+                    Incorrect email or password
+                </p>
             </div>
 
-            <p id="pinError" class="text-red-400 text-[10px] font-bold tracking-widest uppercase text-center mt-4 h-4 opacity-0 transition-opacity">
-                <i class="fa-solid fa-lock mr-1"></i>Access Denied
-            </p>
-
-            <p class="text-center text-[9px] text-white/20 mt-6 uppercase tracking-widest">Authorized Personnel Only</p>
+            <p class="text-center text-[11px] text-apple-secondary/60 dark:text-gray-600 mt-7">Authorized personnel only &bull; LogiSync &copy; 2026</p>
         </div>
     </div>
 
