@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tempo | Floor Operations</title>
+    <title>SYNC | Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -40,36 +40,6 @@
             background-repeat: no-repeat; background-position-x: calc(100% - 12px); background-position-y: 50%;
         }
 
-        /* TEMPO LOGIN — animated rhythm/equalizer accent */
-        .tempo-eq { display: flex; align-items: flex-end; gap: 4px; height: 28px; }
-        .tempo-eq span { width: 4px; border-radius: 2px; background: linear-gradient(to top, #007AFF, #6366f1); animation: tempoBeat 1.1s ease-in-out infinite; }
-        .tempo-eq span:nth-child(1) { animation-delay: 0s; }
-        .tempo-eq span:nth-child(2) { animation-delay: .15s; }
-        .tempo-eq span:nth-child(3) { animation-delay: .3s; }
-        .tempo-eq span:nth-child(4) { animation-delay: .45s; }
-        .tempo-eq span:nth-child(5) { animation-delay: .6s; }
-        .tempo-eq span:nth-child(6) { animation-delay: .75s; }
-        .tempo-eq span:nth-child(7) { animation-delay: .9s; }
-        @keyframes tempoBeat { 0%, 100% { height: 6px; opacity: .55; } 50% { height: 28px; opacity: 1; } }
-        @media (prefers-reduced-motion: reduce) { .tempo-eq span { animation: none; height: 16px; } }
-
-        /* MOBILE OPTIMIZATIONS */
-        @media (max-width: 767px) {
-            /* Give main content bottom padding so sidebar doesn't cover content */
-            main { padding-bottom: 72px !important; }
-            /* Modals full-screen on phone */
-            .fixed.inset-0 > div.max-w-lg,
-            .fixed.inset-0 > div.max-w-2xl { max-width: 100% !important; border-radius: 0 !important; height: 100% !important; overflow-y: auto; }
-            /* Tables scroll horizontally */
-            table { min-width: 520px; }
-            .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            /* Larger tap targets */
-            button, select, input { min-height: 44px; }
-            select, input[type="text"], input[type="email"], input[type="password"], input[type="date"], textarea { font-size: 16px !important; }
-            /* FAB bigger on mobile */
-            #fab-add-task { width: 52px !important; height: 52px !important; font-size: 1.1rem !important; }
-        }
-
         /* WAR ROOM MODE OVERRIDES */
         body.war-room aside, body.war-room header, body.war-room #ops-header, body.war-room #fab-add-task { display: none !important; }
         body.war-room { background-color: #050505 !important; }
@@ -87,119 +57,59 @@
         <i class="fa-solid fa-triangle-exclamation mr-1"></i>Offline Mode
     </div>
 
-    <div id="lockScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center select-none p-6 bg-[#F5F5F7] dark:bg-[#0B0B0C] transition-colors">
-        <!-- very subtle ambient tint -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] opacity-30 dark:opacity-20 pointer-events-none" style="background: radial-gradient(ellipse at top, rgba(99,102,241,0.18) 0%, transparent 65%);"></div>
-
-        <div class="relative z-10 w-full max-w-[380px]">
-            <!-- brand -->
-            <div class="flex flex-col items-center mb-9">
-                <div class="tempo-eq mb-5">
-                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <div id="lockScreen" class="fixed inset-0 z-[100] bg-[#F5F5F7]/95 dark:bg-[#121212]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 transition-opacity duration-500 select-none">
+        <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-8 md:p-10 rounded-[24px] w-full max-w-[360px] shadow-apple-soft text-center transition-colors">
+            <h1 class="text-2xl font-bold tracking-tight dark:text-white mb-2">SYNC Access</h1>
+            <p class="text-xs text-apple-secondary dark:text-gray-400 mb-8">Enter your credentials to continue</p>
+            
+            <div class="space-y-4 mb-6 w-full text-left">
+                <div>
+                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Email</label>
+                    <input type="email" id="loginUsername" autocomplete="email" placeholder="e.g. you@company.com" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-12 px-4 rounded-xl text-sm dark:text-white transition-colors focus:border-apple-blue outline-none" onkeypress="if(event.key === 'Enter') document.getElementById('loginPassword').focus()">
                 </div>
-                <h1 class="text-[30px] font-bold tracking-tight text-apple-primary dark:text-white">Tempo</h1>
-                <p class="text-[13px] text-apple-secondary dark:text-gray-400 mt-1">Set the pace of your floor</p>
+                <div>
+                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-12 px-4 rounded-xl text-sm dark:text-white transition-colors focus:border-apple-blue outline-none" onkeypress="if(event.key === 'Enter') verifyLogin()">
+                </div>
             </div>
 
-            <!-- card -->
-            <div class="bg-white dark:bg-[#161618] rounded-[22px] p-7 border border-apple-border dark:border-[#2A2A2C]" style="box-shadow: 0 20px 50px rgba(0,0,0,0.08);">
-                <h2 class="text-base font-semibold text-apple-primary dark:text-white mb-1">Welcome back</h2>
-                <p class="text-[12px] text-apple-secondary dark:text-gray-500 mb-6">Sign in to your floor dashboard</p>
-
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-[11px] font-semibold text-apple-secondary dark:text-gray-400 mb-1.5 block">Email</label>
-                        <input type="email" id="loginUsername" autocomplete="email" placeholder="you@company.com"
-                            class="w-full h-12 px-4 rounded-xl text-sm bg-apple-canvas dark:bg-[#202022] border border-apple-border dark:border-[#3A3A3C] text-apple-primary dark:text-white placeholder-apple-secondary/50 outline-none transition-all focus:border-apple-blue focus:ring-2 focus:ring-apple-blue/15"
-                            onkeypress="if(event.key === 'Enter') document.getElementById('loginPassword').focus()">
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-semibold text-apple-secondary dark:text-gray-400 mb-1.5 block">Password</label>
-                        <input type="password" id="loginPassword" placeholder="Enter your password"
-                            class="w-full h-12 px-4 rounded-xl text-sm bg-apple-canvas dark:bg-[#202022] border border-apple-border dark:border-[#3A3A3C] text-apple-primary dark:text-white placeholder-apple-secondary/50 outline-none transition-all focus:border-apple-blue focus:ring-2 focus:ring-apple-blue/15"
-                            onkeypress="if(event.key === 'Enter') verifyLogin()">
-                    </div>
-                    <button onclick="verifyLogin()" id="loginBtn"
-                        class="w-full h-12 text-sm font-semibold text-white rounded-xl bg-apple-blue hover:bg-apple-blueHover transition-all active:scale-[0.98] mt-2 shadow-sm">
-                        Sign In
-                    </button>
-                </div>
-
-                <p id="pinError" class="text-red-500 text-[11px] font-semibold text-center mt-4 h-4 opacity-0 transition-opacity">
-                    Incorrect email or password
-                </p>
-            </div>
-
-            <p class="text-center text-[11px] text-apple-secondary/60 dark:text-gray-600 mt-7">Authorized personnel only &bull; Tempo &copy; 2026</p>
+            <button onclick="verifyLogin()" id="loginBtn" class="w-full h-12 bg-apple-blue text-white rounded-xl font-bold text-sm shadow-sm active:scale-95 transition-all">Access Command Center</button>
+            <p id="pinError" class="text-red-500 text-[10px] font-semibold tracking-wider uppercase text-center mt-6 h-4 opacity-0 transition-opacity">Denied</p>
         </div>
     </div>
 
-    <aside class="fixed bottom-0 left-0 right-0 h-16 md:relative md:h-full md:w-[210px] bg-apple-surface dark:bg-[#1C1C1E] border-t md:border-t-0 md:border-r border-apple-border dark:border-[#2C2C2E] flex flex-row md:flex-col items-center md:items-stretch justify-around md:justify-start md:py-6 md:px-3 z-40">
-        <div class="hidden md:flex items-center gap-2 px-2 mb-8">
-            <div class="h-9 w-9 bg-gradient-to-br from-apple-blue to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
-                <i class="fa-solid fa-layer-group text-base"></i>
-            </div>
-            <span class="font-bold text-sm tracking-tight dark:text-white">Tempo</span>
+    <aside class="fixed bottom-0 left-0 right-0 h-16 md:relative md:h-full md:w-[68px] bg-apple-surface dark:bg-[#1C1C1E] border-t md:border-t-0 md:border-r border-apple-border dark:border-[#2C2C2E] flex flex-row md:flex-col items-center justify-around md:justify-start md:py-6 z-40">
+        <div class="hidden md:flex h-10 w-10 bg-apple-primary dark:bg-apple-blue rounded-xl items-center justify-center text-white mb-8 shadow-sm">
+            <i class="fa-solid fa-layer-group text-lg"></i>
         </div>
-        <nav class="flex flex-row md:flex-col gap-2 md:gap-1 w-full items-center md:items-stretch justify-around md:justify-start">
-            <button onclick="switchView('table')" id="nav-table" class="text-apple-blue relative p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
-                <i class="fa-solid fa-list text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Directives</span>
+        <nav class="flex flex-row md:flex-col gap-2 md:gap-6 w-full items-center justify-around md:justify-start">
+            <button onclick="switchView('table')" id="nav-table" class="text-apple-blue relative p-2 md:w-full flex justify-center transition-colors">
+                <i class="fa-solid fa-list text-xl"></i>
                 <div id="indicator-table" class="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
-            <button onclick="switchView('rankings')" id="nav-rankings" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
-                <i class="fa-solid fa-ranking-star text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Team Totals</span>
-                <div id="indicator-rankings" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
+            <button onclick="switchView('board')" id="nav-board" class="text-apple-secondary dark:text-gray-400 p-2 md:w-full flex justify-center transition-colors">
+                <i class="fa-solid fa-border-all text-xl"></i>
+                <div id="indicator-board" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
-            <button onclick="switchView('coaching')" id="nav-coaching" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
-                <i class="fa-solid fa-comments text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Coaching</span>
-                <div id="indicator-coaching" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
-            </button>
-            <button onclick="switchView('leave')" id="nav-leave" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors relative">
-                <i class="fa-solid fa-plane-departure text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Leave</span>
-                <span id="leaveTodayDot" class="hidden absolute top-1 right-2 md:right-3 h-2 w-2 rounded-full bg-orange-500"></span>
-                <div id="indicator-leave" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
-            </button>
-            <button onclick="switchView('team')" id="nav-team" class="admin-only text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
-                <i class="fa-solid fa-users text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">People</span>
+            <button onclick="switchView('team')" id="nav-team" class="admin-only text-apple-secondary dark:text-gray-400 p-2 md:w-full flex justify-center transition-colors">
+                <i class="fa-solid fa-users text-xl"></i>
                 <div id="indicator-team" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
-            <button onclick="switchView('log')" id="nav-log" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
-                <i class="fa-solid fa-bolt text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Activity</span>
+            <button onclick="switchView('log')" id="nav-log" class="text-apple-secondary dark:text-gray-400 p-2 md:w-full flex justify-center transition-colors">
+                <i class="fa-solid fa-bolt text-xl"></i>
                 <div id="indicator-log" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
-            <button onclick="switchView('analytics')" id="nav-analytics" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
-                <i class="fa-solid fa-chart-line text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Performance</span>
+            <button onclick="switchView('analytics')" id="nav-analytics" class="text-apple-secondary dark:text-gray-400 p-2 md:w-full flex justify-center transition-colors">
+                <i class="fa-solid fa-chart-line text-xl"></i>
                 <div id="indicator-analytics" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
         </nav>
-
-        <!-- Logged-in user card (desktop) with probation badge -->
-        <div id="sidebarUserCard" class="hidden md:flex md:mt-auto md:mb-3 items-center gap-2 px-3 py-2 mx-1 rounded-xl bg-apple-canvas dark:bg-[#2C2C2E]">
-            <div class="h-8 w-8 rounded-full bg-apple-blue flex items-center justify-center text-white text-[10px] font-black shrink-0" id="sidebarUserInit">--</div>
-            <div class="min-w-0">
-                <p class="text-[11px] font-bold dark:text-white truncate flex items-center gap-1">
-                    <span id="sidebarUserName" class="truncate">Locked</span>
-                    <i id="sidebarProbationBadge" class="fa-solid fa-graduation-cap text-green-500 text-[10px] hidden" title="Passed probation period"></i>
-                </p>
-                <p class="text-[8px] uppercase tracking-widest text-apple-secondary truncate" id="sidebarUserRole">—</p>
-            </div>
-        </div>
-
-        <div class="md:flex flex-row md:flex-col gap-2 md:gap-1 items-center md:items-stretch flex">
-            <button onclick="toggleTheme()" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
-                <i id="themeIcon" class="fa-solid fa-moon text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Theme</span>
+        <div class="md:mt-auto flex flex-row md:flex-col gap-2 md:gap-6 items-center">
+            <button onclick="toggleTheme()" class="text-apple-secondary dark:text-gray-400 p-2 md:w-full flex justify-center transition-colors">
+                <i id="themeIcon" class="fa-solid fa-moon text-xl"></i>
             </button>
-            <button onclick="lockSystem()" class="text-apple-secondary dark:text-gray-400 hover:text-red-500 transition-colors p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3">
-                <i class="fa-solid fa-power-off text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Lock</span>
+            <button onclick="lockSystem()" class="text-apple-secondary dark:text-gray-400 hover:text-red-500 transition-colors p-2 md:w-full flex justify-center">
+                <i class="fa-solid fa-power-off text-xl"></i>
             </button>
         </div>
     </aside>
@@ -208,17 +118,16 @@
         <header class="h-16 border-b border-apple-border dark:border-[#2C2C2E] bg-white/70 dark:bg-[#1C1C1E]/80 backdrop-blur-xl z-10 flex items-center justify-between px-6 transition-colors">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-layer-group text-apple-blue text-xl md:hidden"></i>
-                <span class="font-bold text-sm tracking-tight md:hidden dark:text-white">Tempo</span>
+                <span class="font-bold text-sm tracking-tight md:hidden dark:text-white">SYNC</span>
             </div>
             
             <div id="searchContainer" class="hidden flex-1 max-w-md mx-6 relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-apple-secondary"></i>
-                <input type="text" id="omniSearchInput" oninput="handleSearch(this.value)" placeholder="Omni-Search directives, references, assignees..." class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-9 pl-9 pr-4 rounded-lg text-xs dark:text-white outline-none focus:border-apple-blue transition-colors">
+                <input type="text" id="omniSearchInput" oninput="handleSearch(this.value)" placeholder="Omni-Search directives, timing, assignees..." class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-9 pl-9 pr-4 rounded-lg text-xs dark:text-white outline-none focus:border-apple-blue transition-colors">
             </div>
 
             <div class="flex items-center gap-3 ml-auto">
                 <p id="activeUserName" class="text-[10px] font-bold text-apple-secondary dark:text-gray-400 uppercase tracking-widest">LOCKED</p>
-                <span id="activeUserRole" class="hidden text-[9px] font-black uppercase tracking-widest text-apple-blue border border-apple-blue/40 bg-apple-blue/10 px-2 py-1 rounded-md"></span>
                 <div class="h-7 w-7 rounded-full bg-apple-blue flex items-center justify-center text-white text-[10px] font-black">
                     <i class="fa-solid fa-user"></i>
                 </div>
@@ -229,95 +138,52 @@
             <div class="max-w-7xl mx-auto flex flex-col gap-6">
                 
                 <div id="ops-header" class="block">
-                    <!-- COMMAND BAR -->
-                    <div class="rounded-2xl p-5 mb-5 relative bg-white dark:bg-[#161618] border border-apple-border dark:border-[#2C2C2E] shadow-sm">
-                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                            <div class="flex items-center gap-4">
-                                <div class="h-12 w-12 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br from-apple-blue to-indigo-500" style="box-shadow: 0 8px 20px rgba(79,70,229,0.22);">
-                                    <i class="fa-solid fa-satellite-dish text-white text-lg"></i>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h1 class="text-xl font-bold tracking-tight text-apple-primary dark:text-white">Ops Console</h1>
-                                        <span class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
-                                            <span class="relative flex h-1.5 w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span></span>
-                                            <span class="text-[8px] font-black text-green-600 dark:text-green-400 uppercase tracking-widest">Live</span>
-                                        </span>
-                                    </div>
-                                    <p class="text-[10px] text-apple-secondary uppercase tracking-widest font-bold mt-0.5">Run the floor &bull; track every move</p>
-                                </div>
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
+                        <div class="flex items-center gap-6">
+                            <div>
+                                <h1 class="text-2xl font-bold tracking-tight dark:text-white">Command Operations</h1>
+                                <p class="text-xs text-apple-secondary dark:text-gray-400">See everything. Solve anything.</p>
                             </div>
-                            <div class="flex items-center gap-5">
-                                <div class="text-right hidden sm:block">
-                                    <p id="opsClock" class="text-2xl font-bold text-apple-primary dark:text-white tabular-nums leading-none">--:--</p>
-                                    <p id="opsDate" class="text-[9px] text-apple-secondary uppercase tracking-widest font-bold mt-1">—</p>
-                                </div>
-                                <div class="h-10 w-px bg-apple-border dark:bg-[#2C2C2E] hidden sm:block"></div>
-                                <div class="hidden lg:block w-28" title="8-Hour Execution Velocity">
-                                    <p class="text-[8px] uppercase font-bold text-apple-secondary mb-1 tracking-widest">Velocity</p>
-                                    <div id="sparklineContainer" class="h-6 w-full flex items-end"></div>
-                                </div>
-                                <!-- ACTIONS MENU -->
-                                <div class="relative admin-only">
-                                    <button onclick="toggleActionsMenu(event)" id="actionsMenuBtn" class="h-10 px-4 rounded-xl flex items-center gap-2 text-[11px] font-bold bg-apple-blue text-white shadow-sm hover:bg-apple-blueHover transition-all">
-                                        <i class="fa-solid fa-bars text-xs"></i><span class="hidden sm:inline">ACTIONS</span>
-                                    </button>
-                                    <div id="actionsMenu" class="hidden absolute right-0 top-12 z-50 w-52 bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-xl shadow-2xl p-1.5">
-                                        <button onclick="closeActionsMenu(); openModal('templatesModal')" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-bolt w-4 text-apple-blue"></i> Templates</button>
-                                        <button onclick="closeActionsMenu(); openModal('bulkPasteModal')" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-paste w-4 text-apple-secondary"></i> Import Tasks</button>
-                                        <button onclick="closeActionsMenu(); copyShiftReport()" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-copy w-4 text-apple-secondary"></i> Shift Report</button>
-                                        <div class="h-px bg-apple-border dark:bg-[#2C2C2E] my-1.5"></div>
-                                        <button onclick="closeActionsMenu(); exportToSheets()" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-table-cells w-4 text-green-600"></i> Export to Sheets</button>
-                                        <button onclick="closeActionsMenu(); exportToCSV()" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-file-csv w-4 text-green-600"></i> Export CSV</button>
-                                        <button onclick="closeActionsMenu(); backupAllData()" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-shield-halved w-4 text-indigo-600"></i> Backup Data</button>
-                                    </div>
-                                </div>
+                            <div class="hidden lg:block h-10 w-32 border-l border-apple-border dark:border-[#2C2C2E] pl-6 ml-2" title="8-Hour Execution Velocity">
+                                <p class="text-[8px] uppercase font-bold text-apple-secondary mb-1">Velocity</p>
+                                <div id="sparklineContainer" class="h-6 w-full flex items-end"></div>
                             </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openModal('bulkPasteModal')" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-apple-blue text-white shadow-sm transition-all flex items-center justify-center gap-2 hover:opacity-80">
+                                <i class="fa-solid fa-paste"></i> BULK
+                            </button>
+                            <button onclick="copyShiftReport()" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary hover:text-apple-primary dark:text-gray-400 dark:hover:text-white shadow-sm transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-copy"></i> REPORT
+                            </button>
+                            <button onclick="exportToCSV()" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 shadow-sm transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-file-csv"></i> EXPORT
+                            </button>
                         </div>
                     </div>
-
-                    <!-- FILTERS + VIEW TOGGLE -->
-                    <div class="flex items-center justify-between gap-3 mb-6">
-                        <div class="flex gap-2 overflow-x-auto scrollbar-hide py-1">
-                            <button onclick="setFilter('All')" id="flt-All" class="admin-only shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-apple-primary text-white dark:bg-apple-blue shadow-sm">All Active</button>
-                            <button onclick="setFilter('Mine')" id="flt-Mine" class="shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white dark:bg-[#1C1C1E] text-apple-secondary border border-apple-border dark:border-[#2C2C2E]">My Tasks</button>
-                            <button onclick="setFilter('Critical')" id="flt-Critical" class="admin-only shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white dark:bg-[#1C1C1E] text-apple-secondary border border-apple-border dark:border-[#2C2C2E]">Critical</button>
-                        </div>
-                        <div class="shrink-0 flex items-center bg-apple-canvas dark:bg-[#2C2C2E] rounded-lg p-1 gap-1">
-                            <button onclick="setLayout('table')" id="layout-table" class="h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all bg-white dark:bg-[#1C1C1E] text-apple-primary dark:text-white shadow-sm"><i class="fa-solid fa-list text-[11px]"></i><span class="hidden sm:inline">List</span></button>
-                            <button onclick="setLayout('board')" id="layout-board" class="h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all text-apple-secondary"><i class="fa-solid fa-border-all text-[11px]"></i><span class="hidden sm:inline">Board</span></button>
-                        </div>
+                    
+                    <div class="flex gap-2 overflow-x-auto scrollbar-hide mb-6 py-1">
+                        <button onclick="setFilter('All')" id="flt-All" class="admin-only shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-apple-primary text-white dark:bg-apple-blue shadow-sm">All Active</button>
+                        <button onclick="setFilter('Mine')" id="flt-Mine" class="shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white dark:bg-[#1C1C1E] text-apple-secondary border border-apple-border dark:border-[#2C2C2E]">My Tasks</button>
+                        <button onclick="setFilter('Critical')" id="flt-Critical" class="admin-only shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white dark:bg-[#1C1C1E] text-apple-secondary border border-apple-border dark:border-[#2C2C2E]">Critical</button>
                     </div>
 
-                    <!-- KPI TILES -->
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-l-4 border-l-apple-blue relative overflow-hidden">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Active Total</p>
-                                <i class="fa-solid fa-layer-group text-apple-blue/40"></i>
-                            </div>
-                            <span id="kpi-total" class="text-3xl font-black dark:text-white">0</span>
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm">
+                            <p class="text-[9px] uppercase font-bold text-apple-secondary mb-1">Active Total</p>
+                            <span id="kpi-total" class="text-2xl font-bold dark:text-white">0</span>
                         </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-l-4 border-l-purple-500">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Radar &amp; Assigned</p>
-                                <i class="fa-solid fa-satellite text-purple-500/40"></i>
-                            </div>
-                            <span id="kpi-radar" class="text-3xl font-black dark:text-white">0</span>
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm">
+                            <p class="text-[9px] uppercase font-bold text-apple-secondary mb-1">Radar & Assigned</p>
+                            <span id="kpi-radar" class="text-2xl font-bold dark:text-white">0</span>
                         </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-l-4 border-l-orange-500">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">In Progress</p>
-                                <i class="fa-solid fa-bolt text-orange-500/40"></i>
-                            </div>
-                            <span id="kpi-progress" class="text-3xl font-black dark:text-white">0</span>
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm">
+                            <p class="text-[9px] uppercase font-bold text-apple-secondary mb-1">In Progress</p>
+                            <span id="kpi-progress" class="text-2xl font-bold dark:text-white">0</span>
                         </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-l-4 border-l-green-500">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Done Today</p>
-                                <i class="fa-solid fa-circle-check text-green-500/40"></i>
-                            </div>
-                            <span id="kpi-completed" class="text-3xl font-black text-green-500">0</span>
+                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] opacity-50">
+                            <p class="text-[9px] uppercase font-bold text-apple-secondary mb-1">Done Today</p>
+                            <span id="kpi-completed" class="text-2xl font-bold dark:text-white">0</span>
                         </div>
                     </div>
                 </div>
@@ -325,7 +191,7 @@
                 <div id="view-table" class="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-apple-border dark:border-[#2C2C2E] overflow-hidden shadow-sm">
                     <div class="overflow-x-auto scrollbar-hide">
                         <table class="w-full text-left border-collapse min-w-[600px]">
-                            <thead><tr class="bg-[#FBFBFD] dark:bg-[#242426] border-b border-apple-border dark:border-[#2C2C2E]"><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Directive</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Reference</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Department</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Assignee</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Status</th><th class="py-3 px-4 text-right"></th></tr></thead>
+                            <thead><tr class="bg-[#FBFBFD] dark:bg-[#242426] border-b border-apple-border dark:border-[#2C2C2E]"><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Directive</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Timing</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Department</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Assignee</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Status</th><th class="py-3 px-4 text-right"></th></tr></thead>
                             <tbody id="taskTableBody"></tbody>
                         </table>
                     </div>
@@ -351,176 +217,6 @@
                     <div class="w-72 shrink-0 flex flex-col bg-white/40 dark:bg-[#1C1C1E]/40 border border-apple-border dark:border-[#2C2C2E] rounded-2xl p-4 opacity-60 h-fit">
                         <h3 class="text-[9px] uppercase font-black text-apple-secondary mb-4 flex justify-between">Completed <span id="board-count-done" class="text-apple-primary dark:text-white">0</span></h3>
                         <div id="col-completed" class="space-y-3"></div>
-                    </div>
-                </div>
-
-                <div id="view-rankings" class="hidden flex-col gap-6">
-                    <div class="flex items-center justify-between gap-3 flex-wrap">
-                        <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-apple-blue to-indigo-500 flex items-center justify-center text-white shadow-sm"><i class="fa-solid fa-ranking-star"></i></div>
-                            <div>
-                                <h2 class="text-xl font-bold dark:text-white">Team Totals</h2>
-                                <p class="text-[10px] text-apple-secondary uppercase tracking-widest">Team ranking by floor numbers &bull; <span id="rank-dept">your floor</span></p>
-                            </div>
-                        </div>
-                        <button onclick="copyRankingReport()" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary hover:text-apple-primary dark:text-gray-400 dark:hover:text-white shadow-sm flex items-center gap-2 transition-all">
-                            <i class="fa-solid fa-clipboard"></i> COPY REPORT
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-apple-blue">
-                            <i class="fa-solid fa-list-check text-lg text-apple-blue mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="rank-total">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Total Directives</p>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-green-500">
-                            <i class="fa-solid fa-circle-check text-lg text-green-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold text-green-500" id="rank-completed">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Completed</p>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-indigo-500">
-                            <i class="fa-solid fa-gauge-high text-lg text-indigo-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold text-indigo-500" id="rank-rate">0%</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Completion Rate</p>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-purple-500">
-                            <i class="fa-solid fa-people-group text-lg text-purple-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="rank-teams">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Teams Ranked</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-2xl p-6 shadow-sm">
-                        <h3 class="text-[10px] uppercase font-black text-apple-secondary tracking-widest mb-5">Leaderboard &mdash; Teams by Completed Directives</h3>
-                        <div id="rankingsBoard" class="space-y-4"></div>
-                    </div>
-
-                    <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-2xl overflow-hidden shadow-sm">
-                        <div class="px-6 pt-5 pb-2"><h3 class="text-[10px] uppercase font-black text-apple-secondary tracking-widest">Numbers by Team</h3></div>
-                        <div class="overflow-x-auto scrollbar-hide">
-                            <table class="w-full text-left border-collapse min-w-[560px]">
-                                <thead><tr class="border-b border-apple-border dark:border-[#2C2C2E]">
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary">Rank</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary">Team</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary text-center">Members</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary text-center">Total</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary text-center">Done</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary text-center">Rate</th>
-                                </tr></thead>
-                                <tbody id="rankTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="view-coaching" class="hidden flex-col gap-6">
-                    <div class="flex items-center justify-between gap-3 flex-wrap">
-                        <div>
-                            <h2 class="text-lg font-bold dark:text-white">Coaching Log</h2>
-                            <p class="text-[10px] text-apple-secondary uppercase tracking-widest">Sessions recorded across the floor</p>
-                        </div>
-                        <button onclick="openModal('newCoachingModal')" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-apple-blue text-white shadow-sm flex items-center gap-2 hover:opacity-90 transition-all">
-                            <i class="fa-solid fa-plus"></i> LOG SESSION
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm">
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest mb-1">Total Sessions</p>
-                            <h3 class="text-3xl font-bold dark:text-white" id="coach-total">0</h3>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm">
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest mb-1">This Week</p>
-                            <h3 class="text-3xl font-bold text-apple-blue" id="coach-week">0</h3>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm">
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest mb-1">Agents Coached</p>
-                            <h3 class="text-3xl font-bold dark:text-white" id="coach-agents">0</h3>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm">
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest mb-1">Coaches Active</p>
-                            <h3 class="text-3xl font-bold dark:text-white" id="coach-coaches">0</h3>
-                        </div>
-                    </div>
-
-                    <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-2xl overflow-hidden shadow-sm">
-                        <div class="overflow-x-auto scrollbar-hide">
-                            <table class="w-full text-left border-collapse min-w-[680px]">
-                                <thead><tr class="bg-[#FBFBFD] dark:bg-[#242426] border-b border-apple-border dark:border-[#2C2C2E]">
-                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">Date</th>
-                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">Agent</th>
-                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">Topic</th>
-                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">Notes</th>
-                                    <th class="py-3 px-5 text-[9px] uppercase font-bold text-apple-secondary">Coach</th>
-                                    <th class="py-3 px-5"></th>
-                                </tr></thead>
-                                <tbody id="coachingTableBody"></tbody>
-                            </table>
-                        </div>
-                        <div id="coachingEmpty" class="hidden text-xs text-apple-secondary italic text-center py-10">No coaching sessions logged yet.</div>
-                    </div>
-                </div>
-
-                <div id="view-leave" class="hidden flex-col gap-6">
-                    <div class="flex items-center justify-between gap-3 flex-wrap">
-                        <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-sm"><i class="fa-solid fa-plane-departure"></i></div>
-                            <div>
-                                <h2 class="text-xl font-bold dark:text-white">Leave Tracker</h2>
-                                <p class="text-[10px] text-apple-secondary uppercase tracking-widest">Who's out &amp; when &bull; <span id="leave-dept">your floor</span></p>
-                            </div>
-                        </div>
-                        <button onclick="openModal('newLeaveModal')" class="h-9 px-4 rounded-lg text-[11px] font-bold bg-orange-500 text-white shadow-sm flex items-center gap-2 hover:opacity-90 transition-all">
-                            <i class="fa-solid fa-plus"></i> LOG LEAVE
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-orange-500">
-                            <i class="fa-solid fa-user-clock text-lg text-orange-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="leave-today">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Out Today</p>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-amber-500">
-                            <i class="fa-solid fa-calendar-week text-lg text-amber-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="leave-week">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">On Leave This Week</p>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-red-500">
-                            <i class="fa-solid fa-notes-medical text-lg text-red-500 mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="leave-sick">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Sick (30d)</p>
-                        </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] p-5 rounded-2xl border border-apple-border dark:border-[#2C2C2E] shadow-sm border-t-4 border-t-apple-blue">
-                            <i class="fa-solid fa-umbrella-beach text-lg text-apple-blue mb-2"></i>
-                            <h3 class="text-3xl font-bold dark:text-white" id="leave-annual">0</h3>
-                            <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Annual (30d)</p>
-                        </div>
-                    </div>
-
-                    <div id="leaveOutToday" class="hidden bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-900/40 rounded-2xl p-4">
-                        <p class="text-[10px] uppercase font-black text-orange-600 dark:text-orange-400 tracking-widest mb-2"><i class="fa-solid fa-circle-exclamation"></i> Out Today</p>
-                        <div id="leaveOutTodayList" class="flex flex-wrap gap-2"></div>
-                    </div>
-
-                    <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-2xl overflow-hidden shadow-sm">
-                        <div class="px-6 pt-5 pb-2"><h3 class="text-[10px] uppercase font-black text-apple-secondary tracking-widest">Leave Records</h3></div>
-                        <div class="overflow-x-auto scrollbar-hide">
-                            <table class="w-full text-left border-collapse min-w-[680px]">
-                                <thead><tr class="border-b border-apple-border dark:border-[#2C2C2E]">
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary">Member</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary">Type</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary">From</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary">To</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary">Status</th>
-                                    <th class="py-3 px-6 text-[9px] uppercase font-bold text-apple-secondary">Notes</th>
-                                    <th class="py-3 px-6"></th>
-                                </tr></thead>
-                                <tbody id="leaveTableBody"></tbody>
-                            </table>
-                        </div>
-                        <div id="leaveEmpty" class="hidden text-xs text-apple-secondary italic text-center py-10">No leave logged yet.</div>
                     </div>
                 </div>
 
@@ -593,11 +289,10 @@
                     </div>
                 </div>
 
-
             </div>
         </main>
 
-        <button id="fab-add-task" onclick="openModal('newTaskModal')" class="admin-only fixed bottom-20 md:bottom-10 right-6 md:right-10 h-14 w-14 bg-gradient-to-br from-apple-blue to-indigo-500 text-white rounded-full shadow-xl active:scale-90 hover:scale-105 transition-all flex items-center justify-center text-xl z-30 border border-white/20"><i class="fa-solid fa-plus"></i></button>
+        <button id="fab-add-task" onclick="openModal('newTaskModal')" class="admin-only fixed bottom-20 md:bottom-10 right-6 md:right-10 h-14 w-14 bg-apple-blue text-white rounded-full shadow-lg active:scale-90 transition-all flex items-center justify-center text-xl z-30 border border-white/20"><i class="fa-solid fa-plus"></i></button>
 
         <div id="slideDrawer" class="fixed top-0 bottom-0 right-0 w-full sm:w-[420px] bg-white dark:bg-[#1C1C1E] shadow-2xl border-l border-apple-border dark:border-[#2C2C2E] z-[120] translate-x-full flex flex-col transition-transform duration-300">
             <div class="p-6 border-b border-apple-border dark:border-[#2C2C2E] flex justify-between items-center">
@@ -616,8 +311,12 @@
                     <div><label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Priority</label><select id="drawerPriority" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 text-xs rounded-lg dark:text-white"><option value="Standard">Standard</option><option value="High">High</option><option value="Critical">Critical</option></select></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Department</label><select id="drawerZone" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 text-xs rounded-lg dark:text-white"><option value="Escalations">Escalations</option><option value="Meetings">Meetings</option><option value="Walking the Floor">Walking the Floor</option><option value="Training">Training</option><option value="Coaching Session">Coaching Session</option><option value="Hourly Report">Hourly Report</option><option value="Daily Report">Daily Report</option><option value="Spiffs">Spiffs</option></select></div>
+                    <div><label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Activity</label><select id="drawerZone" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 text-xs rounded-lg dark:text-white"><option value="Escalations">Escalations</option><option value="Meetings">Meetings</option><option value="Walking the Floor">Walking the Floor</option><option value="Training">Training</option><option value="Coaching Session">Coaching Session</option><option value="Hourly Report">Hourly Report</option><option value="Daily Report">Daily Report</option><option value="Spiffs">Spiffs</option></select></div>
                     <div><label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Assignee</label><select id="drawerAssignee" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 text-xs rounded-lg dark:text-white"></select></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Department</label><select id="drawerDept" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 text-xs rounded-lg dark:text-white"><option value="Survey">Survey</option><option value="Reservations">Reservations</option></select></div>
+                    <div><label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Timing</label><input type="text" id="drawerTiming" placeholder="e.g. 3-4 PM" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 text-xs rounded-lg dark:text-white focus:border-apple-blue outline-none"></div>
                 </div>
                 <div><label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase"><i class="fa-solid fa-lock mr-1"></i> Blocked By</label><select id="drawerBlocker" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 text-xs rounded-lg dark:text-white"><option value="">None (Unblocked)</option></select></div>
                 <div><label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Notes</label><textarea id="drawerNotes" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] rounded-lg p-3 text-xs h-24 resize-none dark:text-white"></textarea></div>
@@ -672,9 +371,10 @@
             <div class="space-y-4 mb-6">
                 <input type="text" id="newTitle" placeholder="Directive Title" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="text" id="newTarget" placeholder="Reference (Call ID)..." class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white">
+                    <input type="text" id="newTarget" placeholder="Timing (e.g. 3-4 PM)..." class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white">
                     <select id="newZone" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white"><option value="Escalations">Escalations</option><option value="Meetings">Meetings</option><option value="Walking the Floor">Walking the Floor</option><option value="Training">Training</option><option value="Coaching Session">Coaching Session</option><option value="Hourly Report">Hourly Report</option><option value="Daily Report">Daily Report</option><option value="Spiffs">Spiffs</option></select>
                 </div>
+                <select id="newDept" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white"><option value="Survey">Survey</option><option value="Reservations">Reservations</option></select>
                 <div>
                     <select id="newAssignee" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-11 px-4 rounded-lg text-sm dark:text-white">
                         <option value="None">Assign To: Unassigned</option>
@@ -687,102 +387,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Log Coaching Session Modal -->
-    <div id="newCoachingModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-6 rounded-2xl w-full max-w-lg shadow-2xl">
-            <h2 class="text-lg font-bold dark:text-white mb-1">Log Coaching Session</h2>
-            <p class="text-[10px] text-apple-secondary uppercase tracking-widest mb-5">Record a coaching conversation</p>
-            <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Agent</label>
-                        <select id="coach-agent" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white"></select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Date</label>
-                        <input type="date" id="coach-date" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Topic</label>
-                    <select id="coach-topic" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
-                        <option>Performance</option><option>Attendance</option><option>Quality</option>
-                        <option>Behavior / Conduct</option><option>Product Knowledge</option><option>Recognition</option>
-                        <option>Goal Setting</option><option>Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Notes</label>
-                    <textarea id="coach-notes" placeholder="What was discussed, action items, follow-up..." class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] rounded-lg p-3 text-sm h-24 resize-none dark:text-white"></textarea>
-                </div>
-            </div>
-            <p id="coachError" class="text-red-500 text-[10px] font-semibold mt-3 hidden"></p>
-            <div class="flex gap-2 mt-5">
-                <button onclick="closeModal('newCoachingModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
-                <button id="saveCoachingBtn" class="flex-1 h-11 text-xs font-bold bg-apple-blue text-white rounded-xl shadow-sm">Save Session</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Task Templates Modal -->
-    <div id="templatesModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-6 rounded-2xl w-full max-w-lg shadow-2xl">
-            <h2 class="text-lg font-bold dark:text-white mb-1">Task Templates</h2>
-            <p class="text-[10px] text-apple-secondary uppercase tracking-widest mb-5">One tap to create a recurring floor task</p>
-            <div id="templatesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[55vh] overflow-y-auto scrollbar-hide"></div>
-            <button onclick="closeModal('templatesModal')" class="w-full h-11 mt-5 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Close</button>
-        </div>
-    </div>
-
-    <!-- Log Leave Modal -->
-    <div id="newLeaveModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden items-end md:items-center justify-center">
-        <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-6 rounded-t-3xl md:rounded-2xl w-full max-w-lg shadow-2xl max-h-[92vh] overflow-y-auto">
-            <h2 class="text-lg font-bold dark:text-white mb-1">Log Leave</h2>
-            <p class="text-[10px] text-apple-secondary uppercase tracking-widest mb-5">Record time off for a team member</p>
-            <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Member</label>
-                        <input type="text" id="leave-member" placeholder="Type agent name…" autocomplete="off" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white focus:border-apple-blue outline-none transition-colors">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Type</label>
-                        <select id="leave-type" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
-                            <option>Sick Leave</option><option>Emergency</option><option>Annual</option>
-                            <option>Half Day</option><option>Unpaid</option><option>Bereavement</option><option>Other</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">From</label>
-                        <input type="date" id="leave-start" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">To</label>
-                        <input type="date" id="leave-end" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Status</label>
-                    <select id="leave-status" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] h-10 px-3 rounded-lg text-sm dark:text-white">
-                        <option>Approved</option><option>Pending</option><option>Rejected</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-apple-secondary mb-1 block uppercase">Notes</label>
-                    <textarea id="leave-notes" placeholder="Reason / details (optional)" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] rounded-lg p-3 text-sm h-20 resize-none dark:text-white"></textarea>
-                </div>
-            </div>
-            <p id="leaveError" class="text-red-500 text-[10px] font-semibold mt-3 hidden"></p>
-            <div class="flex gap-2 mt-5">
-                <button onclick="closeModal('newLeaveModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
-                <button id="saveLeaveBtn" class="flex-1 h-11 text-xs font-bold bg-orange-500 text-white rounded-xl shadow-sm">Save Leave</button>
-            </div>
-        </div>
-    </div>
-
 
     <div id="toastAlert" class="fixed top-6 left-1/2 -translate-x-1/2 -translate-y-24 transition-transform bg-apple-primary dark:bg-apple-blue px-6 py-3 rounded-full shadow-lg z-[500] flex items-center gap-3">
         <i class="fa-solid fa-bell text-green-400 dark:text-white text-sm"></i><p id="toastMessage" class="text-sm font-medium text-white">Action Confirmed</p>
@@ -851,14 +455,6 @@
             clearTimeout(idleTimer);
             idleTimer = setTimeout(lockSystem, 300000);
         }
-        function tickOpsClock() {
-            const clk = document.getElementById('opsClock'); if(!clk) return;
-            const now = new Date();
-            clk.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-            const dt = document.getElementById('opsDate');
-            if(dt) dt.textContent = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-        }
-        tickOpsClock(); setInterval(tickOpsClock, 1000 * 15);
         function lockSystem() {
             if(!currentUser) return;
             supabaseClient.auth.signOut();
@@ -880,37 +476,22 @@
         window.addEventListener('offline', () => { document.getElementById('offlineBanner').style.display = 'block'; });
         window.addEventListener('online', () => { document.getElementById('offlineBanner').style.display = 'none'; });
 
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
+        function openModal(id) { 
+            document.getElementById(id).style.display = 'flex'; 
             if(id === 'addMemberModal') document.getElementById('memberError').style.display = 'none';
-            if(id === 'newCoachingModal') {
-                const sel = document.getElementById('coach-agent');
-                sel.innerHTML = globalUsers.map(u => `<option value="${u.name}">${u.name}</option>`).join('') || '<option value="">No team members</option>';
-                document.getElementById('coach-date').value = new Date().toISOString().slice(0, 10);
-                document.getElementById('coach-notes').value = '';
-                document.getElementById('coachError').classList.add('hidden');
-            }
-            if(id === 'templatesModal') renderTemplates();
-            if(id === 'newLeaveModal') {
-                document.getElementById('leave-member').value = '';
-                const today = new Date().toISOString().slice(0, 10);
-                document.getElementById('leave-start').value = today;
-                document.getElementById('leave-end').value = today;
-                document.getElementById('leave-notes').value = '';
-                document.getElementById('leaveError').classList.add('hidden');
-            }
         }
         function closeModal(id) { 
             document.getElementById(id).style.display = 'none'; 
             if(id === 'addMemberModal') { document.getElementById('newMemberName').value = ''; document.getElementById('newMemberEmail').value = ''; document.getElementById('newMemberPassword').value = ''; }
             if(id === 'newTaskModal') { 
-                document.getElementById('newTitle').value = ''; 
-                document.getElementById('newTarget').value = ''; 
+                document.getElementById('newTitle').value = '';
+                document.getElementById('newTarget').value = '';
                 document.getElementById('newZone').value = 'Escalations';
+                document.getElementById('newDept').value = 'Survey';
                 document.getElementById('newAssignee').value = 'None';
             }
             if(id === 'bulkPasteModal') {
-                document.getElementById('bulkPasteInput').value = '';
+                document.getElementById('bulkPasteInput').value = ''; 
                 document.getElementById('bulkPasteZone').value = 'Escalations';
             }
         }
@@ -920,71 +501,27 @@
         }
 
         function switchView(viewName) {
-            const views = ['table', 'board', 'rankings', 'coaching', 'leave', 'team', 'log', 'analytics'];
+            const views = ['table', 'board', 'team', 'log', 'analytics'];
             views.forEach(v => {
                 const nav = document.getElementById('nav-' + v);
                 const ind = document.getElementById('indicator-' + v);
                 const viewEl = document.getElementById('view-' + v);
-                if(nav) {
+                if(nav && viewEl) {
                     const isActive = v === viewName;
                     nav.classList.toggle('text-apple-blue', isActive);
-                    nav.classList.toggle('md:bg-apple-blue/10', isActive);
                     nav.classList.toggle('text-apple-secondary', !isActive);
                     if(ind) ind.style.display = isActive ? 'block' : 'none';
-                    if(viewEl) viewEl.style.display = isActive ? 'flex' : 'none';
+                    viewEl.style.display = isActive ? (v === 'board' ? 'flex' : 'flex') : 'none';
                 }
             });
-            // The ops console header (incl. List/Board toggle) belongs to the Directives view only.
-            const opsHeader = document.getElementById('ops-header');
-            if(opsHeader) opsHeader.style.display = (viewName === 'table') ? 'block' : 'none';
-            if(viewName === 'table') applyLayout();
-            closeActionsMenu();
             if(viewName === 'log') fetchLogs();
             if(viewName === 'analytics') { fetchLogs(); renderAnalytics(); }
-            if(viewName === 'rankings') renderRankings();
-            if(viewName === 'coaching') loadCoachingSessions();
-            if(viewName === 'leave') loadLeave();
         }
-
-        let currentLayout = 'table';
-        function setLayout(layout) {
-            currentLayout = layout;
-            applyLayout();
-        }
-        function applyLayout() {
-            const tableEl = document.getElementById('view-table');
-            const boardEl = document.getElementById('view-board');
-            const onDirectives = document.getElementById('ops-header').style.display !== 'none';
-            if(!onDirectives) return;
-            if(tableEl) tableEl.style.display = currentLayout === 'table' ? 'flex' : 'none';
-            if(boardEl) boardEl.style.display = currentLayout === 'board' ? 'flex' : 'none';
-            const tBtn = document.getElementById('layout-table');
-            const bBtn = document.getElementById('layout-board');
-            const active = 'h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all bg-white dark:bg-[#1C1C1E] text-apple-primary dark:text-white shadow-sm';
-            const idle = 'h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all text-apple-secondary';
-            if(tBtn) tBtn.className = currentLayout === 'table' ? active : idle;
-            if(bBtn) bBtn.className = currentLayout === 'board' ? active : idle;
-        }
-        function toggleActionsMenu(e) {
-            if(e) e.stopPropagation();
-            document.getElementById('actionsMenu').classList.toggle('hidden');
-        }
-        function closeActionsMenu() {
-            const m = document.getElementById('actionsMenu');
-            if(m) m.classList.add('hidden');
-        }
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('actionsMenu');
-            const btn = document.getElementById('actionsMenuBtn');
-            if(menu && !menu.classList.contains('hidden') && !menu.contains(e.target) && btn && !btn.contains(e.target)) {
-                menu.classList.add('hidden');
-            }
-        });
 
         function applyRolePermissions() {
             const isAdmin = currentUser && (currentUser.role.includes('Manager') || currentUser.role === 'Admin');
             document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? '' : 'none');
-
+            
             if(isAdmin) {
                 setFilter('All');
                 document.getElementById('drawerAssignee').disabled = false;
@@ -997,19 +534,6 @@
         function handleSearch(val) {
             currentSearchQuery = val.trim().toLowerCase();
             renderData();
-        }
-
-        function updateSidebarUserCard(profile) {
-            if(!profile) return;
-            const init = (profile.name || '?').split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-            const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.innerText = v; };
-            setTxt('sidebarUserInit', init);
-            setTxt('sidebarUserName', profile.name || 'User');
-            setTxt('sidebarUserRole', profile.role || '—');
-            const badge = document.getElementById('sidebarProbationBadge');
-            if(badge) badge.classList.toggle('hidden', !profile.probation_passed);
-            const roleChip = document.getElementById('activeUserRole');
-            if(roleChip) { roleChip.innerText = profile.role || ''; roleChip.classList.toggle('hidden', !profile.role); }
         }
 
         async function verifyLogin() {
@@ -1049,20 +573,19 @@
                 document.getElementById('lockScreen').style.opacity = '0';
                 setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
                 document.getElementById('activeUserName').innerText = profile.name + ' (' + (profile.department || 'SYS') + ')';
-                updateSidebarUserCard(profile);
                 document.getElementById('searchContainer').classList.remove('hidden');
 
                 document.getElementById('loginUsername').value = '';
                 document.getElementById('loginPassword').value = '';
 
-                applyRolePermissions(); switchView('table'); initTeam(); loadData(); fetchLogs(); loadLeave(); logAction("Session Start"); resetIdleTimer();
+                applyRolePermissions(); switchView('table'); initTeam(); loadData(); fetchLogs(); logAction("Session Start"); resetIdleTimer();
                 playSound('pop');
             } catch (err) {
                 errEl.innerText = "Access Denied";
                 errEl.style.opacity = '1';
                 setTimeout(() => errEl.style.opacity = '0', 2000);
             }
-            btn.innerText = "Sign In"; btn.disabled = false;
+            btn.innerText = "Access Command Center"; btn.disabled = false;
         }
 
         async function logAction(text) {
@@ -1131,30 +654,8 @@
                 if(newSelect) newSelect.insertAdjacentHTML('beforeend', `<option value="${user.name}">${user.name}</option>`);
                 
                 const init = user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-                const passed = !!user.probation_passed;
-                const probaBadge = passed
-                    ? `<span class="text-[8px] font-black bg-green-50 dark:bg-green-900/20 text-green-600 px-2 py-0.5 rounded-full uppercase tracking-tighter flex items-center gap-1"><i class="fa-solid fa-graduation-cap"></i> Passed Probation</span>`
-                    : `<span class="text-[8px] font-black bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 px-2 py-0.5 rounded-full uppercase tracking-tighter">On Probation</span>`;
-                const safeName = user.name.replace(/'/g, "\\'");
-                grid.insertAdjacentHTML('beforeend', `<div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-2xl p-4 text-center relative overflow-hidden transition-all">
-                    <button onclick="toggleProbation('${safeName}', ${passed})" title="${passed ? 'Mark as still on probation' : 'Mark probation as passed'}" class="absolute top-2 right-2 h-7 w-7 rounded-full flex items-center justify-center text-[11px] transition-colors ${passed ? 'bg-green-100 dark:bg-green-900/30 text-green-600' : 'bg-apple-canvas dark:bg-[#2C2C2E] text-apple-secondary hover:text-green-500'}"><i class="fa-solid fa-graduation-cap"></i></button>
-                    <button onclick="revokeUser('${safeName}')" title="Revoke access" class="absolute top-2 left-2 h-7 w-7 rounded-full flex items-center justify-center text-[11px] bg-apple-canvas dark:bg-[#2C2C2E] text-apple-secondary hover:text-red-500 transition-colors"><i class="fa-solid fa-user-slash"></i></button>
-                    <div class="h-12 w-12 mx-auto rounded-full bg-apple-canvas dark:bg-[#2C2C2E] flex items-center justify-center font-bold text-apple-primary dark:text-white mb-2 mt-3">${init}</div>
-                    <h3 class="text-xs font-bold dark:text-white uppercase tracking-tighter">${user.name}</h3>
-                    <p class="text-[8px] text-apple-secondary uppercase mb-2 tracking-widest">${user.role}</p>
-                    <button onclick="setTeam('${safeName}', '${(user.team||'').replace(/'/g, "\\'")}')" class="text-[9px] font-bold mb-2 px-2 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue hover:bg-apple-blue/20 transition-colors flex items-center gap-1 mx-auto"><i class="fa-solid fa-people-group text-[8px]"></i> ${user.team ? user.team : 'Set team'}</button>
-                    <div class="flex justify-center">${probaBadge}</div>
-                </div>`);
+                grid.insertAdjacentHTML('beforeend', `<div onclick="revokeUser('${user.name}')" class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-2xl p-4 text-center cursor-pointer group relative overflow-hidden transition-all hover:border-red-500"><div class="h-12 w-12 mx-auto rounded-full bg-apple-canvas dark:bg-[#2C2C2E] flex items-center justify-center font-bold text-apple-primary dark:text-white mb-2">${init}</div><h3 class="text-xs font-bold dark:text-white uppercase tracking-tighter">${user.name}</h3><p class="text-[8px] text-apple-secondary uppercase mb-2 tracking-widest">${user.role}</p><span class="text-[8px] font-black bg-green-50 dark:bg-green-900/20 text-green-600 px-2 py-0.5 rounded-full uppercase tracking-tighter">Ready</span><div class="absolute inset-0 bg-red-500/90 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><span class="font-black text-[9px] uppercase tracking-widest">Revoke</span></div></div>`);
             });
-        }
-
-        async function setTeam(name, current) {
-            const team = prompt(`Team / supervisor for ${name}:`, current || '');
-            if(team === null) return;
-            const { error } = await supabaseClient.from('floor_users')
-                .update({ team: team.trim() }).eq('name', name).eq('department', currentUser.department);
-            if(error) { alert('Could not update: ' + error.message); return; }
-            logAction(`Set team for ${name}: ${team.trim() || '(none)'}`); initTeam();
         }
 
         async function revokeUser(name) {
@@ -1162,18 +663,6 @@
                 await supabaseClient.from('floor_users').delete().eq('name', name);
                 logAction(`Revoked: ${name}`); initTeam();
             }
-        }
-
-        async function toggleProbation(name, currentlyPassed) {
-            const newVal = !currentlyPassed;
-            const { error } = await supabaseClient.from('floor_users')
-                .update({ probation_passed: newVal }).eq('name', name).eq('department', currentUser.department);
-            if(error) { alert('Could not update: ' + error.message); return; }
-            logAction(`${newVal ? 'Passed' : 'Reset'} probation: ${name}`);
-            // Keep the logged-in user's own sidebar badge in sync.
-            if(currentUser && currentUser.name === name) { currentUser.probation_passed = newVal; updateSidebarUserCard(currentUser); }
-            showToast(newVal ? `${name} passed probation 🎓` : `${name} set back on probation`);
-            initTeam();
         }
 
         document.getElementById('submitMemberBtn').addEventListener('click', async () => {
@@ -1220,34 +709,13 @@
         });
 
         function exportToCSV() {
-            let csv = "ID,Directive,Reference,Department,Assignee,Priority,Status\n";
-            globalTasks.forEach(t => csv += `"${t.id}","${t.title}","${t.linked_entity}","${t.zone || 'General'}","${t.assigned_to}","${t.priority}","${t.status}"\n`);
-            // UTF-8 BOM so Excel recognizes the encoding and skips the "format mismatch" warning
-            const blob = new Blob(["﻿" + csv], { type: 'text/csv;charset=utf-8;' });
+            if(!globalTasks.length) return;
+            let csv = "ID,Directive,Timing,Activity,Assignee,Priority,Status\n";
+            globalTasks.forEach(t => csv += `"${t.id}","${t.title}","${t.linked_entity}","${t.zone || 'Escalations'}","${t.assigned_to}","${t.priority}","${t.status}"\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
-            const stamp = new Date().toISOString().slice(0, 10);
-            const a = document.createElement('a'); a.setAttribute('href', url); a.setAttribute('download', `Tempo_Report_${stamp}.csv`); a.click();
-            window.URL.revokeObjectURL(url);
+            const a = document.createElement('a'); a.setAttribute('href', url); a.setAttribute('download', 'Sync_Report.csv'); a.click();
             showToast("Exported.");
-        }
-
-        async function exportToSheets() {
-            const header = ["ID","Directive","Reference","Department","Assignee","Priority","Status"];
-            const rows = globalTasks.map(t => [
-                t.id, t.title || '', t.linked_entity || '', t.zone || 'General',
-                t.assigned_to || '', t.priority || '', t.status || ''
-            ].map(c => String(c).replace(/\t/g, ' ').replace(/\r?\n/g, ' ')).join('\t'));
-            // Always include the header row — even with zero directives the columns get laid out
-            const tsv = [header.join('\t'), ...rows].join('\n');
-            try {
-                await navigator.clipboard.writeText(tsv);
-                showToast(globalTasks.length
-                    ? "Copied! Opening Google Sheets — press Ctrl+V to paste."
-                    : "Headers copied — opening Sheets, press Ctrl+V to paste.");
-            } catch(e) {
-                showToast("Opening Sheets — use Ctrl+V to paste.");
-            }
-            window.open('https://sheets.new', '_blank');
         }
 
         async function copyShiftReport() {
@@ -1315,8 +783,8 @@
                 if(item.priority === 'Critical') c.crit++;
                 
                 // COACHING MATRIX ANALYTICS LOGIC
-                if(item.zone === 'Coaching Session' && item.status !== 'Completed') c.coach++;
-                if((item.zone === 'Daily Report' || item.zone === 'Hourly Report') && item.status !== 'Completed') c.rep++;
+                if(item.zone === 'Coaching' && item.status !== 'Completed') c.coach++;
+                if(item.zone === 'Reports' && item.status !== 'Completed') c.rep++;
                 
                 let isBlocked = false;
                 if(item.blocked_by) {
@@ -1331,7 +799,7 @@
                 let badge = `<span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${badgeColor}">${item.status}</span>`;
                 let blockIco = isBlocked ? `<i class="fa-solid fa-lock text-red-500 ml-2" title="Blocked"></i>` : '';
 
-                tbody.insertAdjacentHTML('beforeend', `<tr class="border-b border-apple-border dark:border-[#2C2C2E] hover:bg-apple-canvas dark:hover:bg-[#242426] transition-colors cursor-pointer" onclick="openDrawer('${item.id}')"><td class="py-3 px-4 text-xs font-bold dark:text-white">${item.title} ${blockIco}</td><td class="py-3 px-4 text-[9px] font-mono opacity-50 uppercase dark:text-white">${item.linked_entity}</td><td class="py-3 px-4 text-[9px] font-bold uppercase dark:text-gray-400">${item.zone || 'General'}</td><td class="py-3 px-4 text-xs dark:text-gray-300">${item.assigned_to}</td><td class="py-3 px-4">${badge}</td><td class="py-3 px-4 text-right"><i class="fa-solid fa-chevron-right text-[8px] opacity-20 dark:text-white"></i></td></tr>`);
+                tbody.insertAdjacentHTML('beforeend', `<tr class="border-b border-apple-border dark:border-[#2C2C2E] hover:bg-apple-canvas dark:hover:bg-[#242426] transition-colors cursor-pointer" onclick="openDrawer('${item.id}')"><td class="py-3 px-4 text-xs font-bold dark:text-white">${item.title} ${blockIco}</td><td class="py-3 px-4 text-[9px] font-mono opacity-50 uppercase dark:text-white">${item.linked_entity}</td><td class="py-3 px-4 text-[9px] font-bold uppercase dark:text-gray-400">${item.sub_department || item.zone || 'Survey'}</td><td class="py-3 px-4 text-xs dark:text-gray-300">${item.assigned_to}</td><td class="py-3 px-4">${badge}</td><td class="py-3 px-4 text-right"><i class="fa-solid fa-chevron-right text-[8px] opacity-20 dark:text-white"></i></td></tr>`);
                 
                 if(cols[item.status]) {
                     let border = item.priority === 'Critical' ? 'border-l-4 border-l-red-500' : (item.priority === 'High' ? 'border-l-4 border-l-orange-500' : 'border border-apple-border dark:border-[#2C2C2E]');
@@ -1396,99 +864,6 @@
             const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
             if(avg < 60) return Math.round(avg) + 'm';
             return (avg / 60).toFixed(1) + 'h';
-        }
-
-        // Build a map of member name -> team (falls back to the person's own name
-        // when no team is assigned, so everyone still shows up somewhere).
-        function buildTeamMap() {
-            const map = {};
-            (globalUsers || []).forEach(u => { map[u.name] = (u.team && u.team.trim()) ? u.team.trim() : u.name; });
-            return map;
-        }
-
-        let rankEntriesCache = [];
-
-        function renderRankings() {
-            const deptEl = document.getElementById('rank-dept');
-            if(deptEl && currentUser) deptEl.innerText = currentUser.department || 'your floor';
-
-            const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.innerText = v; };
-            const board = document.getElementById('rankingsBoard');
-            const tbody = document.getElementById('rankTableBody');
-            const teamOf = buildTeamMap();
-
-            // Aggregate the department's directives by the assignee's team.
-            const teams = {};
-            let total = 0, completed = 0;
-            globalTasks.forEach(t => {
-                const team = teamOf[t.assigned_to] || t.assigned_to || 'Unassigned';
-                if(!teams[team]) teams[team] = { total: 0, done: 0, members: new Set() };
-                teams[team].total++; total++;
-                if(t.assigned_to) teams[team].members.add(t.assigned_to);
-                if(t.status === 'Completed') { teams[team].done++; completed++; }
-            });
-
-            setTxt('rank-total', total);
-            setTxt('rank-completed', completed);
-            setTxt('rank-rate', total > 0 ? Math.round((completed / total) * 100) + '%' : '0%');
-            setTxt('rank-teams', Object.keys(teams).length);
-
-            const entries = Object.entries(teams).sort((a, b) => b[1].done - a[1].done || b[1].total - a[1].total);
-            rankEntriesCache = entries;
-
-            if(board) {
-                if(!entries.length) { board.innerHTML = `<p class="text-xs text-apple-secondary italic text-center py-8">No directives assigned yet.</p>`; }
-                else {
-                    const maxDone = Math.max(...entries.map(e => e[1].done), 1);
-                    const medals = ['text-yellow-500', 'text-gray-400', 'text-amber-700'];
-                    board.innerHTML = entries.map(([team, s], i) => {
-                        const pct = Math.round((s.done / maxDone) * 100);
-                        const rate = s.total > 0 ? Math.round((s.done / s.total) * 100) : 0;
-                        const rankIco = i < 3 ? `<i class="fa-solid fa-medal ${medals[i]} text-base"></i>` : `<span class="text-apple-secondary text-xs font-black">${i + 1}</span>`;
-                        const init = team.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-                        return `<div class="flex items-center gap-3">
-                            <div class="w-6 text-center">${rankIco}</div>
-                            <div class="h-8 w-8 rounded-full bg-apple-canvas dark:bg-[#2C2C2E] flex items-center justify-center text-[10px] font-black dark:text-white shrink-0">${init}</div>
-                            <div class="flex-1 min-w-0">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-xs font-bold dark:text-white truncate">${team}</span>
-                                    <span class="text-[10px] text-apple-secondary shrink-0 ml-2">${s.done}/${s.total} &bull; ${rate}%</span>
-                                </div>
-                                <div class="h-2.5 w-full bg-apple-canvas dark:bg-[#2C2C2E] rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-apple-blue to-indigo-500 rounded-full transition-all" style="width:${pct}%"></div>
-                                </div>
-                            </div>
-                        </div>`;
-                    }).join('');
-                }
-            }
-
-            if(tbody) {
-                const medals = ['🥇', '🥈', '🥉'];
-                tbody.innerHTML = entries.map(([team, s], i) => {
-                    const rate = s.total > 0 ? Math.round((s.done / s.total) * 100) : 0;
-                    return `<tr class="border-b border-apple-border dark:border-[#2C2C2E] hover:bg-apple-canvas dark:hover:bg-[#242426] transition-colors">
-                        <td class="py-3 px-6 text-xs font-black dark:text-white">${medals[i] || (i + 1)}</td>
-                        <td class="py-3 px-6 text-xs font-bold dark:text-white">${team}</td>
-                        <td class="py-3 px-6 text-xs text-center dark:text-gray-300">${s.members.size}</td>
-                        <td class="py-3 px-6 text-xs text-center dark:text-gray-300">${s.total}</td>
-                        <td class="py-3 px-6 text-xs text-center font-bold text-green-600 dark:text-green-400">${s.done}</td>
-                        <td class="py-3 px-6 text-xs text-center font-bold text-indigo-500">${rate}%</td>
-                    </tr>`;
-                }).join('');
-            }
-        }
-
-        function copyRankingReport() {
-            if(!rankEntriesCache.length) { showToast('Nothing to copy yet.'); return; }
-            const dept = (currentUser && currentUser.department) || 'Floor';
-            let txt = `📊 TEAM TOTALS — ${dept}\n${new Date().toLocaleDateString()}\n\n`;
-            rankEntriesCache.forEach(([team, s], i) => {
-                const rate = s.total > 0 ? Math.round((s.done / s.total) * 100) : 0;
-                const medal = ['🥇','🥈','🥉'][i] || `${i + 1}.`;
-                txt += `${medal} ${team} — ${s.done}/${s.total} done (${rate}%)\n`;
-            });
-            navigator.clipboard.writeText(txt).then(() => showToast('Report copied!')).catch(() => showToast('Copy failed.'));
         }
 
         function renderAnalytics() {
@@ -1630,9 +1005,11 @@
                 document.getElementById('drawerStatus').value = t.status;
                 document.getElementById('drawerPriority').value = t.priority; 
                 document.getElementById('drawerAssignee').value = t.assigned_to;
-                document.getElementById('drawerZone').value = t.zone || 'General';
+                document.getElementById('drawerZone').value = t.zone || 'Escalations';
+                document.getElementById('drawerDept').value = t.sub_department || 'Survey';
+                document.getElementById('drawerTiming').value = t.linked_entity || '';
                 document.getElementById('drawerBlocker').value = t.blocked_by || '';
-                document.getElementById('drawerNotes').value = t.notes || ''; 
+                document.getElementById('drawerNotes').value = t.notes || '';
                 
                 const histC = document.getElementById('drawerHistoryContainer');
                 histC.innerHTML = '';
@@ -1657,13 +1034,15 @@
             if(!activeDrawerId) return;
             const b = document.getElementById('saveDrawerBtn'); if(b.disabled) return;
             b.disabled = true; b.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-            const upd = { 
-                status: document.getElementById('drawerStatus').value, 
-                priority: document.getElementById('drawerPriority').value, 
-                assigned_to: document.getElementById('drawerAssignee').value, 
+            const upd = {
+                status: document.getElementById('drawerStatus').value,
+                priority: document.getElementById('drawerPriority').value,
+                assigned_to: document.getElementById('drawerAssignee').value,
                 zone: document.getElementById('drawerZone').value,
+                sub_department: document.getElementById('drawerDept').value,
+                linked_entity: document.getElementById('drawerTiming').value || 'N/A',
                 blocked_by: document.getElementById('drawerBlocker').value || null,
-                notes: document.getElementById('drawerNotes').value 
+                notes: document.getElementById('drawerNotes').value
             };
             const t = globalTasks.find(x => x.id == activeDrawerId);
             await supabaseClient.from('pulses').update(upd).eq('id', activeDrawerId);
@@ -1681,76 +1060,17 @@
             logAction(`Deleted: "${t.title}"`); showToast('Deleted.'); closeDrawer(); loadData();
         });
 
-        // ── TASK TEMPLATES ────────────────────────────────────────────
-        const TASK_TEMPLATES = [
-            { label: 'Hourly Report', zone: 'Hourly Report', priority: 'Standard', icon: 'fa-clock', color: 'text-blue-500' },
-            { label: 'Daily Report', zone: 'Daily Report', priority: 'High', icon: 'fa-calendar-day', color: 'text-indigo-500' },
-            { label: 'Walk the Floor', zone: 'Walking the Floor', priority: 'Standard', icon: 'fa-person-walking', color: 'text-teal-500' },
-            { label: 'Team Meeting', zone: 'Meetings', priority: 'Standard', icon: 'fa-users', color: 'text-purple-500' },
-            { label: 'Handle Escalation', zone: 'Escalations', priority: 'Critical', icon: 'fa-triangle-exclamation', color: 'text-red-500' },
-            { label: 'Coaching Session', zone: 'Coaching Session', priority: 'High', icon: 'fa-comments', color: 'text-orange-500' },
-            { label: 'Training Session', zone: 'Training', priority: 'Standard', icon: 'fa-chalkboard-user', color: 'text-green-500' },
-            { label: 'Run Spiffs', zone: 'Spiffs', priority: 'Standard', icon: 'fa-gift', color: 'text-pink-500' }
-        ];
-
-        function renderTemplates() {
-            const grid = document.getElementById('templatesGrid');
-            if(!grid) return;
-            grid.innerHTML = TASK_TEMPLATES.map((t, i) => `
-                <button onclick="createFromTemplate(${i})" class="flex items-center gap-3 p-3 rounded-xl border border-apple-border dark:border-[#2C2C2E] bg-apple-canvas dark:bg-[#2C2C2E] hover:border-apple-blue dark:hover:border-apple-blue text-left transition-all active:scale-95">
-                    <i class="fa-solid ${t.icon} ${t.color} text-lg w-6 text-center"></i>
-                    <div class="min-w-0">
-                        <p class="text-xs font-bold dark:text-white truncate">${t.label}</p>
-                        <p class="text-[8px] uppercase tracking-widest text-apple-secondary">${t.zone} &bull; ${t.priority}</p>
-                    </div>
-                </button>`).join('');
-        }
-
-        async function createFromTemplate(i) {
-            const t = TASK_TEMPLATES[i]; if(!t) return;
-            const { data, error } = await supabaseClient.from('pulses').insert([{
-                title: t.label, linked_entity: 'N/A', zone: t.zone, assigned_to: 'None',
-                priority: t.priority, status: 'Radar', department: currentUser.department
-            }]).select();
-            if(error) { alert('Could not create: ' + error.message); return; }
-            if(data && data.length) logAction(`Created from template: "${t.label}"`);
-            closeModal('templatesModal'); playSound('pop'); showToast(`Added "${t.label}".`); loadData();
-        }
-
-        async function backupAllData() {
-            try {
-                const dept = currentUser.department;
-                const [pulses, users, coaching, logs] = await Promise.all([
-                    supabaseClient.from('pulses').select('*').eq('department', dept),
-                    supabaseClient.from('floor_users').select('name,role,status,department,team,probation_passed').eq('department', dept),
-                    supabaseClient.from('coaching_sessions').select('*').eq('department', dept),
-                    supabaseClient.from('activity_logs').select('*').eq('department', dept)
-                ]);
-                const backup = {
-                    exported_at: new Date().toISOString(), department: dept,
-                    tasks: pulses.data || [], team: users.data || [],
-                    coaching_sessions: coaching.data || [], activity_logs: logs.data || []
-                };
-                const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = `Tempo-Backup-${dept}-${new Date().toISOString().slice(0,10)}.json`;
-                a.click();
-                showToast('Backup downloaded.');
-            } catch(e) { alert('Backup failed: ' + e.message); }
-        }
-        // ── END TASK TEMPLATES ────────────────────────────────────────
-
         document.getElementById('createTaskBtn').addEventListener('click', async () => {
             const btn = document.getElementById('createTaskBtn'); if(btn.disabled) return;
             const title = document.getElementById('newTitle').value;
             const linked_entity = document.getElementById('newTarget').value;
             const zone = document.getElementById('newZone').value;
+            const sub_department = document.getElementById('newDept').value;
             const assigned_to = document.getElementById('newAssignee').value || 'None';
             if(!title) return;
             btn.disabled = true; btn.innerText = "Creating...";
-            
-            const { data, error } = await supabaseClient.from('pulses').insert([{ title, linked_entity: linked_entity || 'N/A', zone: zone, assigned_to: assigned_to, priority: 'Standard', status: 'Radar', department: currentUser.department }]).select();
+
+            const { data, error } = await supabaseClient.from('pulses').insert([{ title, linked_entity: linked_entity || 'N/A', zone, sub_department, assigned_to, priority: 'Standard', status: 'Radar', department: currentUser.department }]).select();
             btn.disabled = false; btn.innerText = "Create"; closeModal('newTaskModal'); showToast('Created.'); 
             
             if(data && data.length > 0) logAction(`Created: "${title}"`);
@@ -1826,198 +1146,11 @@
                 if(currentUser) { 
                     document.body.classList.toggle('war-room');
                     if(document.body.classList.contains('war-room')) {
-                        switchView('table'); setLayout('board'); playSound('chime'); showToast('WAR ROOM MODE ACTIVATED');
+                        switchView('board'); playSound('chime'); showToast('WAR ROOM MODE ACTIVATED');
                     } else { showToast('War Room Off'); }
                 }
             }
         });
-
-
-        // ── COACHING LOG ──────────────────────────────────────────────
-        let globalCoaching = [];
-
-        async function loadCoachingSessions() {
-            const { data, error } = await supabaseClient.from('coaching_sessions')
-                .select('*').eq('department', currentUser.department).order('session_date', { ascending: false });
-            if(error) { console.warn('coaching load', error.message); }
-            globalCoaching = data || [];
-            renderCoachingSessions();
-        }
-
-        function renderCoachingSessions() {
-            const body = document.getElementById('coachingTableBody');
-            const empty = document.getElementById('coachingEmpty');
-            if(!body) return;
-            const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.innerText = v; };
-
-            // KPIs
-            const now = new Date();
-            const weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 7);
-            const thisWeek = globalCoaching.filter(s => s.session_date && new Date(s.session_date) >= weekAgo).length;
-            setTxt('coach-total', globalCoaching.length);
-            setTxt('coach-week', thisWeek);
-            setTxt('coach-agents', new Set(globalCoaching.map(s => s.agent_name)).size);
-            setTxt('coach-coaches', new Set(globalCoaching.map(s => s.coached_by)).size);
-
-            if(!globalCoaching.length) { body.innerHTML = ''; empty.classList.remove('hidden'); return; }
-            empty.classList.add('hidden');
-            const isAdmin = currentUser && (currentUser.role.includes('Manager') || currentUser.role === 'Admin');
-            const topicColor = { 'Performance':'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', 'Attendance':'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', 'Quality':'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400', 'Behavior / Conduct':'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', 'Recognition':'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' };
-            body.innerHTML = globalCoaching.map(s => {
-                const badge = `<span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${topicColor[s.topic] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300'}">${s.topic || '—'}</span>`;
-                const del = isAdmin ? `<button onclick="deleteCoaching(${s.id})" class="text-apple-secondary hover:text-red-500 transition-colors"><i class="fa-solid fa-trash text-[10px]"></i></button>` : '';
-                return `<tr class="border-b border-apple-border dark:border-[#2C2C2E] hover:bg-apple-canvas dark:hover:bg-[#242426] transition-colors">
-                    <td class="py-3 px-5 text-[10px] font-mono text-apple-secondary whitespace-nowrap">${s.session_date || ''}</td>
-                    <td class="py-3 px-5 text-xs font-bold dark:text-white">${s.agent_name}</td>
-                    <td class="py-3 px-5">${badge}</td>
-                    <td class="py-3 px-5 text-xs text-apple-secondary dark:text-gray-300 max-w-[280px] truncate" title="${(s.notes||'').replace(/"/g,'&quot;')}">${s.notes || ''}</td>
-                    <td class="py-3 px-5 text-[10px] text-apple-secondary uppercase">${s.coached_by || ''}</td>
-                    <td class="py-3 px-5 text-right">${del}</td>
-                </tr>`;
-            }).join('');
-        }
-
-        document.getElementById('saveCoachingBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('saveCoachingBtn'); if(btn.disabled) return;
-            const agent = document.getElementById('coach-agent').value;
-            const date = document.getElementById('coach-date').value;
-            const topic = document.getElementById('coach-topic').value;
-            const notes = document.getElementById('coach-notes').value.trim();
-            const errEl = document.getElementById('coachError');
-            if(!agent) { errEl.innerText = 'Pick an agent.'; errEl.classList.remove('hidden'); return; }
-            btn.disabled = true; btn.innerText = 'Saving...';
-            const { error } = await supabaseClient.from('coaching_sessions').insert([{
-                agent_name: agent, session_date: date || null, topic, notes,
-                coached_by: currentUser.name, department: currentUser.department
-            }]);
-            btn.disabled = false; btn.innerText = 'Save Session';
-            if(error) { errEl.innerText = error.message; errEl.classList.remove('hidden'); return; }
-            closeModal('newCoachingModal'); playSound('pop'); showToast('Coaching session logged.');
-            logAction(`Coached: ${agent} (${topic})`); loadCoachingSessions();
-        });
-
-        async function deleteCoaching(id) {
-            if(!confirm('Delete this coaching session?')) return;
-            const { error } = await supabaseClient.from('coaching_sessions').delete().eq('id', id);
-            if(error) { alert(error.message); return; }
-            showToast('Deleted.'); loadCoachingSessions();
-        }
-        // ── END COACHING LOG ──────────────────────────────────────────
-
-        // ── LEAVE TRACKER ─────────────────────────────────────────────
-        let globalLeave = [];
-        const LEAVE_COLORS = {
-            'Sick Leave':'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-            'Emergency':'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-            'Annual':'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-            'Half Day':'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
-            'Unpaid':'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
-            'Bereavement':'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-            'Other':'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400'
-        };
-
-        function isOnLeaveOn(rec, dateStr) {
-            if(rec.status === 'Rejected') return false;
-            const s = rec.start_date, e = rec.end_date || rec.start_date;
-            if(!s) return false;
-            return dateStr >= s && dateStr <= e;
-        }
-
-        async function loadLeave() {
-            const { data, error } = await supabaseClient.from('leave_records')
-                .select('*').eq('department', currentUser.department).order('start_date', { ascending: false });
-            if(error) { console.warn('leave load', error.message); }
-            globalLeave = data || [];
-            renderLeave();
-        }
-
-        function renderLeave() {
-            const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.innerText = v; };
-            const deptEl = document.getElementById('leave-dept');
-            if(deptEl && currentUser) deptEl.innerText = currentUser.department || 'your floor';
-
-            const todayStr = new Date().toISOString().slice(0, 10);
-            const now = new Date();
-            const weekAhead = new Date(now); weekAhead.setDate(now.getDate() + 7);
-            const monthAgo = new Date(now); monthAgo.setDate(now.getDate() - 30);
-
-            const outToday = globalLeave.filter(r => isOnLeaveOn(r, todayStr));
-            const thisWeek = globalLeave.filter(r => r.status !== 'Rejected' && r.start_date && new Date(r.end_date || r.start_date) >= now && new Date(r.start_date) <= weekAhead);
-            const recent = globalLeave.filter(r => r.start_date && new Date(r.start_date) >= monthAgo);
-            setTxt('leave-today', outToday.length);
-            setTxt('leave-week', thisWeek.length);
-            setTxt('leave-sick', recent.filter(r => r.leave_type === 'Sick Leave').length);
-            setTxt('leave-annual', recent.filter(r => r.leave_type === 'Annual').length);
-
-            // Sidebar dot + "out today" banner
-            const dot = document.getElementById('leaveTodayDot');
-            if(dot) dot.classList.toggle('hidden', outToday.length === 0);
-            const banner = document.getElementById('leaveOutToday');
-            const list = document.getElementById('leaveOutTodayList');
-            if(banner && list) {
-                if(outToday.length) {
-                    banner.classList.remove('hidden');
-                    list.innerHTML = outToday.map(r => `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${LEAVE_COLORS[r.leave_type] || 'bg-gray-100 text-gray-600'}">${r.member_name} &bull; ${r.leave_type}</span>`).join('');
-                } else { banner.classList.add('hidden'); }
-            }
-
-            const body = document.getElementById('leaveTableBody');
-            const empty = document.getElementById('leaveEmpty');
-            if(!body) return;
-            if(!globalLeave.length) { body.innerHTML = ''; empty.classList.remove('hidden'); return; }
-            empty.classList.add('hidden');
-            const isAdmin = currentUser && (currentUser.role.includes('Manager') || currentUser.role === 'Admin');
-            const statusColor = { 'Approved':'text-green-600 dark:text-green-400', 'Pending':'text-yellow-600 dark:text-yellow-400', 'Rejected':'text-red-500' };
-            body.innerHTML = globalLeave.map(r => {
-                const onNow = isOnLeaveOn(r, todayStr);
-                const badge = `<span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${LEAVE_COLORS[r.leave_type] || 'bg-gray-100 text-gray-600'}">${r.leave_type}</span>`;
-                const del = isAdmin ? `<button onclick="deleteLeave(${r.id})" class="text-apple-secondary hover:text-red-500 transition-colors"><i class="fa-solid fa-trash text-[10px]"></i></button>` : '';
-                return `<tr class="border-b border-apple-border dark:border-[#2C2C2E] hover:bg-apple-canvas dark:hover:bg-[#242426] transition-colors">
-                    <td class="py-3 px-6 text-xs font-bold dark:text-white">${r.member_name} ${onNow ? '<span class="ml-1 text-[8px] font-black uppercase text-orange-500">&bull; OUT</span>' : ''}</td>
-                    <td class="py-3 px-6">${badge}</td>
-                    <td class="py-3 px-6 text-[10px] font-mono text-apple-secondary whitespace-nowrap">${r.start_date || ''}</td>
-                    <td class="py-3 px-6 text-[10px] font-mono text-apple-secondary whitespace-nowrap">${r.end_date || ''}</td>
-                    <td class="py-3 px-6 text-[10px] font-bold uppercase ${statusColor[r.status] || ''}">${r.status || ''}</td>
-                    <td class="py-3 px-6 text-xs text-apple-secondary dark:text-gray-300 max-w-[220px] truncate" title="${(r.notes||'').replace(/"/g,'&quot;')}">${r.notes || ''}</td>
-                    <td class="py-3 px-6 text-right">${del}</td>
-                </tr>`;
-            }).join('');
-        }
-
-        document.getElementById('saveLeaveBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('saveLeaveBtn'); if(btn.disabled) return;
-            const member = document.getElementById('leave-member').value;
-            const type = document.getElementById('leave-type').value;
-            const start = document.getElementById('leave-start').value;
-            const end = document.getElementById('leave-end').value;
-            const status = document.getElementById('leave-status').value;
-            const notes = document.getElementById('leave-notes').value.trim();
-            const errEl = document.getElementById('leaveError');
-            if(!member) { errEl.innerText = 'Pick a member.'; errEl.classList.remove('hidden'); return; }
-            if(!start) { errEl.innerText = 'Start date is required.'; errEl.classList.remove('hidden'); return; }
-            if(end && end < start) { errEl.innerText = 'End date cannot be before start date.'; errEl.classList.remove('hidden'); return; }
-            btn.disabled = true; btn.innerText = 'Saving...';
-            const { error } = await supabaseClient.from('leave_records').insert([{
-                member_name: member, leave_type: type, start_date: start, end_date: end || start,
-                status, notes, logged_by: currentUser.name, department: currentUser.department
-            }]);
-            btn.disabled = false; btn.innerText = 'Save Leave';
-            if(error) { errEl.innerText = error.message; errEl.classList.remove('hidden'); return; }
-            closeModal('newLeaveModal'); playSound('pop'); showToast('Leave logged.');
-            logAction(`Leave: ${member} (${type})`); loadLeave();
-        });
-
-        async function deleteLeave(id) {
-            if(!confirm('Delete this leave record?')) return;
-            const { error } = await supabaseClient.from('leave_records').delete().eq('id', id);
-            if(error) { alert(error.message); return; }
-            showToast('Deleted.'); loadLeave();
-        }
-        // ── END LEAVE TRACKER ─────────────────────────────────────────
-
-        supabaseClient.channel('db-sync-leave').on('postgres_changes', { event: '*', schema: 'public', table: 'leave_records' }, () => { if(currentUser) loadLeave(); }).subscribe();
-
-        supabaseClient.channel('db-sync-coaching').on('postgres_changes', { event: '*', schema: 'public', table: 'coaching_sessions' }, () => { if(currentUser) loadCoachingSessions(); }).subscribe();
 
         supabaseClient.channel('db-sync-logs').on('postgres_changes', { event: '*', schema: 'public', table: 'activity_logs' }, () => fetchLogs()).subscribe();
         
