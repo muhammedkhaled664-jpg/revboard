@@ -134,11 +134,6 @@
                 <span class="hidden md:inline text-xs font-semibold">Directives</span>
                 <div id="indicator-table" class="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
-            <button onclick="switchView('board')" id="nav-board" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
-                <i class="fa-solid fa-border-all text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Floor Board</span>
-                <div id="indicator-board" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
-            </button>
             <button onclick="switchView('rankings')" id="nav-rankings" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
                 <i class="fa-solid fa-ranking-star text-xl md:text-base w-5 text-center"></i>
                 <span class="hidden md:inline text-xs font-semibold">Team Totals</span>
@@ -250,36 +245,36 @@
                                     <p class="text-[8px] uppercase font-bold text-blue-300/60 mb-1 tracking-widest">Velocity</p>
                                     <div id="sparklineContainer" class="h-6 w-full flex items-end"></div>
                                 </div>
+                                <!-- ACTIONS MENU -->
+                                <div class="relative admin-only">
+                                    <button onclick="toggleActionsMenu(event)" id="actionsMenuBtn" class="h-10 px-3 rounded-xl flex items-center gap-2 text-[11px] font-bold text-white transition-all" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);">
+                                        <i class="fa-solid fa-bars text-xs"></i><span class="hidden sm:inline">ACTIONS</span>
+                                    </button>
+                                    <div id="actionsMenu" class="hidden absolute right-0 top-12 z-30 w-52 bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-xl shadow-2xl p-1.5">
+                                        <button onclick="closeActionsMenu(); openModal('templatesModal')" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-bolt w-4 text-apple-blue"></i> Templates</button>
+                                        <button onclick="closeActionsMenu(); openModal('bulkPasteModal')" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-paste w-4 text-apple-secondary"></i> Import Tasks</button>
+                                        <button onclick="closeActionsMenu(); copyShiftReport()" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-copy w-4 text-apple-secondary"></i> Shift Report</button>
+                                        <div class="h-px bg-apple-border dark:bg-[#2C2C2E] my-1.5"></div>
+                                        <button onclick="closeActionsMenu(); exportToSheets()" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-table-cells w-4 text-green-600"></i> Export to Sheets</button>
+                                        <button onclick="closeActionsMenu(); exportToCSV()" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-file-csv w-4 text-green-600"></i> Export CSV</button>
+                                        <button onclick="closeActionsMenu(); backupAllData()" class="w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold text-apple-primary dark:text-white hover:bg-apple-canvas dark:hover:bg-[#2C2C2E] flex items-center gap-3"><i class="fa-solid fa-shield-halved w-4 text-indigo-600"></i> Backup Data</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ACTION TOOLBAR -->
-                    <div class="flex gap-2 flex-wrap mb-5">
-                        <button onclick="openModal('templatesModal')" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-apple-blue text-white shadow-sm transition-all flex items-center justify-center gap-2 hover:opacity-90">
-                            <i class="fa-solid fa-bolt"></i> TEMPLATES
-                        </button>
-                        <button onclick="openModal('bulkPasteModal')" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary hover:text-apple-primary dark:text-gray-400 dark:hover:text-white shadow-sm transition-all flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-paste"></i> IMPORT TASKS
-                        </button>
-                        <button onclick="copyShiftReport()" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-apple-secondary hover:text-apple-primary dark:text-gray-400 dark:hover:text-white shadow-sm transition-all flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-copy"></i> REPORT
-                        </button>
-                        <button onclick="exportToSheets()" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-green-700 hover:text-green-800 dark:text-green-500 dark:hover:text-green-400 shadow-sm transition-all flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-table-cells"></i> SHEETS
-                        </button>
-                        <button onclick="exportToCSV()" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 shadow-sm transition-all flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-file-csv"></i> EXPORT
-                        </button>
-                        <button onclick="backupAllData()" class="admin-only flex-1 sm:flex-none h-9 px-3 rounded-lg text-[11px] font-bold bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 shadow-sm transition-all flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-shield-halved"></i> BACKUP
-                        </button>
-                    </div>
-
-                    <div class="flex gap-2 overflow-x-auto scrollbar-hide mb-6 py-1">
-                        <button onclick="setFilter('All')" id="flt-All" class="admin-only shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-apple-primary text-white dark:bg-apple-blue shadow-sm">All Active</button>
-                        <button onclick="setFilter('Mine')" id="flt-Mine" class="shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white dark:bg-[#1C1C1E] text-apple-secondary border border-apple-border dark:border-[#2C2C2E]">My Tasks</button>
-                        <button onclick="setFilter('Critical')" id="flt-Critical" class="admin-only shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white dark:bg-[#1C1C1E] text-apple-secondary border border-apple-border dark:border-[#2C2C2E]">Critical</button>
+                    <!-- FILTERS + VIEW TOGGLE -->
+                    <div class="flex items-center justify-between gap-3 mb-6">
+                        <div class="flex gap-2 overflow-x-auto scrollbar-hide py-1">
+                            <button onclick="setFilter('All')" id="flt-All" class="admin-only shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-apple-primary text-white dark:bg-apple-blue shadow-sm">All Active</button>
+                            <button onclick="setFilter('Mine')" id="flt-Mine" class="shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white dark:bg-[#1C1C1E] text-apple-secondary border border-apple-border dark:border-[#2C2C2E]">My Tasks</button>
+                            <button onclick="setFilter('Critical')" id="flt-Critical" class="admin-only shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white dark:bg-[#1C1C1E] text-apple-secondary border border-apple-border dark:border-[#2C2C2E]">Critical</button>
+                        </div>
+                        <div class="shrink-0 flex items-center bg-apple-canvas dark:bg-[#2C2C2E] rounded-lg p-1 gap-1">
+                            <button onclick="setLayout('table')" id="layout-table" class="h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all bg-white dark:bg-[#1C1C1E] text-apple-primary dark:text-white shadow-sm"><i class="fa-solid fa-list text-[11px]"></i><span class="hidden sm:inline">List</span></button>
+                            <button onclick="setLayout('board')" id="layout-board" class="h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all text-apple-secondary"><i class="fa-solid fa-border-all text-[11px]"></i><span class="hidden sm:inline">Board</span></button>
+                        </div>
                     </div>
 
                     <!-- KPI TILES -->
@@ -927,15 +922,52 @@
                     if(viewEl) viewEl.style.display = isActive ? 'flex' : 'none';
                 }
             });
-            // The ops KPI header belongs to the task views only.
+            // The ops console header (incl. List/Board toggle) belongs to the Directives view only.
             const opsHeader = document.getElementById('ops-header');
-            if(opsHeader) opsHeader.style.display = (viewName === 'table' || viewName === 'board') ? 'block' : 'none';
+            if(opsHeader) opsHeader.style.display = (viewName === 'table') ? 'block' : 'none';
+            if(viewName === 'table') applyLayout();
+            closeActionsMenu();
             if(viewName === 'log') fetchLogs();
             if(viewName === 'analytics') { fetchLogs(); renderAnalytics(); }
             if(viewName === 'rankings') renderRankings();
             if(viewName === 'coaching') loadCoachingSessions();
             if(viewName === 'leave') loadLeave();
         }
+
+        let currentLayout = 'table';
+        function setLayout(layout) {
+            currentLayout = layout;
+            applyLayout();
+        }
+        function applyLayout() {
+            const tableEl = document.getElementById('view-table');
+            const boardEl = document.getElementById('view-board');
+            const onDirectives = document.getElementById('ops-header').style.display !== 'none';
+            if(!onDirectives) return;
+            if(tableEl) tableEl.style.display = currentLayout === 'table' ? 'flex' : 'none';
+            if(boardEl) boardEl.style.display = currentLayout === 'board' ? 'flex' : 'none';
+            const tBtn = document.getElementById('layout-table');
+            const bBtn = document.getElementById('layout-board');
+            const active = 'h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all bg-white dark:bg-[#1C1C1E] text-apple-primary dark:text-white shadow-sm';
+            const idle = 'h-7 px-3 rounded-md text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all text-apple-secondary';
+            if(tBtn) tBtn.className = currentLayout === 'table' ? active : idle;
+            if(bBtn) bBtn.className = currentLayout === 'board' ? active : idle;
+        }
+        function toggleActionsMenu(e) {
+            if(e) e.stopPropagation();
+            document.getElementById('actionsMenu').classList.toggle('hidden');
+        }
+        function closeActionsMenu() {
+            const m = document.getElementById('actionsMenu');
+            if(m) m.classList.add('hidden');
+        }
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('actionsMenu');
+            const btn = document.getElementById('actionsMenuBtn');
+            if(menu && !menu.classList.contains('hidden') && !menu.contains(e.target) && btn && !btn.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
 
         function applyRolePermissions() {
             const isAdmin = currentUser && (currentUser.role.includes('Manager') || currentUser.role === 'Admin');
@@ -1782,7 +1814,7 @@
                 if(currentUser) { 
                     document.body.classList.toggle('war-room');
                     if(document.body.classList.contains('war-room')) {
-                        switchView('board'); playSound('chime'); showToast('WAR ROOM MODE ACTIVATED');
+                        switchView('table'); setLayout('board'); playSound('chime'); showToast('WAR ROOM MODE ACTIVATED');
                     } else { showToast('War Room Off'); }
                 }
             }
