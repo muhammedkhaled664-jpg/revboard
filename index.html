@@ -686,35 +686,65 @@
 
 
                 <!-- HEADSETS VIEW -->
-                <div id="view-headsets" class="hidden flex-col gap-4">
-                    <!-- Header -->
-                    <div class="flex items-center justify-between gap-3 flex-wrap">
-                        <div>
-                            <h2 class="text-lg font-bold dark:text-white">Headsets Tracker</h2>
-                            <p class="text-[10px] text-apple-secondary uppercase tracking-widest mt-0.5">Tap a name to rename &bull; Tap a count to edit</p>
+                <div id="view-headsets" class="hidden flex-col gap-5">
+
+                    <!-- Stat cards row -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="rounded-2xl p-4 bg-gradient-to-br from-apple-blue to-indigo-500 text-white shadow-lg col-span-2 md:col-span-1 flex items-center gap-4" style="box-shadow:0 8px 24px rgba(79,70,229,0.28)">
+                            <div class="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-headset text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-black uppercase tracking-widest text-white/70 mb-0.5">Total Headsets</p>
+                                <span id="hs-total" class="text-3xl font-black">0</span>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-3 rounded-2xl px-5 py-3 bg-gradient-to-br from-apple-blue to-indigo-500 shrink-0" style="box-shadow:0 8px 20px rgba(79,70,229,0.25)">
-                            <i class="fa-solid fa-headset text-white/80"></i>
-                            <div class="leading-none">
-                                <p class="text-[8px] font-black text-white/70 uppercase tracking-widest mb-0.5">Total</p>
-                                <span id="hs-total" class="text-2xl font-black text-white">0</span>
+                        <div class="rounded-2xl p-4 bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] shadow-sm flex items-center gap-3">
+                            <div class="h-10 w-10 rounded-xl bg-apple-blue/10 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-users text-apple-blue text-base"></i>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-black uppercase tracking-widest text-apple-secondary mb-0.5">Teams</p>
+                                <span id="hs-stat-teams-num" class="text-2xl font-black dark:text-white">0</span>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl p-4 bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] shadow-sm flex items-center gap-3">
+                            <div class="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-box text-purple-500 text-base"></i>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-black uppercase tracking-widest text-apple-secondary mb-0.5">Inventory</p>
+                                <span id="hs-stat-roles-num" class="text-2xl font-black dark:text-white">0</span>
+                            </div>
+                        </div>
+                        <div id="hs-damaged-card" class="rounded-2xl p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 shadow-sm flex items-center gap-3">
+                            <div class="h-10 w-10 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-triangle-exclamation text-red-500 text-base"></i>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-black uppercase tracking-widest text-red-400 mb-0.5">Damaged</p>
+                                <span id="hs-damaged-num" class="text-2xl font-black text-red-500">0</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Unified table panel -->
-                    <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-2xl shadow-sm overflow-hidden">
-                        <div class="px-5 py-2.5 bg-apple-canvas dark:bg-[#2C2C2E] border-b border-apple-border dark:border-[#3A3A3C] flex items-center justify-between">
-                            <p class="text-[9px] font-black uppercase tracking-widest text-apple-secondary">Teams</p>
-                            <span id="hs-stat-teams-badge" class="text-[9px] font-black text-apple-blue">0 headsets</span>
-                        </div>
-                        <div id="hs-teams-rows"></div>
-                        <div class="px-5 py-2.5 bg-apple-canvas dark:bg-[#2C2C2E] border-y border-apple-border dark:border-[#3A3A3C] flex items-center justify-between">
-                            <p class="text-[9px] font-black uppercase tracking-widest text-apple-secondary">Roles &amp; Inventory</p>
-                            <span id="hs-stat-roles-badge" class="text-[9px] font-black text-apple-secondary">0 headsets</span>
-                        </div>
-                        <div id="hs-roles-rows"></div>
+                    <!-- Teams grid -->
+                    <div>
+                        <p class="text-[9px] font-black uppercase tracking-widest text-apple-secondary mb-3 px-1">Teams</p>
+                        <div id="hs-teams-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3"></div>
                     </div>
+
+                    <!-- Roles grid -->
+                    <div>
+                        <p class="text-[9px] font-black uppercase tracking-widest text-apple-secondary mb-3 px-1">Roles &amp; Inventory</p>
+                        <div id="hs-roles-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+                    </div>
+
+                    <!-- hidden badges kept for compat -->
+                    <span id="hs-stat-teams-badge" class="hidden"></span>
+                    <span id="hs-stat-roles-badge" class="hidden"></span>
+                    <div id="hs-teams-rows" class="hidden"></div>
+                    <div id="hs-roles-rows" class="hidden"></div>
                 </div>
 
             </div>
@@ -2085,53 +2115,76 @@
             const teamsTotal = HS_TEAM_KEYS.reduce((s, k) => s + parseInt(globalHeadsets[k]?.count || 0), 0);
             const rolesTotal = HS_ROLE_KEYS.reduce((s, k) => s + parseInt(globalHeadsets[k]?.count || 0), 0);
             const total = teamsTotal + rolesTotal;
-            const maxAll = Math.max(1, ...[...HS_TEAM_KEYS, ...HS_ROLE_KEYS].map(k => parseInt(globalHeadsets[k]?.count || 0)));
+            const maxTeam = Math.max(1, ...HS_TEAM_KEYS.map(k => parseInt(globalHeadsets[k]?.count || 0)));
 
             const set = (id, v) => { const el = document.getElementById(id); if(el) el.innerText = v; };
             set('hs-total', total);
-            set('hs-stat-teams-badge', `${teamsTotal} headsets`);
-            set('hs-stat-roles-badge', `${rolesTotal} headsets`);
+            set('hs-stat-teams-num', teamsTotal);
+            set('hs-stat-roles-num', rolesTotal);
+            const damagedCount = parseInt(globalHeadsets['Damaged']?.count || 0);
+            set('hs-damaged-num', damagedCount);
+            const dmgCard = document.getElementById('hs-damaged-card');
+            if(dmgCard) {
+                dmgCard.className = damagedCount > 0
+                    ? 'rounded-2xl p-4 bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-500/50 shadow-sm flex items-center gap-3'
+                    : 'rounded-2xl p-4 bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] shadow-sm flex items-center gap-3';
+            }
 
             const roleIcons = {
                 Managers: 'fa-user-tie', Sales: 'fa-handshake', Nesting: 'fa-graduation-cap',
                 Quality: 'fa-clipboard-check', Admin: 'fa-gear', Stock: 'fa-box', Damaged: 'fa-triangle-exclamation'
             };
 
-            const renderRow = (key, isTeam) => {
+            // Team card: big number + label editable + mini bar
+            const renderTeamCard = (key) => {
                 const d = globalHeadsets[key] || { label: key, count: 0 };
                 const label = d.label || key;
                 const count = parseInt(d.count ?? 0);
-                const pct = Math.round((count / maxAll) * 100);
-                const isDamaged = key === 'Damaged';
-                const icon = isTeam ? 'fa-users' : (roleIcons[key] || 'fa-circle');
-                const barColor = isDamaged ? 'from-red-500 to-red-400' : (isTeam ? 'from-apple-blue to-indigo-500' : 'from-gray-400 to-gray-300 dark:from-gray-500 dark:to-gray-600');
-                const countColor = isDamaged ? 'text-red-500' : 'text-apple-primary dark:text-white';
-                const iconBg = isDamaged ? 'bg-red-500/10 text-red-500' : (isTeam ? 'bg-apple-blue/10 text-apple-blue' : 'bg-apple-canvas dark:bg-[#2C2C2E] text-apple-secondary');
-
-                return `<div class="flex items-center gap-3 px-4 py-3 border-b border-apple-border dark:border-[#2C2C2E] last:border-b-0 group">
-                    <div class="h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${iconBg}">
-                        <i class="fa-solid ${icon} text-xs"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        ${isTeam
-                            ? `<div class="hs-label text-sm font-semibold dark:text-white cursor-pointer hover:text-apple-blue flex items-center gap-1.5 mb-1.5" data-key="${key}">${label}<i class="fa-solid fa-pen text-[8px] opacity-0 group-hover:opacity-40 transition-opacity"></i></div>`
-                            : `<div class="text-sm font-semibold ${isDamaged ? 'text-red-500' : 'text-apple-primary dark:text-gray-300'} mb-1.5">${label}</div>`
-                        }
-                        <div class="h-1.5 w-full rounded-full bg-apple-canvas dark:bg-[#2C2C2E] overflow-hidden">
-                            <div class="h-full rounded-full bg-gradient-to-r ${barColor} transition-all duration-500" style="width:${pct}%"></div>
+                const pct = Math.round((count / maxTeam) * 100);
+                return `<div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] rounded-2xl p-4 flex flex-col gap-2 shadow-sm group">
+                    <div class="flex items-center justify-between">
+                        <div class="h-8 w-8 rounded-lg bg-apple-blue/10 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-users text-apple-blue text-xs"></i>
                         </div>
+                        <input type="number" min="0" inputmode="numeric" value="${count}" data-key="${key}"
+                            class="hs-count w-16 text-right text-2xl font-black text-apple-primary dark:text-white bg-transparent border-0 focus:bg-apple-canvas dark:focus:bg-[#2C2C2E] focus:border focus:border-apple-blue rounded-lg h-9 px-2 focus:outline-none transition-all"
+                            onchange="saveHeadsetField('${key}','count', parseInt(this.value)||0)"
+                            onclick="this.select()">
                     </div>
-                    <input type="number" min="0" inputmode="numeric" value="${count}" data-key="${key}"
-                        class="hs-count w-14 text-right text-base font-black ${countColor} bg-transparent border-0 focus:bg-apple-canvas dark:focus:bg-[#2C2C2E] focus:border focus:border-apple-blue rounded-lg h-9 px-2 focus:outline-none transition-all"
-                        onchange="saveHeadsetField('${key}','count', parseInt(this.value)||0)"
-                        onclick="this.select()">
+                    <div class="hs-label text-xs font-bold text-apple-primary dark:text-white cursor-pointer hover:text-apple-blue flex items-center gap-1 truncate" data-key="${key}">${label}<i class="fa-solid fa-pen text-[7px] ml-1 opacity-0 group-hover:opacity-40 transition-opacity"></i></div>
+                    <div class="h-1.5 w-full rounded-full bg-apple-canvas dark:bg-[#2C2C2E] overflow-hidden">
+                        <div class="h-full rounded-full bg-gradient-to-r from-apple-blue to-indigo-500 transition-all duration-500" style="width:${pct}%"></div>
+                    </div>
                 </div>`;
             };
 
-            const teamsEl = document.getElementById('hs-teams-rows');
-            if(teamsEl) teamsEl.innerHTML = HS_TEAM_KEYS.map(k => renderRow(k, true)).join('');
-            const rolesEl = document.getElementById('hs-roles-rows');
-            if(rolesEl) rolesEl.innerHTML = HS_ROLE_KEYS.map(k => renderRow(k, false)).join('');
+            // Role card: icon + label + editable number
+            const renderRoleCard = (key) => {
+                const d = globalHeadsets[key] || { label: key, count: 0 };
+                const label = d.label || key;
+                const count = parseInt(d.count ?? 0);
+                const isDamaged = key === 'Damaged';
+                const icon = roleIcons[key] || 'fa-circle';
+                const accent = isDamaged ? 'text-red-500' : 'text-apple-secondary dark:text-gray-300';
+                const iconBg = isDamaged ? 'bg-red-500/10 text-red-500' : 'bg-apple-canvas dark:bg-[#2C2C2E] text-apple-secondary';
+                return `<div class="bg-white dark:bg-[#1C1C1E] border ${isDamaged && count > 0 ? 'border-red-300 dark:border-red-500/40' : 'border-apple-border dark:border-[#2C2C2E]'} rounded-2xl p-4 flex items-center gap-3 shadow-sm">
+                    <div class="h-10 w-10 rounded-xl ${iconBg} flex items-center justify-center shrink-0">
+                        <i class="fa-solid ${icon} text-base"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[10px] font-bold uppercase tracking-tight ${accent} truncate">${label}</p>
+                        <input type="number" min="0" inputmode="numeric" value="${count}" data-key="${key}"
+                            class="hs-count w-full text-xl font-black ${isDamaged ? 'text-red-500' : 'text-apple-primary dark:text-white'} bg-transparent border-0 focus:outline-none p-0 h-7"
+                            onchange="saveHeadsetField('${key}','count', parseInt(this.value)||0)"
+                            onclick="this.select()">
+                    </div>
+                </div>`;
+            };
+
+            const teamsGrid = document.getElementById('hs-teams-grid');
+            if(teamsGrid) teamsGrid.innerHTML = HS_TEAM_KEYS.map(k => renderTeamCard(k)).join('');
+            const rolesGrid = document.getElementById('hs-roles-grid');
+            if(rolesGrid) rolesGrid.innerHTML = HS_ROLE_KEYS.map(k => renderRoleCard(k)).join('');
 
             document.querySelectorAll('.hs-label').forEach(el => {
                 el.addEventListener('click', function() {
@@ -2140,7 +2193,7 @@
                     const input = document.createElement('input');
                     input.type = 'text';
                     input.value = current;
-                    input.className = 'text-sm font-semibold dark:text-white bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-blue rounded-lg px-2 h-7 w-32 focus:outline-none';
+                    input.className = 'text-xs font-bold dark:text-white bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-blue rounded-lg px-2 h-6 w-24 focus:outline-none';
                     this.replaceWith(input);
                     input.focus(); input.select();
                     const commit = () => { saveHeadsetField(key, 'label', input.value.trim() || current); };
