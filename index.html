@@ -601,9 +601,14 @@
                             <h2 class="text-lg font-bold dark:text-white">Performance Dashboard</h2>
                             <p class="text-[10px] text-apple-secondary uppercase tracking-widest">Impact snapshot for <span id="perf-dept">your floor</span> • Today</p>
                         </div>
-                        <button onclick="copyPerformanceReport()" class="h-9 px-3 rounded-lg text-[11px] font-bold bg-apple-blue text-white shadow-sm transition-all flex items-center justify-center gap-2 hover:opacity-80">
-                            <i class="fa-solid fa-clipboard"></i> COPY REPORT
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="emailEodReport()" class="h-9 px-3 rounded-lg text-[11px] font-bold bg-apple-canvas dark:bg-[#2C2C2E] text-apple-primary dark:text-white border border-apple-border dark:border-[#3A3A3C] shadow-sm transition-all flex items-center justify-center gap-2 hover:opacity-80">
+                                <i class="fa-solid fa-envelope"></i> <span class="hidden sm:inline">EMAIL EOD</span>
+                            </button>
+                            <button onclick="copyPerformanceReport()" class="h-9 px-3 rounded-lg text-[11px] font-bold bg-apple-blue text-white shadow-sm transition-all flex items-center justify-center gap-2 hover:opacity-80">
+                                <i class="fa-solid fa-clipboard"></i> <span class="hidden sm:inline">COPY REPORT</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- TEAM RACE LEADERBOARD (8 editable teams, ranked by score) -->
@@ -2208,7 +2213,7 @@
             });
         }
 
-        async function copyPerformanceReport() {
+        function buildEodReport() {
             const doneToday = globalLogs.filter(l => l.action_text.includes('to Completed') && isToday(l.created_at)).length;
             const active = globalTasks.filter(t => t.status !== 'Completed').length;
             const openCrit = globalTasks.filter(t => t.priority === 'Critical' && t.status !== 'Completed').length;
@@ -2222,18 +2227,42 @@
             });
             const top = Object.entries(stats).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
-            let report = `📊 ${dept} PERFORMANCE REPORT — ${date}\n`;
+            // Team Race standings (ranked by Success)
+            const raceRows = (typeof RACE_KEYS !== 'undefined' ? RACE_KEYS : []).map((key, i) => {
+                const d = globalRace[key] || { label: `Team ${i + 1}`, count: 0 };
+                return { label: d.label || `Team ${i + 1}`, score: parseInt(d.count || 0) };
+            }).filter(r => r.score > 0).sort((a, b) => b.score - a.score);
+
+            let report = `📊 ${dept} END-OF-DAY SUMMARY — ${date}\n`;
             report += `————————————————————\n`;
             report += `✅ Completed Today: ${doneToday}\n`;
             report += `⏱  Avg Resolution Time: ${avg}\n`;
             report += `📋 Currently Active: ${active}\n`;
             report += `🚨 Open Criticals: ${openCrit}\n`;
+            if(raceRows.length) {
+                report += `\n🏁 TEAM RACE (by Success)\n`;
+                const medals = ['🥇', '🥈', '🥉'];
+                raceRows.forEach((r, i) => { report += `${medals[i] || (i + 1) + '.'} ${r.label} — ${r.score}\n`; });
+            }
             if(top.length) {
                 report += `\n🏆 TOP PERFORMERS\n`;
                 top.forEach(([name, n], i) => { report += `${i + 1}. ${name} — ${n} completed\n`; });
             }
+            return { report, dept, date };
+        }
+
+        async function copyPerformanceReport() {
+            const { report } = buildEodReport();
             try { await navigator.clipboard.writeText(report); showToast('Performance report copied!'); }
             catch(e) { showToast('Copy failed — check permissions'); }
+        }
+
+        function emailEodReport() {
+            const { report, dept, date } = buildEodReport();
+            const subject = `${dept} End-of-Day Summary — ${date}`;
+            const link = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(report)}`;
+            window.location.href = link;
+            showToast('Opening your email app…');
         }
 
         async function quickMove(id, nextStat) {
