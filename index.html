@@ -360,41 +360,57 @@
 
                     <!-- KPI TILES -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-l-4 border-l-apple-blue relative overflow-hidden">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Active Total</p>
-                                <i class="fa-solid fa-layer-group text-apple-blue/40"></i>
+                        <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
+                            <div class="absolute inset-0 bg-gradient-to-br from-apple-blue/5 to-transparent pointer-events-none"></div>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="h-9 w-9 rounded-xl bg-apple-blue/10 flex items-center justify-center">
+                                    <i class="fa-solid fa-layer-group text-apple-blue text-sm"></i>
+                                </div>
+                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Active</p>
                             </div>
-                            <span id="kpi-total" class="text-3xl font-black dark:text-white">0</span>
+                            <span id="kpi-total" class="text-4xl font-black dark:text-white tracking-tight">0</span>
+                            <p class="text-[9px] text-apple-secondary font-semibold mt-1">total directives</p>
                         </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-l-4 border-l-purple-500">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Radar &amp; Assigned</p>
-                                <i class="fa-solid fa-satellite text-purple-500/40"></i>
+                        <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
+                            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent pointer-events-none"></div>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="h-9 w-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                                    <i class="fa-solid fa-satellite text-purple-500 text-sm"></i>
+                                </div>
+                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Queued</p>
                             </div>
-                            <span id="kpi-radar" class="text-3xl font-black dark:text-white">0</span>
+                            <span id="kpi-radar" class="text-4xl font-black text-purple-500 tracking-tight">0</span>
+                            <p class="text-[9px] text-apple-secondary font-semibold mt-1">radar &amp; assigned</p>
                         </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-l-4 border-l-orange-500">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">In Progress</p>
-                                <i class="fa-solid fa-bolt text-orange-500/40"></i>
+                        <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
+                            <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent pointer-events-none"></div>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="h-9 w-9 rounded-xl bg-orange-500/10 flex items-center justify-center">
+                                    <i class="fa-solid fa-bolt text-orange-500 text-sm"></i>
+                                </div>
+                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Live</p>
                             </div>
-                            <span id="kpi-progress" class="text-3xl font-black dark:text-white">0</span>
+                            <span id="kpi-progress" class="text-4xl font-black text-orange-500 tracking-tight">0</span>
+                            <p class="text-[9px] text-apple-secondary font-semibold mt-1">in progress now</p>
                         </div>
-                        <div class="bg-white dark:bg-[#1C1C1E] rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm border-l-4 border-l-green-500">
-                            <div class="flex items-center justify-between mb-1">
-                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Done Today</p>
-                                <i class="fa-solid fa-circle-check text-green-500/40"></i>
+                        <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
+                            <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent pointer-events-none"></div>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="h-9 w-9 rounded-xl bg-green-500/10 flex items-center justify-center">
+                                    <i class="fa-solid fa-circle-check text-green-500 text-sm"></i>
+                                </div>
+                                <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Done</p>
                             </div>
-                            <span id="kpi-completed" class="text-3xl font-black text-green-500">0</span>
+                            <span id="kpi-completed" class="text-4xl font-black text-green-500 tracking-tight">0</span>
+                            <p class="text-[9px] text-apple-secondary font-semibold mt-1">completed today</p>
                         </div>
                     </div>
                 </div>
 
                 <div id="view-table" class="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-apple-border dark:border-[#2C2C2E] overflow-hidden shadow-sm">
-                    <div class="overflow-x-auto scrollbar-hide">
+                    <div class="overflow-x-auto scrollbar-hide" style="min-width:0">
                         <table class="w-full text-left border-collapse min-w-[600px]">
-                            <thead><tr class="bg-[#FBFBFD] dark:bg-[#242426] border-b border-apple-border dark:border-[#2C2C2E]"><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Directive</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Timing</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Department</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Assignee</th><th class="py-3 px-4 text-[9px] uppercase font-bold text-apple-secondary dark:text-gray-400">Status</th><th class="py-3 px-4 text-right"></th></tr></thead>
+                            <thead><tr class="bg-[#F7F7FA] dark:bg-[#1A1A1E] border-b border-apple-border dark:border-[#2C2C2E]"><th class="py-3.5 px-5 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Directive</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Timing</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Dept</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Assignee</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Status</th><th class="py-3.5 px-4 text-right"></th></tr></thead>
                             <tbody id="taskTableBody"></tbody>
                         </table>
                     </div>
@@ -1213,8 +1229,11 @@
                 if(nav) {
                     const isActive = v === viewName;
                     nav.classList.toggle('text-apple-blue', isActive);
-                    nav.classList.toggle('md:bg-apple-blue/10', isActive);
+                    nav.classList.toggle('bg-apple-blue/10', isActive);
+                    nav.classList.toggle('dark:bg-apple-blue/15', isActive);
+                    nav.classList.toggle('font-bold', isActive);
                     nav.classList.toggle('text-apple-secondary', !isActive);
+                    nav.classList.toggle('dark:text-gray-400', !isActive);
                     if(ind) ind.style.display = isActive ? 'block' : 'none';
                     if(viewEl) viewEl.style.display = isActive ? 'flex' : 'none';
                 }
@@ -1716,23 +1735,43 @@
                     if(blocker && blocker.status !== 'Completed') isBlocked = true;
                 }
 
-                let badgeColor = 'bg-orange-50 text-orange-500 dark:bg-orange-900/20 dark:text-orange-400';
-                if(item.status === 'Completed') badgeColor = 'bg-gray-100 text-gray-500 dark:bg-[#2C2C2E] dark:text-gray-400';
-                if(item.status === 'Pending PM Review') badgeColor = 'bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400';
+                // Status badge — more visually distinct
+                const statusMeta = {
+                    'Radar':            { dot: 'bg-orange-400',  text: 'text-orange-500 dark:text-orange-400',  bg: 'bg-orange-50 dark:bg-orange-900/20',   label: 'Radar' },
+                    'Assigned To':      { dot: 'bg-purple-500',  text: 'text-purple-600 dark:text-purple-400',  bg: 'bg-purple-50 dark:bg-purple-900/20',   label: 'Assigned' },
+                    'In Progress':      { dot: 'bg-blue-500',    text: 'text-apple-blue dark:text-blue-400',    bg: 'bg-blue-50 dark:bg-blue-900/20',       label: 'In Progress' },
+                    'Pending PM Review':{ dot: 'bg-yellow-500',  text: 'text-yellow-600 dark:text-yellow-400',  bg: 'bg-yellow-50 dark:bg-yellow-900/20',   label: 'Review' },
+                    'Completed':        { dot: 'bg-green-500',   text: 'text-green-600 dark:text-green-400',    bg: 'bg-green-50 dark:bg-green-900/20',     label: 'Done' },
+                }[item.status] || { dot: 'bg-gray-400', text: 'text-gray-500', bg: 'bg-gray-50 dark:bg-[#2C2C2E]', label: item.status };
 
-                let badge = `<span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${badgeColor}">${item.status}</span>`;
-                let blockIco = isBlocked ? `<i class="fa-solid fa-lock text-red-500 ml-2" title="Blocked"></i>` : '';
+                const badge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${statusMeta.bg} ${statusMeta.text}"><span class="h-1.5 w-1.5 rounded-full ${statusMeta.dot} shrink-0"></span>${statusMeta.label}</span>`;
+
+                const priorityAccent = item.priority === 'Critical' ? 'border-l-[3px] border-l-red-500' : item.priority === 'High' ? 'border-l-[3px] border-l-orange-400' : '';
+                const blockIco = isBlocked ? `<i class="fa-solid fa-lock text-red-500 text-[9px] ml-1.5" title="Blocked"></i>` : '';
 
                 const mineUnaccepted = currentUser && item.assigned_to === currentUser.name && item.status === 'Assigned To';
                 let lastCell;
                 if(mineUnaccepted) {
-                    lastCell = `<button onclick="event.stopPropagation(); acceptTask('${item.id}')" class="h-7 px-3 rounded-full bg-green-500 text-white text-[9px] font-black uppercase tracking-tighter hover:bg-green-600 transition-colors"><i class="fa-solid fa-check mr-1"></i>Accept</button>`;
+                    lastCell = `<button onclick="event.stopPropagation(); acceptTask('${item.id}')" class="h-7 px-3 rounded-full bg-green-500 text-white text-[9px] font-black uppercase tracking-tighter hover:bg-green-600 transition-colors flex items-center gap-1"><i class="fa-solid fa-check text-[8px]"></i>Accept</button>`;
                 } else if(isAdmin && item.status !== 'Completed' && !isBlocked) {
-                    lastCell = `<button onclick="event.stopPropagation(); quickMove('${item.id}', 'Completed')" title="Mark done now" class="h-7 px-3 rounded-full bg-apple-primary dark:bg-apple-blue text-white text-[9px] font-black uppercase tracking-tighter hover:opacity-80 transition-opacity"><i class="fa-solid fa-check mr-1"></i>Done</button>`;
+                    lastCell = `<button onclick="event.stopPropagation(); quickMove('${item.id}', 'Completed')" title="Mark done now" class="h-7 px-3 rounded-full bg-apple-blue text-white text-[9px] font-black uppercase tracking-tighter hover:opacity-80 transition-opacity flex items-center gap-1"><i class="fa-solid fa-check text-[8px]"></i>Done</button>`;
                 } else {
                     lastCell = `<i class="fa-solid fa-chevron-right text-[8px] opacity-20 dark:text-white"></i>`;
                 }
-                tbody.insertAdjacentHTML('beforeend', `<tr class="border-b border-apple-border dark:border-[#2C2C2E] hover:bg-apple-canvas dark:hover:bg-[#242426] transition-colors cursor-pointer" onclick="openDrawer('${item.id}')"><td class="py-3 px-4 text-xs font-bold dark:text-white">${item.title} ${blockIco}</td><td class="py-3 px-4 text-[9px] font-mono opacity-50 uppercase dark:text-white">${item.linked_entity}</td><td class="py-3 px-4 text-[9px] font-bold uppercase dark:text-gray-400">${item.sub_department || 'Survey'}</td><td class="py-3 px-4 text-xs dark:text-gray-300">${item.assigned_to}</td><td class="py-3 px-4">${badge}</td><td class="py-3 px-4 text-right">${lastCell}</td></tr>`);
+
+                // Assignee initials avatar
+                const assigneeName = item.assigned_to || 'Unassigned';
+                const initials = assigneeName === 'None' || assigneeName === 'Unassigned' ? '—' : assigneeName.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+                const assigneeCell = `<div class="flex items-center gap-2"><div class="h-6 w-6 rounded-full bg-apple-blue/10 dark:bg-apple-blue/20 flex items-center justify-center text-apple-blue text-[8px] font-black shrink-0">${initials}</div><span class="text-[11px] dark:text-gray-300 font-medium truncate">${assigneeName}</span></div>`;
+
+                tbody.insertAdjacentHTML('beforeend', `<tr class="border-b border-apple-border dark:border-[#1E1E1E] hover:bg-[#F7F7FA] dark:hover:bg-[#1A1A1E] transition-colors cursor-pointer group ${priorityAccent}" onclick="openDrawer('${item.id}')">
+                    <td class="py-3.5 px-5"><div class="flex items-center gap-2"><span class="text-sm font-semibold text-apple-primary dark:text-white leading-tight">${item.title}</span>${blockIco}${item.priority === 'Critical' ? '<span class="shrink-0 text-[7px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-red-500/10 text-red-500 border border-red-500/20">Critical</span>' : ''}</div></td>
+                    <td class="py-3.5 px-4"><span class="text-[10px] font-mono text-apple-secondary dark:text-gray-500 bg-apple-canvas dark:bg-[#2C2C2E] px-2 py-0.5 rounded">${item.linked_entity || '—'}</span></td>
+                    <td class="py-3.5 px-4 text-[10px] font-bold uppercase text-apple-secondary dark:text-gray-400 tracking-tight">${item.sub_department || 'Survey'}</td>
+                    <td class="py-3.5 px-4">${assigneeCell}</td>
+                    <td class="py-3.5 px-4">${badge}</td>
+                    <td class="py-3.5 px-4 text-right">${lastCell}</td>
+                </tr>`);
                 
                 if(cols[item.status]) {
                     let border = item.priority === 'Critical' ? 'border-l-4 border-l-red-500' : (item.priority === 'High' ? 'border-l-4 border-l-orange-500' : 'border border-apple-border dark:border-[#2C2C2E]');
