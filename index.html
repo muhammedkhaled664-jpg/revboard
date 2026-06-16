@@ -134,7 +134,65 @@
         body:not(.war-room) #appShell main { background: #FFFFFF !important; }
         body.dark:not(.war-room) #appShell,
         body.dark:not(.war-room) #appShell header,
-        body.dark:not(.war-room) #appShell main { background: #161618 !important; }
+        body.dark:not(.war-room) #appShell main { background: #0D0D14 !important; }
+
+        /* ── SLEEK DARK THEME ─────────────────────────────
+           Near-black bg, deep charcoal cards, bright blue accent.
+           Overrides Tailwind dark: classes app-wide.
+        ──────────────────────────────────────────────────── */
+        body.dark:not(.war-room) {
+            background: #07070E !important;
+            color: #E8E8F0 !important;
+        }
+        /* sidebar on dark: deep navy */
+        body.dark:not(.war-room) aside {
+            background: #0D0D18 !important;
+        }
+        @media (max-width: 767px) {
+            body.dark:not(.war-room) aside { background: #0D0D18 !important; box-shadow: 0 -1px 0 rgba(255,255,255,0.06); }
+        }
+        body.dark:not(.war-room) aside nav button { color: rgba(200,200,230,0.6) !important; }
+        body.dark:not(.war-room) aside nav button.text-apple-blue { background: rgba(75,123,238,0.18) !important; color: #7FB3FF !important; }
+        body.dark:not(.war-room) aside nav button.text-apple-blue span { color: #7FB3FF !important; }
+        body.dark:not(.war-room) aside [id^="indicator-"] { background: #4B7BEE !important; }
+        body.dark:not(.war-room) #sidebarUserCard { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.07); }
+        /* app shell */
+        body.dark:not(.war-room) #appShell { background: #0D0D14 !important; }
+        body.dark:not(.war-room) #appShell header { background: #0D0D14 !important; border-color: rgba(255,255,255,0.07) !important; backdrop-filter: none !important; }
+        body.dark:not(.war-room) #appShell main { background: #0D0D14 !important; }
+        /* cards / panels */
+        body.dark:not(.war-room) .bg-white,
+        body.dark:not(.war-room) .dark\\:bg-\\[\\#1C1C1E\\],
+        body.dark:not(.war-room) .dark\\:bg-\\[\\#161618\\] {
+            background-color: #13131F !important;
+            border-color: rgba(255,255,255,0.07) !important;
+        }
+        /* secondary surfaces */
+        body.dark:not(.war-room) .dark\\:bg-\\[\\#2C2C2E\\],
+        body.dark:not(.war-room) .dark\\:bg-\\[\\#202022\\] {
+            background-color: #1C1C2C !important;
+        }
+        /* text */
+        body.dark:not(.war-room) .dark\\:text-white { color: #EEEEF8 !important; }
+        body.dark:not(.war-room) .dark\\:text-gray-400 { color: rgba(180,180,210,0.6) !important; }
+        /* borders */
+        body.dark:not(.war-room) .dark\\:border-\\[\\#2C2C2E\\],
+        body.dark:not(.war-room) .dark\\:border-\\[\\#3A3A3C\\] {
+            border-color: rgba(255,255,255,0.08) !important;
+        }
+        /* inputs */
+        body.dark:not(.war-room) input, body.dark:not(.war-room) textarea, body.dark:not(.war-room) select {
+            background-color: #1C1C2C !important;
+            border-color: rgba(255,255,255,0.1) !important;
+            color: #EEEEF8 !important;
+        }
+        /* blue accent stays vivid */
+        body.dark:not(.war-room) .bg-apple-blue,
+        body.dark:not(.war-room) .dark\\:bg-apple-blue { background-color: #4B7BEE !important; }
+        body.dark:not(.war-room) .text-apple-blue { color: #7FB3FF !important; }
+        body.dark:not(.war-room) .border-apple-blue { border-color: #4B7BEE !important; }
+        /* frame bg also near-black in dark */
+        body.dark:not(.war-room) { background: #07070E !important; }
 
         /* WAR ROOM MODE OVERRIDES */
         body.war-room aside, body.war-room header, body.war-room #ops-header, body.war-room #fab-add-task { display: none !important; }
@@ -145,6 +203,15 @@
         body.war-room .bg-white { background-color: #121212 !important; border-color: #2a2a2a !important; color: #fff !important; }
         body.war-room .text-apple-primary { color: #fff !important; }
         body.war-room * { text-shadow: 0 0 1px rgba(255,255,255,0.1); }
+
+        /* Dark mode login */
+        body.dark #lockScreen {
+            background: linear-gradient(170deg, #0A0A14 0%, #0D0D1C 100%) !important;
+        }
+        body.dark #lockScreen h1 { color: #EEEEF8 !important; }
+        body.dark #lockScreen p { color: rgba(180,180,210,0.65) !important; }
+        body.dark #lockScreen .bg-white,
+        body.dark #lockScreen .dark\\:bg-\\[\\#161618\\] { background: #13131F !important; border-color: rgba(255,255,255,0.08) !important; }
     </style>
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col md:flex-row antialiased bg-apple-canvas text-apple-primary dark:bg-[#121212] dark:text-[#F5F5F7] transition-colors duration-300">
