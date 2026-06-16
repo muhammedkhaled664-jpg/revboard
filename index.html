@@ -184,6 +184,11 @@
                 <span class="text-xs font-semibold">Headsets</span>
                 <div id="indicator-headsets" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
+            <button onclick="switchView('ers')" id="nav-ers" class="text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors">
+                <i class="fa-solid fa-trophy text-base w-5 text-center"></i>
+                <span class="text-xs font-semibold">Rewards</span>
+                <div id="indicator-ers" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
+            </button>
         </nav>
 
         <!-- Mobile bottom bar: 4 primary tabs + More -->
@@ -231,6 +236,10 @@
                 <button onclick="closeMobileMore(); switchView('headsets')" id="mob-nav-headsets" class="flex flex-col items-center justify-center gap-1.5 py-3.5 rounded-2xl bg-apple-canvas dark:bg-[#2C2C2E] text-apple-secondary dark:text-gray-300 transition-colors">
                     <i class="fa-solid fa-headset text-xl"></i>
                     <span class="text-[10px] font-semibold">Headsets</span>
+                </button>
+                <button onclick="closeMobileMore(); switchView('ers')" id="mob-nav-ers" class="flex flex-col items-center justify-center gap-1.5 py-3.5 rounded-2xl bg-apple-canvas dark:bg-[#2C2C2E] text-apple-secondary dark:text-gray-300 transition-colors">
+                    <i class="fa-solid fa-trophy text-xl"></i>
+                    <span class="text-[10px] font-semibold">Rewards</span>
                 </button>
             </div>
         </div>
@@ -758,6 +767,63 @@
                     <div id="hs-roles-rows" class="hidden"></div>
                 </div>
 
+                <!-- ERS VIEW -->
+                <div id="view-ers" class="hidden flex-col gap-4">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between gap-3 flex-wrap">
+                        <div class="flex items-center gap-3">
+                            <div class="h-11 w-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shrink-0" style="box-shadow:0 8px 20px rgba(245,158,11,.35)">
+                                <i class="fa-solid fa-trophy text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-black dark:text-white tracking-tight">Employee Rewards</h2>
+                                <p class="text-[9px] text-apple-secondary uppercase tracking-widest font-bold mt-0.5">Monthly Scorecard · <span id="ers-month-label">—</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openImportERS()" class="h-9 px-3 rounded-xl text-[10px] font-black uppercase tracking-widest bg-apple-canvas dark:bg-[#2C2C2E] text-apple-primary dark:text-white border border-apple-border dark:border-[#3A3A3C] flex items-center gap-2 transition-colors hover:opacity-80">
+                                <i class="fa-solid fa-file-import text-apple-blue"></i> Import Transfers
+                            </button>
+                            <button onclick="resetERS(true)" class="h-9 px-3 rounded-xl text-[10px] font-black uppercase tracking-widest bg-apple-canvas dark:bg-[#2C2C2E] text-apple-primary dark:text-white border border-apple-border dark:border-[#3A3A3C] flex items-center gap-2 transition-colors hover:text-red-500">
+                                <i class="fa-solid fa-rotate-left text-red-400"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 6 Pillars -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                        <div class="rounded-2xl p-3.5 bg-apple-blue/5 dark:bg-apple-blue/10 border border-apple-blue/20 flex items-start gap-2.5">
+                            <div class="h-8 w-8 rounded-lg bg-apple-blue/15 flex items-center justify-center shrink-0"><i class="fa-solid fa-people-group text-apple-blue text-xs"></i></div>
+                            <div><p class="text-[9px] font-black text-apple-blue uppercase tracking-wider mb-0.5">Team-Centric</p><p class="text-[8px] text-apple-secondary leading-tight">Team achievements celebrated monthly</p></div>
+                        </div>
+                        <div class="rounded-2xl p-3.5 bg-amber-400/5 dark:bg-amber-400/10 border border-amber-400/20 flex items-start gap-2.5">
+                            <div class="h-8 w-8 rounded-lg bg-amber-400/15 flex items-center justify-center shrink-0"><i class="fa-solid fa-eye text-amber-500 text-xs"></i></div>
+                            <div><p class="text-[9px] font-black text-amber-500 uppercase tracking-wider mb-0.5">Transparency</p><p class="text-[8px] text-apple-secondary leading-tight">All scores visible to the floor</p></div>
+                        </div>
+                        <div class="rounded-2xl p-3.5 bg-green-500/5 dark:bg-green-500/10 border border-green-500/20 flex items-start gap-2.5">
+                            <div class="h-8 w-8 rounded-lg bg-green-500/15 flex items-center justify-center shrink-0"><i class="fa-solid fa-sliders text-green-500 text-xs"></i></div>
+                            <div><p class="text-[9px] font-black text-green-500 uppercase tracking-wider mb-0.5">Flexible</p><p class="text-[8px] text-apple-secondary leading-tight">Metrics adapt to floor priorities</p></div>
+                        </div>
+                        <div class="rounded-2xl p-3.5 bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 flex items-start gap-2.5">
+                            <div class="h-8 w-8 rounded-lg bg-red-500/15 flex items-center justify-center shrink-0"><i class="fa-solid fa-bolt text-red-500 text-xs"></i></div>
+                            <div><p class="text-[9px] font-black text-red-500 uppercase tracking-wider mb-0.5">Empowerment</p><p class="text-[8px] text-apple-secondary leading-tight">Managers own their numbers</p></div>
+                        </div>
+                        <div class="rounded-2xl p-3.5 bg-purple-500/5 dark:bg-purple-500/10 border border-purple-500/20 flex items-start gap-2.5">
+                            <div class="h-8 w-8 rounded-lg bg-purple-500/15 flex items-center justify-center shrink-0"><i class="fa-solid fa-comments text-purple-500 text-xs"></i></div>
+                            <div><p class="text-[9px] font-black text-purple-500 uppercase tracking-wider mb-0.5">Cont. Feedback</p><p class="text-[8px] text-apple-secondary leading-tight">Live scores, not annual reviews</p></div>
+                        </div>
+                        <div class="rounded-2xl p-3.5 bg-teal-500/5 dark:bg-teal-500/10 border border-teal-500/20 flex items-start gap-2.5">
+                            <div class="h-8 w-8 rounded-lg bg-teal-500/15 flex items-center justify-center shrink-0"><i class="fa-solid fa-bullseye text-teal-500 text-xs"></i></div>
+                            <div><p class="text-[9px] font-black text-teal-500 uppercase tracking-wider mb-0.5">Outcome-Driven</p><p class="text-[8px] text-apple-secondary leading-tight">Tasks done + transfers = real impact</p></div>
+                        </div>
+                    </div>
+
+                    <!-- Leaderboard (rendered by JS) -->
+                    <div id="ersBoard"></div>
+
+                    <p class="text-[8px] text-apple-secondary/60 text-center uppercase tracking-widest font-bold">Tasks auto-tracked · Transfers imported from RingCentral · Resets 1st of each month</p>
+                </div>
+
             </div>
         </main>
 
@@ -852,6 +918,23 @@
             <div class="flex gap-2">
                 <button onclick="closeModal('importRaceModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
                 <button onclick="applyRaceImport()" class="flex-1 h-11 text-xs font-bold bg-apple-blue text-white rounded-xl shadow-sm">Apply Scores</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="importERSModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1C1C1E] border border-apple-border dark:border-[#2C2C2E] p-6 rounded-2xl w-full max-w-md shadow-2xl">
+            <h3 class="text-lg font-bold mb-1 dark:text-white">Import Transfers</h3>
+            <p class="text-[11px] text-apple-secondary mb-4">From RingCentral: paste rows (manager name + transfer count), or upload a CSV/Excel. Names are matched to your managers.</p>
+            <p id="importERSError" class="text-red-500 text-[10px] font-bold mb-3 hidden bg-red-50 dark:bg-red-900/20 p-2 rounded border border-red-100"></p>
+            <textarea id="importERSText" rows="6" placeholder="Alex K.&#9;210&#10;Sarah M.&#9;188&#10;Mark J.&#9;154" class="w-full bg-apple-canvas dark:bg-[#2C2C2E] border border-apple-border dark:border-[#3A3A3C] p-3 rounded-lg text-sm dark:text-white font-mono mb-3"></textarea>
+            <label class="flex items-center justify-center gap-2 h-11 mb-4 rounded-lg border-2 border-dashed border-apple-border dark:border-[#3A3A3C] text-apple-secondary text-xs font-bold cursor-pointer hover:border-apple-blue transition-colors">
+                <i class="fa-solid fa-paperclip"></i> <span id="importERSFileName">Choose CSV or Excel file…</span>
+                <input type="file" id="importERSFile" accept=".csv,.tsv,.xlsx,.xls" class="hidden" onchange="handleERSFile(event)">
+            </label>
+            <div class="flex gap-2">
+                <button onclick="closeModal('importERSModal')" class="flex-1 h-11 text-xs font-bold bg-apple-canvas dark:bg-[#2C2C2E] dark:text-white rounded-xl">Cancel</button>
+                <button onclick="applyERSImport()" class="flex-1 h-11 text-xs font-bold bg-apple-blue text-white rounded-xl shadow-sm">Apply Transfers</button>
             </div>
         </div>
     </div>
@@ -1121,7 +1204,7 @@
         }
 
         function switchView(viewName) {
-            const views = ['table', 'board', 'rankings', 'coaching', 'leave', 'team', 'log', 'analytics', 'headsets'];
+            const views = ['table', 'board', 'rankings', 'coaching', 'leave', 'team', 'log', 'analytics', 'headsets', 'ers'];
             const mobileMain = ['table', 'leave', 'analytics'];
             views.forEach(v => {
                 const nav = document.getElementById('nav-' + v);
@@ -1165,6 +1248,7 @@
             if(viewName === 'coaching') loadCoachingSessions();
             if(viewName === 'leave') loadLeave();
             if(viewName === 'headsets') loadHeadsets();
+            if(viewName === 'ers') { if(!globalLogs?.length) fetchLogs().then(loadERS); else loadERS(); }
             // The + task FAB only makes sense on the directives view (admins only)
             const fab = document.getElementById('fab-add-task');
             const isAdmin = currentUser && (currentUser.role.includes('Manager') || currentUser.role === 'Admin');
@@ -2211,6 +2295,255 @@
                     input.addEventListener('keydown', e => { if(e.key === 'Enter') input.blur(); if(e.key === 'Escape') { input.value = current; input.blur(); } });
                 });
             });
+        }
+
+        // ── ERS (Employee Rewards System) ─────────────────────────────────────
+        const ERS_META_KEY = 'ERS_META';
+        let globalERS = {}; // { managerName: { transfers: N } }
+
+        async function loadERS() {
+            if(!currentUser) return;
+            const month = new Date().toISOString().slice(0, 7); // YYYY-MM
+            const label = document.getElementById('ers-month-label');
+            if(label) label.textContent = new Date().toLocaleDateString([], { month: 'long', year: 'numeric' });
+
+            const { data } = await supabaseClient.from('headsets')
+                .select('*').eq('department', currentUser.department)
+                .like('slot_key', 'ERS_%');
+            if(!data) return;
+
+            globalERS = {};
+            let metaMonth = null;
+            data.forEach(row => {
+                if(row.slot_key === ERS_META_KEY) { metaMonth = row.label; return; }
+                const name = row.label;
+                globalERS[name] = { transfers: parseInt(row.count || 0), slot_key: row.slot_key };
+            });
+
+            // Monthly auto-reset
+            if(metaMonth !== month) {
+                await resetERS(false);
+                await supabaseClient.from('headsets')
+                    .upsert([{ slot_key: ERS_META_KEY, department: currentUser.department, label: month, count: 0 }],
+                        { onConflict: 'department,slot_key' });
+            }
+            renderERS();
+        }
+
+        function ersManagerKey(name) {
+            return 'ERS_' + name.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase();
+        }
+
+        async function saveERSTransfers(name, value) {
+            if(!currentUser) return;
+            const key = ersManagerKey(name);
+            await supabaseClient.from('headsets')
+                .upsert([{ slot_key: key, department: currentUser.department, label: name, count: value }],
+                    { onConflict: 'department,slot_key' });
+            if(!globalERS[name]) globalERS[name] = { transfers: 0, slot_key: key };
+            globalERS[name].transfers = value;
+            renderERS();
+        }
+
+        async function resetERS(confirmFirst) {
+            if(confirmFirst && !confirm('Reset all transfer counts to zero for this month?')) return;
+            const updates = Object.keys(globalERS).map(name => ({
+                slot_key: ersManagerKey(name), department: currentUser.department, label: name, count: 0
+            }));
+            if(updates.length) await supabaseClient.from('headsets').upsert(updates, { onConflict: 'department,slot_key' });
+            Object.keys(globalERS).forEach(n => { globalERS[n].transfers = 0; });
+            if(confirmFirst) showToast('Transfers reset for this month.');
+            renderERS();
+        }
+
+        function openImportERS() {
+            document.getElementById('importERSText').value = '';
+            document.getElementById('importERSFileName').textContent = 'Choose CSV or Excel file…';
+            document.getElementById('importERSError').style.display = 'none';
+            document.getElementById('importERSModal').style.display = 'flex';
+        }
+
+        function handleERSFile(e) {
+            const file = e.target.files[0]; if(!file) return;
+            document.getElementById('importERSFileName').textContent = file.name;
+            if(file.name.match(/\.xlsx?$/i)) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    const wb = XLSX.read(ev.target.result, { type: 'array' });
+                    const ws = wb.Sheets[wb.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_csv(ws);
+                    document.getElementById('importERSText').value = rows;
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                const reader = new FileReader();
+                reader.onload = ev => { document.getElementById('importERSText').value = ev.target.result; };
+                reader.readAsText(file);
+            }
+        }
+
+        async function applyERSImport() {
+            const raw = document.getElementById('importERSText').value.trim();
+            const errEl = document.getElementById('importERSError');
+            errEl.style.display = 'none';
+            if(!raw) { errEl.innerText = 'Paste rows or choose a file first.'; errEl.style.display = 'block'; return; }
+
+            const parsed = [];
+            raw.split(/\r?\n/).forEach(line => {
+                const cells = line.split(/\t|,/).map(c => c.trim()).filter(c => c !== '');
+                if(!cells.length) return;
+                let count = null, name = null;
+                for(let i = cells.length - 1; i >= 0; i--) { if(/^\d+$/.test(cells[i])) { count = parseInt(cells[i]); break; } }
+                name = cells.find(c => !/^\d+$/.test(c)) || null;
+                if(name && count !== null) parsed.push({ name, count });
+            });
+            if(!parsed.length) { errEl.innerText = 'No "name + number" rows found.'; errEl.style.display = 'block'; return; }
+
+            // Match by case-insensitive name against known managers
+            const managers = (globalUsers || []).filter(u => u.role === 'Manager' || u.role === 'Admin');
+            let applied = 0;
+            for(const row of parsed) {
+                const match = managers.find(m => m.name.toLowerCase().includes(row.name.toLowerCase()) || row.name.toLowerCase().includes(m.name.toLowerCase()));
+                const targetName = match ? match.name : row.name;
+                await saveERSTransfers(targetName, row.count);
+                applied++;
+            }
+            logAction(`ERS: Imported transfers for ${applied} manager${applied === 1 ? '' : 's'}`);
+            closeModal('importERSModal');
+            showToast(`Imported ${applied} manager${applied === 1 ? '' : 's'}.`);
+            renderERS();
+        }
+
+        function renderERS() {
+            const container = document.getElementById('ersBoard');
+            if(!container) return;
+
+            // Build manager list: all managers from globalUsers + anyone in globalERS
+            const managers = (globalUsers || []).filter(u => u.role === 'Manager' || u.role === 'Admin');
+            const month = new Date().toISOString().slice(0, 7);
+
+            // Count tasks done this month per manager from logs
+            const taskCounts = {};
+            (globalLogs || []).forEach(l => {
+                if(!l.action_text?.includes('to Completed')) return;
+                const d = l.created_at?.slice(0, 7);
+                if(d !== month) return;
+                taskCounts[l.performed_by] = (taskCounts[l.performed_by] || 0) + 1;
+            });
+
+            const rows = managers.map(u => ({
+                name: u.name,
+                init: u.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
+                tasks: taskCounts[u.name] || 0,
+                transfers: globalERS[u.name]?.transfers || 0,
+            }));
+
+            // Sort: primary = tasks desc, secondary = transfers desc
+            rows.sort((a, b) => b.tasks - a.tasks || b.transfers - a.transfers);
+
+            if(!rows.length) {
+                container.innerHTML = `<div class="text-center py-12 text-apple-secondary text-sm">No managers found. Add managers in the People tab first.</div>`;
+                return;
+            }
+
+            const maxTasks = Math.max(1, ...rows.map(r => r.tasks));
+            const maxTransfers = Math.max(1, ...rows.map(r => r.transfers));
+            const medals = ['🥇', '🥈', '🥉'];
+            const podiumColors = [
+                'from-amber-400 to-orange-500',
+                'from-slate-400 to-slate-500',
+                'from-amber-700 to-amber-600',
+            ];
+            const ringColors = [
+                'ring-amber-400/40',
+                'ring-slate-400/30',
+                'ring-amber-700/30',
+            ];
+
+            // Top 3 podium
+            const top3 = rows.slice(0, 3);
+            // Reorder for visual podium: 2nd | 1st | 3rd
+            const podiumOrder = top3.length >= 2 ? [top3[1], top3[0], top3[2]].filter(Boolean) : top3;
+
+            const podiumHTML = `<div class="grid gap-3 mb-3" style="grid-template-columns:repeat(${podiumOrder.length},1fr);align-items:end;">
+                ${podiumOrder.map(r => {
+                    const rank = rows.indexOf(r);
+                    const isFirst = rank === 0;
+                    const taskPct = Math.round((r.tasks / maxTasks) * 100);
+                    const trPct = Math.round((r.transfers / maxTransfers) * 100);
+                    const bg = isFirst
+                        ? 'background:linear-gradient(160deg,#1a1508,#2a1f06,#1a1508);border:1px solid rgba(251,191,36,0.3);box-shadow:0 0 40px rgba(251,191,36,0.15),0 8px 32px rgba(0,0,0,0.5);'
+                        : 'background:linear-gradient(160deg,#161625,#0f0f1a);border:1px solid rgba(255,255,255,0.07);box-shadow:0 4px 24px rgba(0,0,0,0.4);';
+                    const crown = isFirst ? `<div style="font-size:26px;margin-bottom:8px;filter:drop-shadow(0 0 10px rgba(251,191,36,0.9));">👑</div>` : `<div style="font-size:22px;margin-bottom:8px;">${medals[rank] || (rank+1)}</div>`;
+                    const nameColor = isFirst ? 'background:linear-gradient(135deg,#fbbf24,#fde68a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;' : 'color:white;';
+                    const subColor = isFirst ? 'color:rgba(251,191,36,0.45);' : 'color:rgba(255,255,255,0.3);';
+                    const avatarBg = `background:linear-gradient(135deg,${isFirst ? '#f59e0b,#ef4444' : rank === 1 ? '#64748b,#94a3b8' : '#92400e,#d97706'});`;
+                    const ringStyle = isFirst ? 'box-shadow:0 0 0 4px rgba(245,158,11,0.3),0 8px 20px rgba(245,158,11,0.25);' : rank === 1 ? 'box-shadow:0 0 0 3px rgba(148,163,184,0.2);' : 'box-shadow:0 0 0 3px rgba(217,119,6,0.2);';
+                    const h = isFirst ? '60px' : '52px';
+                    const pad = isFirst ? '22px 16px' : '18px 14px';
+                    const barH = isFirst ? '5px' : '4px';
+                    return `<div style="border-radius:20px;padding:${pad};display:flex;flex-direction:column;align-items:center;text-align:center;${bg}">
+                        <div style="position:relative;top:0;right:0;pointer-events:none;"></div>
+                        ${crown}
+                        <div style="height:${h};width:${h};border-radius:50%;${avatarBg}display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:${isFirst?'18':'15'}px;margin-bottom:10px;${ringStyle}">${r.init}</div>
+                        <div style="font-size:${isFirst?'15':'13'}px;font-weight:900;margin-bottom:2px;${nameColor}">${r.name}</div>
+                        <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;${subColor}">Manager</div>
+                        <div style="width:100%;">
+                            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                                <span style="font-size:8px;color:rgba(96,165,250,${isFirst?'0.7':'0.5'});font-weight:800;text-transform:uppercase;">Tasks</span>
+                                <span style="font-size:${isFirst?'16':'14'}px;font-weight:900;color:#60a5fa;">${r.tasks}</span>
+                            </div>
+                            <div style="height:${barH};border-radius:${barH};background:rgba(255,255,255,0.08);overflow:hidden;margin-bottom:8px;">
+                                <div style="width:${taskPct}%;height:100%;background:linear-gradient(90deg,#3b82f6,#6366f1);border-radius:${barH};${isFirst?'box-shadow:0 0 6px rgba(99,102,241,0.5);':''}"></div>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                                <span style="font-size:8px;color:rgba(167,139,250,${isFirst?'0.7':'0.5'});font-weight:800;text-transform:uppercase;">Transfers</span>
+                                <span style="font-size:${isFirst?'16':'14'}px;font-weight:900;color:#a78bfa;">${r.transfers}</span>
+                            </div>
+                            <div style="height:${barH};border-radius:${barH};background:rgba(255,255,255,0.08);overflow:hidden;">
+                                <div style="width:${trPct}%;height:100%;background:linear-gradient(90deg,#8b5cf6,#a855f7);border-radius:${barH};${isFirst?'box-shadow:0 0 6px rgba(168,85,247,0.5);':''}"></div>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>`;
+
+            // Rest of the table (rank 4+)
+            const rest = rows.slice(3);
+            const tableHTML = rest.length ? `<div style="border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);background:#13131A;box-shadow:0 4px 20px rgba(0,0,0,0.4);">
+                <div style="display:grid;grid-template-columns:44px 1fr 90px 90px;gap:8px;padding:10px 18px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <div style="font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.25);text-align:center;">#</div>
+                    <div style="font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.25);">Manager</div>
+                    <div style="font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:rgba(96,165,250,0.6);text-align:right;">Tasks</div>
+                    <div style="font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:rgba(167,139,250,0.6);text-align:right;">Transfers</div>
+                </div>
+                ${rest.map((r, i) => {
+                    const rank = i + 4;
+                    const taskPct = Math.round((r.tasks / maxTasks) * 100);
+                    const trPct = Math.round((r.transfers / maxTransfers) * 100);
+                    const isLast = i === rest.length - 1;
+                    return `<div style="display:grid;grid-template-columns:44px 1fr 90px 90px;gap:8px;padding:12px 18px;${isLast ? '' : 'border-bottom:1px solid rgba(255,255,255,0.04);'}align-items:center;">
+                        <div style="font-size:11px;font-weight:900;color:rgba(255,255,255,0.2);text-align:center;">${rank}</div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="height:34px;width:34px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font-weight:900;font-size:11px;flex-shrink:0;">${r.init}</div>
+                            <div>
+                                <div style="font-size:13px;font-weight:800;color:white;">${r.name}</div>
+                                <div style="font-size:8px;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:1px;font-weight:600;">Manager</div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:15px;font-weight:900;color:#60a5fa;">${r.tasks}</div>
+                            <div style="height:3px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden;margin-top:4px;"><div style="width:${taskPct}%;height:100%;background:#3b82f6;opacity:0.5;border-radius:3px;"></div></div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:15px;font-weight:900;color:#a78bfa;">${r.transfers}</div>
+                            <div style="height:3px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden;margin-top:4px;"><div style="width:${trPct}%;height:100%;background:#8b5cf6;opacity:0.5;border-radius:3px;"></div></div>
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>` : '';
+
+            container.innerHTML = podiumHTML + tableHTML;
         }
 
         function buildEodReport() {
