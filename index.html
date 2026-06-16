@@ -281,7 +281,7 @@
 
     <aside class="fixed bottom-0 left-0 right-0 h-16 md:relative md:h-full md:w-[210px] bg-apple-surface dark:bg-[#1C1C1E] border-t md:border-t-0 md:border-r border-apple-border dark:border-[#2C2C2E] flex flex-row md:flex-col items-center md:items-stretch justify-around md:justify-start md:py-6 md:px-3 z-40">
         <div class="hidden md:flex items-center gap-2 px-2 mb-8">
-            <div class="h-9 w-9 bg-gradient-to-br from-apple-blue to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
+            <div class="h-9 w-9 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
                 <i class="fa-solid fa-layer-group text-base"></i>
             </div>
             <span class="font-bold text-sm tracking-tight dark:text-white">Tempo</span>
@@ -442,7 +442,7 @@
                     <div class="rounded-2xl p-5 mb-5 relative bg-white dark:bg-[#161618] border border-apple-border dark:border-[#2C2C2E] shadow-sm">
                         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                             <div class="flex items-center gap-4">
-                                <div class="h-12 w-12 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br from-apple-blue to-indigo-500" style="box-shadow: 0 8px 20px rgba(79,70,229,0.22);">
+                                <div class="h-12 w-12 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E]" style="box-shadow: 0 8px 20px rgba(27,67,50,0.22);">
                                     <i class="fa-solid fa-satellite-dish text-white text-lg"></i>
                                 </div>
                                 <div>
@@ -506,47 +506,43 @@
                     <!-- KPI TILES -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                         <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
-                            <div class="absolute inset-0 bg-gradient-to-br from-apple-blue/5 to-transparent pointer-events-none"></div>
                             <div class="flex items-center justify-between mb-3">
-                                <div class="h-9 w-9 rounded-xl bg-apple-blue/10 flex items-center justify-center">
-                                    <i class="fa-solid fa-layer-group text-apple-blue text-sm"></i>
+                                <div class="h-9 w-9 rounded-xl bg-[#C9A830]/12 flex items-center justify-center">
+                                    <i class="fa-solid fa-layer-group text-[#C9A830] text-sm"></i>
                                 </div>
                                 <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Active</p>
                             </div>
-                            <span id="kpi-total" class="text-4xl font-black dark:text-white tracking-tight">0</span>
+                            <span id="kpi-total" class="text-4xl font-black text-apple-primary dark:text-white tracking-tight">0</span>
                             <p class="text-[9px] text-apple-secondary font-semibold mt-1">total directives</p>
                         </div>
                         <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
-                            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent pointer-events-none"></div>
                             <div class="flex items-center justify-between mb-3">
-                                <div class="h-9 w-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                                    <i class="fa-solid fa-satellite text-purple-500 text-sm"></i>
+                                <div class="h-9 w-9 rounded-xl bg-[#1B4332]/10 flex items-center justify-center">
+                                    <i class="fa-solid fa-satellite text-[#1B4332] dark:text-emerald-400 text-sm"></i>
                                 </div>
                                 <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Queued</p>
                             </div>
-                            <span id="kpi-radar" class="text-4xl font-black text-purple-500 tracking-tight">0</span>
+                            <span id="kpi-radar" class="text-4xl font-black text-apple-primary dark:text-white tracking-tight">0</span>
                             <p class="text-[9px] text-apple-secondary font-semibold mt-1">radar &amp; assigned</p>
                         </div>
                         <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
-                            <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent pointer-events-none"></div>
                             <div class="flex items-center justify-between mb-3">
-                                <div class="h-9 w-9 rounded-xl bg-orange-500/10 flex items-center justify-center">
-                                    <i class="fa-solid fa-bolt text-orange-500 text-sm"></i>
+                                <div class="h-9 w-9 rounded-xl bg-[#C9A830]/12 flex items-center justify-center">
+                                    <i class="fa-solid fa-bolt text-[#C9A830] text-sm"></i>
                                 </div>
                                 <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Live</p>
                             </div>
-                            <span id="kpi-progress" class="text-4xl font-black text-orange-500 tracking-tight">0</span>
+                            <span id="kpi-progress" class="text-4xl font-black text-apple-primary dark:text-white tracking-tight">0</span>
                             <p class="text-[9px] text-apple-secondary font-semibold mt-1">in progress now</p>
                         </div>
                         <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
-                            <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent pointer-events-none"></div>
                             <div class="flex items-center justify-between mb-3">
-                                <div class="h-9 w-9 rounded-xl bg-green-500/10 flex items-center justify-center">
-                                    <i class="fa-solid fa-circle-check text-green-500 text-sm"></i>
+                                <div class="h-9 w-9 rounded-xl bg-[#1B4332]/10 flex items-center justify-center">
+                                    <i class="fa-solid fa-circle-check text-[#1B4332] dark:text-emerald-400 text-sm"></i>
                                 </div>
                                 <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Done</p>
                             </div>
-                            <span id="kpi-completed" class="text-4xl font-black text-green-500 tracking-tight">0</span>
+                            <span id="kpi-completed" class="text-4xl font-black text-apple-primary dark:text-white tracking-tight">0</span>
                             <p class="text-[9px] text-apple-secondary font-semibold mt-1">completed today</p>
                         </div>
                     </div>
@@ -587,7 +583,7 @@
                 <div id="view-rankings" class="hidden flex-col gap-6">
                     <div class="flex items-center justify-between gap-3 flex-wrap">
                         <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-apple-blue to-indigo-500 flex items-center justify-center text-white shadow-sm"><i class="fa-solid fa-ranking-star"></i></div>
+                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] flex items-center justify-center text-white shadow-sm"><i class="fa-solid fa-ranking-star"></i></div>
                             <div>
                                 <h2 class="text-xl font-bold dark:text-white">Team Totals</h2>
                                 <p class="text-[10px] text-apple-secondary uppercase tracking-widest">Team ranking by floor numbers &bull; <span id="rank-dept">your floor</span></p>
@@ -871,7 +867,7 @@
 
                     <!-- Stat cards row -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div class="rounded-2xl p-4 bg-gradient-to-br from-apple-blue to-indigo-500 text-white shadow-lg col-span-2 md:col-span-1 flex items-center gap-4" style="box-shadow:0 8px 24px rgba(79,70,229,0.28)">
+                        <div class="rounded-2xl p-4 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] text-white shadow-lg col-span-2 md:col-span-1 flex items-center gap-4" style="box-shadow:0 8px 24px rgba(27,67,50,0.28)">
                             <div class="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
                                 <i class="fa-solid fa-headset text-xl"></i>
                             </div>
@@ -988,7 +984,7 @@
             </div>
         </main>
 
-        <button id="fab-add-task" onclick="openModal('newTaskModal')" class="admin-only fixed bottom-20 md:bottom-10 right-6 md:right-10 h-14 w-14 bg-gradient-to-br from-apple-blue to-indigo-500 text-white rounded-full shadow-xl active:scale-90 hover:scale-105 transition-all flex items-center justify-center text-xl z-30 border border-white/20"><i class="fa-solid fa-plus"></i></button>
+        <button id="fab-add-task" onclick="openModal('newTaskModal')" class="admin-only fixed bottom-20 md:bottom-10 right-6 md:right-10 h-14 w-14 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] text-white rounded-full shadow-xl active:scale-90 hover:scale-105 transition-all flex items-center justify-center text-xl z-30 border border-white/20"><i class="fa-solid fa-plus"></i></button>
 
         <div id="slideDrawer" class="fixed top-0 bottom-0 right-0 w-full sm:w-[420px] bg-white dark:bg-[#1C1C1E] shadow-2xl border-l border-apple-border dark:border-[#2C2C2E] z-[120] translate-x-full flex flex-col transition-transform duration-300">
             <div class="p-6 border-b border-apple-border dark:border-[#2C2C2E] flex justify-between items-center">
@@ -2055,7 +2051,7 @@
                                     <span class="text-[10px] text-apple-secondary shrink-0 ml-2">${s.done}/${s.total} &bull; ${rate}%</span>
                                 </div>
                                 <div class="h-2.5 w-full bg-apple-canvas dark:bg-[#2C2C2E] rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-apple-blue to-indigo-500 rounded-full transition-all" style="width:${pct}%"></div>
+                                    <div class="h-full bg-gradient-to-r from-[#1B4332] to-[#0F2A1E] rounded-full transition-all" style="width:${pct}%"></div>
                                 </div>
                             </div>
                         </div>`;
@@ -2431,7 +2427,7 @@
                     </div>
                     <div class="hs-label text-xs font-bold text-apple-primary dark:text-white cursor-pointer hover:text-apple-blue flex items-center gap-1 truncate" data-key="${key}">${label}<i class="fa-solid fa-pen text-[7px] ml-1 opacity-0 group-hover:opacity-40 transition-opacity"></i></div>
                     <div class="h-1.5 w-full rounded-full bg-apple-canvas dark:bg-[#2C2C2E] overflow-hidden">
-                        <div class="h-full rounded-full bg-gradient-to-r from-apple-blue to-indigo-500 transition-all duration-500" style="width:${pct}%"></div>
+                        <div class="h-full rounded-full bg-gradient-to-r from-[#1B4332] to-[#0F2A1E] transition-all duration-500" style="width:${pct}%"></div>
                     </div>
                 </div>`;
             };
