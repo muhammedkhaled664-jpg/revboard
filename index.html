@@ -19,7 +19,15 @@
             theme: {
                 extend: {
                     colors: {
-                        apple: { canvas: '#F5F5F7', surface: '#FFFFFF', border: '#E5E5EA', primary: '#1D1D1F', secondary: '#86868B', blue: '#007AFF', blueHover: '#005bb5' }
+                        apple: {
+                            canvas: '#F2F4F2',
+                            surface: '#FFFFFF',
+                            border: '#DDE3DD',
+                            primary: '#1A1A1A',
+                            secondary: '#6B7B6B',
+                            blue: '#C9A830',
+                            blueHover: '#A8861F'
+                        }
                     },
                     fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
                     boxShadow: { 'apple-soft': '0 8px 30px rgba(0, 0, 0, 0.04)', 'apple-drawer': '-20px 0 40px rgba(0, 0, 0, 0.05)' }
@@ -71,14 +79,14 @@
         }
 
         /* ───────────────────────────────────────────────
-           DRIVE THEME — blue app frame + white floating panel
-           Applied app-wide via scoped overrides so every view
-           inherits the look without per-element class edits.
+           THEME — forest green frame + white floating panel
+           Sidebar: deep forest green  #1B4332
+           Accent:  golden amber       #C9A830
         ─────────────────────────────────────────────── */
         body:not(.war-room) {
-            background: linear-gradient(165deg, #4B7BEE 0%, #3B6FE5 55%, #3566DC 100%) !important;
+            background: linear-gradient(165deg, #1B4332 0%, #163829 55%, #112D21 100%) !important;
         }
-        /* Sidebar → solid blue, white text */
+        /* Sidebar → transparent (inherits green frame), white text */
         body:not(.war-room) aside {
             background: transparent !important;
             border: none !important;
@@ -90,28 +98,32 @@
         body:not(.war-room) aside nav button span,
         body:not(.war-room) aside > div:last-child button,
         body:not(.war-room) aside > div:last-child button span {
-            color: rgba(255,255,255,0.82) !important;
+            color: rgba(255,255,255,0.75) !important;
         }
-        body:not(.war-room) aside nav button:hover { background: rgba(255,255,255,0.1) !important; }
-        /* active nav item (switchView adds .text-apple-blue + bg-apple-blue/10) */
+        body:not(.war-room) aside nav button:hover { background: rgba(255,255,255,0.09) !important; color: #fff !important; }
+        /* active nav item — amber highlight */
         body:not(.war-room) aside nav button.text-apple-blue,
-        body:not(.war-room) aside nav button.text-apple-blue span {
-            color: #fff !important;
-        }
-        body:not(.war-room) aside nav button.text-apple-blue {
-            background: rgba(255,255,255,0.18) !important;
-        }
-        body:not(.war-room) aside [id^="indicator-"] { background: #fff !important; }
-        /* sidebar logo + user card on blue */
-        body:not(.war-room) aside .bg-gradient-to-br.from-apple-blue { background: #fff !important; color: #3B6FE5 !important; }
-        body:not(.war-room) aside .bg-gradient-to-br.from-apple-blue i { color: #3B6FE5 !important; }
-        body:not(.war-room) #sidebarUserCard { background: rgba(255,255,255,0.14) !important; }
-        body:not(.war-room) #sidebarUserCard p, body:not(.war-room) #sidebarUserCard span { color: #fff !important; }
-        body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: rgba(255,255,255,0.65) !important; }
-        body:not(.war-room) #sidebarUserInit { background: rgba(255,255,255,0.25) !important; }
-        /* mobile bottom bar keeps a solid surface for legibility */
+        body:not(.war-room) aside nav button.text-apple-blue span { color: #F5D060 !important; }
+        body:not(.war-room) aside nav button.text-apple-blue { background: rgba(201,168,48,0.18) !important; }
+        body:not(.war-room) aside [id^="indicator-"] { background: #C9A830 !important; }
+        /* sidebar logo tile */
+        body:not(.war-room) aside .bg-gradient-to-br.from-apple-blue { background: rgba(255,255,255,0.12) !important; }
+        body:not(.war-room) aside .bg-gradient-to-br.from-apple-blue i { color: #F5D060 !important; }
+        body:not(.war-room) aside span.font-bold { color: #fff !important; }
+        /* user card */
+        body:not(.war-room) #sidebarUserCard { background: rgba(255,255,255,0.10) !important; border: 1px solid rgba(255,255,255,0.12) !important; }
+        body:not(.war-room) #sidebarUserCard p,
+        body:not(.war-room) #sidebarUserCard span { color: rgba(255,255,255,0.9) !important; }
+        body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: rgba(255,255,255,0.55) !important; }
+        body:not(.war-room) #sidebarUserInit { background: rgba(201,168,48,0.35) !important; color: #F5D060 !important; }
+        /* theme / lock buttons */
+        body:not(.war-room) aside > div:last-child button { color: rgba(255,255,255,0.55) !important; }
+        body:not(.war-room) aside > div:last-child button:hover { color: #fff !important; }
+        /* mobile bottom bar */
         @media (max-width: 767px) {
-            body:not(.war-room) aside { background: #3B6FE5 !important; box-shadow: 0 -4px 20px rgba(0,0,0,0.18); }
+            body:not(.war-room) aside { background: #1B4332 !important; box-shadow: 0 -4px 20px rgba(0,0,0,0.28); }
+            body:not(.war-room) aside nav button.text-apple-blue i,
+            body:not(.war-room) aside nav button.text-apple-blue span { color: #F5D060 !important; }
         }
         /* Right side → white floating rounded panel */
         body:not(.war-room) #appShell {
@@ -122,16 +134,16 @@
             body:not(.war-room) #appShell {
                 margin: 16px 16px 16px 0;
                 border-radius: 24px;
-                box-shadow: 0 18px 50px rgba(15,35,90,0.22);
+                box-shadow: 0 18px 50px rgba(0,20,10,0.30);
                 padding-bottom: 0 !important;
             }
         }
         body:not(.war-room) #appShell header {
             background: #FFFFFF !important;
-            border-color: #EEF1F6 !important;
+            border-color: #E8EDE8 !important;
             backdrop-filter: none !important;
         }
-        body:not(.war-room) #appShell main { background: #FFFFFF !important; }
+        body:not(.war-room) #appShell main { background: #F8FAF8 !important; }
         html.dark body:not(.war-room) #appShell,
         html.dark body:not(.war-room) #appShell header,
         html.dark body:not(.war-room) #appShell main { background: #0D0D14 !important; }
@@ -151,10 +163,10 @@
         @media (max-width: 767px) {
             html.dark body:not(.war-room) aside { background: #0D0D18 !important; box-shadow: 0 -1px 0 rgba(255,255,255,0.06); }
         }
-        html.dark body:not(.war-room) aside nav button { color: rgba(200,200,230,0.6) !important; }
-        html.dark body:not(.war-room) aside nav button.text-apple-blue { background: rgba(75,123,238,0.18) !important; color: #7FB3FF !important; }
-        html.dark body:not(.war-room) aside nav button.text-apple-blue span { color: #7FB3FF !important; }
-        html.dark body:not(.war-room) aside [id^="indicator-"] { background: #4B7BEE !important; }
+        html.dark body:not(.war-room) aside nav button { color: rgba(200,210,200,0.6) !important; }
+        html.dark body:not(.war-room) aside nav button.text-apple-blue { background: rgba(201,168,48,0.15) !important; color: #F5D060 !important; }
+        html.dark body:not(.war-room) aside nav button.text-apple-blue span { color: #F5D060 !important; }
+        html.dark body:not(.war-room) aside [id^="indicator-"] { background: #C9A830 !important; }
         html.dark body:not(.war-room) #sidebarUserCard { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.07); }
         /* app shell */
         html.dark body:not(.war-room) #appShell { background: #0D0D14 !important; }
@@ -186,13 +198,13 @@
             border-color: rgba(255,255,255,0.1) !important;
             color: #EEEEF8 !important;
         }
-        /* blue accent stays vivid */
+        /* amber accent in dark mode */
         html.dark body:not(.war-room) .bg-apple-blue,
-        html.dark body:not(.war-room) .dark\\:bg-apple-blue { background-color: #4B7BEE !important; }
-        html.dark body:not(.war-room) .text-apple-blue { color: #7FB3FF !important; }
-        html.dark body:not(.war-room) .border-apple-blue { border-color: #4B7BEE !important; }
-        /* frame bg also near-black in dark */
-        html.dark body:not(.war-room) { background: #07070E !important; }
+        html.dark body:not(.war-room) .dark\\:bg-apple-blue { background-color: #C9A830 !important; }
+        html.dark body:not(.war-room) .text-apple-blue { color: #F5D060 !important; }
+        html.dark body:not(.war-room) .border-apple-blue { border-color: #C9A830 !important; }
+        /* frame bg: deep forest green in dark */
+        html.dark body:not(.war-room) { background: linear-gradient(165deg, #0A1A10 0%, #071208 100%) !important; }
 
         /* WAR ROOM MODE OVERRIDES */
         body.war-room aside, body.war-room header, body.war-room #ops-header, body.war-room #fab-add-task { display: none !important; }
@@ -222,12 +234,12 @@
 
     <div id="lockScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center select-none p-6 transition-colors" style="background: linear-gradient(170deg, #F4F7FD 0%, #E9EFFA 100%);">
         <!-- soft ambient glow -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[450px] opacity-50 pointer-events-none" style="background: radial-gradient(ellipse at top, rgba(91,124,212,0.12) 0%, transparent 65%);"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[450px] opacity-50 pointer-events-none" style="background: radial-gradient(ellipse at top, rgba(27,67,50,0.12) 0%, transparent 65%);"></div>
 
         <div class="relative z-10 w-full max-w-[380px]">
             <!-- brand -->
             <div class="flex flex-col items-center mb-9">
-                <div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-[#4B7BEE] to-[#3566DC] flex items-center justify-center mb-4 shadow-lg" style="box-shadow:0 10px 24px rgba(53,102,220,0.32);">
+                <div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-[#1B4332] to-[#112D21] flex items-center justify-center mb-4 shadow-lg" style="box-shadow:0 10px 24px rgba(27,67,50,0.32);">
                     <i class="fa-solid fa-headset text-white text-2xl"></i>
                 </div>
                 <h1 class="text-[30px] font-bold tracking-tight text-apple-primary">Tempo</h1>
