@@ -224,6 +224,15 @@
         html.dark #lockScreen p { color: rgba(180,180,210,0.65) !important; }
         html.dark #lockScreen .bg-white,
         html.dark #lockScreen .dark\\:bg-\\[\\#161618\\] { background: #13131F !important; border-color: rgba(255,255,255,0.08) !important; }
+        aside.collapsed { width: 64px !important; }
+        aside.collapsed .sidebar-label { display: none !important; }
+        aside.collapsed #sidebarToggle i { transform: rotate(180deg); }
+        aside.collapsed .sidebar-label-block { display: none !important; }
+        aside.collapsed #sidebarUserCard { padding: 8px !important; justify-content: center; }
+        aside.collapsed #sidebarUserCard > div:last-child { display: none !important; }
+        @media (min-width: 768px) {
+            aside { transition: width 0.2s ease; }
+        }
     </style>
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col md:flex-row antialiased bg-apple-canvas text-apple-primary dark:bg-[#121212] dark:text-[#F5F5F7] transition-colors duration-300">
@@ -279,59 +288,62 @@
         </div>
     </div>
 
-    <aside class="fixed bottom-0 left-0 right-0 h-16 md:relative md:h-full md:w-[210px] bg-apple-surface dark:bg-[#1C1C1E] border-t md:border-t-0 md:border-r border-apple-border dark:border-[#2C2C2E] flex flex-row md:flex-col items-center md:items-stretch justify-around md:justify-start md:py-6 md:px-3 z-40">
+    <aside id="sidebar" class="fixed bottom-0 left-0 right-0 h-16 md:relative md:h-full md:w-[210px] bg-apple-surface dark:bg-[#1C1C1E] border-t md:border-t-0 md:border-r border-apple-border dark:border-[#2C2C2E] flex flex-row md:flex-col items-center md:items-stretch justify-around md:justify-start md:py-6 md:px-3 z-40">
         <div class="hidden md:flex items-center gap-2 px-2 mb-8">
             <div class="h-9 w-9 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
                 <i class="fa-solid fa-layer-group text-base"></i>
             </div>
-            <span class="font-bold text-sm tracking-tight dark:text-white">Tempo</span>
+            <span class="sidebar-label font-bold text-sm tracking-tight dark:text-white">Tempo</span>
+            <button id="sidebarToggle" onclick="toggleSidebar()" class="hidden md:flex ml-auto h-7 w-7 rounded-lg items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all" title="Collapse sidebar">
+                <i class="fa-solid fa-chevron-left text-xs transition-transform duration-200"></i>
+            </button>
         </div>
         <!-- Desktop nav: all items visible -->
         <nav class="hidden md:flex md:flex-col gap-1 w-full items-stretch">
             <button onclick="switchView('table')" id="nav-table" class="text-apple-blue relative px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors">
                 <i class="fa-solid fa-list text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">Directives</span>
+                <span class="sidebar-label text-xs font-semibold">Directives</span>
                 <div id="indicator-table" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
             <button onclick="switchView('rankings')" id="nav-rankings" class="text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors">
                 <i class="fa-solid fa-ranking-star text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">Team Totals</span>
+                <span class="sidebar-label text-xs font-semibold">Team Totals</span>
                 <div id="indicator-rankings" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
             <button onclick="switchView('coaching')" id="nav-coaching" class="text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors">
                 <i class="fa-solid fa-comments text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">Coaching</span>
+                <span class="sidebar-label text-xs font-semibold">Coaching</span>
                 <div id="indicator-coaching" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
             <button onclick="switchView('leave')" id="nav-leave" class="text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors relative">
                 <i class="fa-solid fa-plane-departure text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">Leave</span>
+                <span class="sidebar-label text-xs font-semibold">Leave</span>
                 <span id="leaveTodayDot" class="hidden absolute top-2 right-3 h-2 w-2 rounded-full bg-orange-500"></span>
                 <div id="indicator-leave" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
             <button onclick="switchView('team')" id="nav-team" class="admin-only text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors">
                 <i class="fa-solid fa-users text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">People</span>
+                <span class="sidebar-label text-xs font-semibold">People</span>
                 <div id="indicator-team" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
             <button onclick="switchView('log')" id="nav-log" class="text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors">
                 <i class="fa-solid fa-bolt text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">Activity</span>
+                <span class="sidebar-label text-xs font-semibold">Activity</span>
                 <div id="indicator-log" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
             <button onclick="switchView('analytics')" id="nav-analytics" class="text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors">
                 <i class="fa-solid fa-chart-line text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">Performance</span>
+                <span class="sidebar-label text-xs font-semibold">Performance</span>
                 <div id="indicator-analytics" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
             <button onclick="switchView('headsets')" id="nav-headsets" class="text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors relative">
                 <i class="fa-solid fa-headset text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">Headsets</span>
+                <span class="sidebar-label text-xs font-semibold">Headsets</span>
                 <div id="indicator-headsets" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
             <button onclick="switchView('ers')" id="nav-ers" class="text-apple-secondary dark:text-gray-400 px-3 py-2.5 rounded-xl flex items-center justify-start gap-3 transition-colors">
                 <i class="fa-solid fa-trophy text-base w-5 text-center"></i>
-                <span class="text-xs font-semibold">Rewards</span>
+                <span class="sidebar-label text-xs font-semibold">Rewards</span>
                 <div id="indicator-ers" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-apple-blue rounded-r-md"></div>
             </button>
         </nav>
@@ -394,21 +406,21 @@
             <div class="h-8 w-8 rounded-full bg-apple-blue flex items-center justify-center text-white text-[10px] font-black shrink-0" id="sidebarUserInit">--</div>
             <div class="min-w-0">
                 <p class="text-[11px] font-bold dark:text-white truncate flex items-center gap-1">
-                    <span id="sidebarUserName" class="truncate">Locked</span>
+                    <span id="sidebarUserName" class="sidebar-label truncate">Locked</span>
                     <i id="sidebarProbationBadge" class="fa-solid fa-graduation-cap text-green-500 text-[10px] hidden" title="Passed probation period"></i>
                 </p>
-                <p class="text-[8px] uppercase tracking-widest text-apple-secondary truncate" id="sidebarUserRole">—</p>
+                <p class="sidebar-label text-[8px] uppercase tracking-widest text-apple-secondary truncate" id="sidebarUserRole">—</p>
             </div>
         </div>
 
         <div class="md:flex flex-row md:flex-col gap-2 md:gap-1 items-center md:items-stretch flex">
             <button onclick="toggleTheme()" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
                 <i id="themeIcon" class="fa-solid fa-moon text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Theme</span>
+                <span class="sidebar-label hidden md:inline text-xs font-semibold">Theme</span>
             </button>
             <button onclick="lockSystem()" class="text-apple-secondary dark:text-gray-400 hover:text-red-500 transition-colors p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3">
                 <i class="fa-solid fa-power-off text-xl md:text-base w-5 text-center"></i>
-                <span class="hidden md:inline text-xs font-semibold">Lock</span>
+                <span class="sidebar-label hidden md:inline text-xs font-semibold">Lock</span>
             </button>
         </div>
     </aside>
@@ -417,7 +429,12 @@
         <header class="h-16 border-b border-apple-border dark:border-[#2C2C2E] bg-white/70 dark:bg-[#1C1C1E]/80 backdrop-blur-xl z-10 flex items-center justify-between px-6 transition-colors">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-layer-group text-apple-blue text-xl md:hidden"></i>
-                <span class="font-bold text-sm tracking-tight md:hidden dark:text-white">Tempo</span>
+                <span id="headerViewTitleMobile" class="font-bold text-sm tracking-tight md:hidden dark:text-white">Directives</span>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-apple-secondary">
+                <span class="text-xs font-semibold text-apple-secondary">Tempo</span>
+                <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                <span id="headerViewTitle" class="text-xs font-bold text-apple-primary dark:text-white">Directives</span>
             </div>
             
             <div id="searchContainer" class="hidden flex-1 max-w-md mx-6 relative">
@@ -549,9 +566,9 @@
                 </div>
 
                 <div id="view-table" class="bg-white dark:bg-[#1C1C1E] rounded-2xl border border-apple-border dark:border-[#2C2C2E] overflow-hidden shadow-sm">
-                    <div class="overflow-x-auto scrollbar-hide flex-1 w-full" style="min-width:0">
+                    <div class="overflow-x-auto overflow-y-auto scrollbar-hide flex-1 w-full max-h-[calc(100vh-320px)]" style="min-width:0">
                         <table class="w-full text-left border-collapse min-w-[600px]">
-                            <thead><tr class="bg-[#F7F7FA] dark:bg-[#1A1A1E] border-b border-apple-border dark:border-[#2C2C2E]"><th class="py-3.5 px-5 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Directive</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Timing</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Dept</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Assignee</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Status</th><th class="py-3.5 px-4 text-right"></th></tr></thead>
+                            <thead class="sticky top-0 z-10"><tr class="bg-[#F7F7FA] dark:bg-[#1A1A1E] border-b border-apple-border dark:border-[#2C2C2E]"><th class="py-3.5 px-5 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Directive</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Timing</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Dept</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Assignee</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Status</th><th class="py-3.5 px-4 text-right"></th></tr></thead>
                             <tbody id="taskTableBody"></tbody>
                         </table>
                     </div>
@@ -1413,6 +1430,16 @@
             const fab = document.getElementById('fab-add-task');
             const isAdmin = currentUser && (currentUser.role.includes('Manager') || currentUser.role === 'Admin');
             if(fab) fab.style.display = (viewName === 'table' && isAdmin) ? 'flex' : 'none';
+            const VIEW_LABELS = {
+                table: 'Directives', board: 'Board View', rankings: 'Team Totals',
+                coaching: 'Coaching', leave: 'Leave', team: 'People',
+                log: 'Activity', analytics: 'Performance', headsets: 'Headsets', ers: 'Rewards'
+            };
+            const label = VIEW_LABELS[viewName] || viewName;
+            const el = document.getElementById('headerViewTitle');
+            const elMob = document.getElementById('headerViewTitleMobile');
+            if(el) el.textContent = label;
+            if(elMob) elMob.textContent = label;
         }
 
         let currentLayout = 'table';
@@ -1594,6 +1621,15 @@
                     const time = new Date(log.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                     container.insertAdjacentHTML('beforeend', `<div class="border-b border-apple-border dark:border-[#2C2C2E] pb-3 text-xs"><p class="font-bold dark:text-white uppercase tracking-tighter">${log.action_text}</p><p class="text-[9px] text-apple-secondary dark:text-gray-400 uppercase tracking-widest mt-1">By ${log.performed_by} • ${time}</p></div>`);
                 });
+                if(!data.slice(0, 40).length) {
+                    container.innerHTML = `<div class="py-16 text-center flex flex-col items-center gap-3">
+  <div class="h-14 w-14 rounded-2xl bg-[#1B4332]/10 flex items-center justify-center">
+    <i class="fa-solid fa-bolt text-[#1B4332] text-2xl"></i>
+  </div>
+  <p class="text-sm font-semibold text-apple-primary dark:text-white">No activity yet</p>
+  <p class="text-xs text-apple-secondary">Actions taken on this floor will appear here.</p>
+</div>`;
+                }
             }
         }
 
@@ -1939,7 +1975,18 @@
                     document.getElementById(cols[item.status]).insertAdjacentHTML('beforeend', `<div class="bg-white dark:bg-[#1C1C1E] ${border} rounded-xl p-4 shadow-sm active:scale-95 transition-all cursor-pointer" onclick="openDrawer('${item.id}')"><div class="flex justify-between items-start mb-2"><span class="text-[8px] font-black uppercase opacity-40 dark:text-white">${item.zone || 'General'} • ${item.assigned_to}</span><div class="flex items-center gap-1 shrink-0">${moveBtn}${doneBtn}</div></div><h4 class="text-xs font-bold leading-tight dark:text-white">${item.title} ${blockIco}</h4></div>`);
                 }
             });
-            
+            if(!tbody.children.length) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-16 text-center">
+  <div class="flex flex-col items-center gap-3">
+    <div class="h-14 w-14 rounded-2xl bg-[#1B4332]/10 flex items-center justify-center">
+      <i class="fa-solid fa-list-check text-[#1B4332] text-2xl"></i>
+    </div>
+    <p class="text-sm font-semibold text-apple-primary dark:text-white">No directives for today</p>
+    <p class="text-xs text-apple-secondary">All caught up — or add a new directive above.</p>
+  </div>
+</td></tr>`;
+            }
+
             document.getElementById('kpi-total').innerText = c.t;
             document.getElementById('kpi-radar').innerText = c.r + c.a;
             document.getElementById('kpi-progress').innerText = c.p + c.rev;
@@ -3253,6 +3300,15 @@
                 }
             }
         }).subscribe();
+        function toggleSidebar() {
+            const aside = document.getElementById('sidebar');
+            aside.classList.toggle('collapsed');
+            localStorage.setItem('sidebarCollapsed', aside.classList.contains('collapsed'));
+        }
+        // On page load, restore state
+        if(localStorage.getItem('sidebarCollapsed') === 'true') {
+            document.getElementById('sidebar')?.classList.add('collapsed');
+        }
     </script>
 </body>
 </html>
