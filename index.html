@@ -20,17 +20,18 @@
                 extend: {
                     colors: {
                         apple: {
-                            canvas: '#F2F4F2',
+                            canvas: '#F5F5F5',
                             surface: '#FFFFFF',
-                            border: '#DDE3DD',
-                            primary: '#1A1A1A',
-                            secondary: '#6B7B6B',
-                            blue: '#C9A830',
-                            blueHover: '#A8861F'
+                            border: '#E5E5E5',
+                            primary: '#000000',
+                            secondary: '#666666',
+                            blue: '#000000',
+                            blueHover: '#222222'
                         }
                     },
                     fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-                    boxShadow: { 'apple-soft': '0 8px 30px rgba(0, 0, 0, 0.04)', 'apple-drawer': '-20px 0 40px rgba(0, 0, 0, 0.05)' }
+                    borderRadius: { DEFAULT: '0', sm: '0', md: '0', lg: '0', xl: '0', '2xl': '0', '3xl': '0', full: '9999px' },
+                    boxShadow: { DEFAULT: 'none', sm: 'none', md: 'none', lg: 'none', xl: 'none', '2xl': 'none', 'apple-soft': 'none', 'apple-drawer': 'none' }
                 }
             }
         }
@@ -78,133 +79,155 @@
             #fab-add-task { width: 52px !important; height: 52px !important; font-size: 1.1rem !important; }
         }
 
-        /* ───────────────────────────────────────────────
-           THEME — forest green frame + white floating panel
-           Sidebar: deep forest green  #1B4332
-           Accent:  golden amber       #C9A830
-        ─────────────────────────────────────────────── */
+        /* ── ZARA EDITORIAL THEME ──────────────────────── */
         body:not(.war-room) {
-            background: linear-gradient(165deg, #1B4332 0%, #163829 55%, #112D21 100%) !important;
+            background: #F0F0F0 !important;
         }
-        /* Sidebar → transparent (inherits green frame), white text */
         body:not(.war-room) aside {
-            background: transparent !important;
-            border: none !important;
-        }
-        @media (min-width: 768px) {
-            body:not(.war-room) aside { padding-left: 6px; }
+            background: #000000 !important;
+            border-color: #000000 !important;
         }
         body:not(.war-room) aside nav button,
         body:not(.war-room) aside nav button span,
         body:not(.war-room) aside > div:last-child button,
         body:not(.war-room) aside > div:last-child button span {
-            color: rgba(255,255,255,0.75) !important;
+            color: rgba(255,255,255,0.48) !important;
+            border-radius: 0 !important;
         }
-        body:not(.war-room) aside nav button:hover { background: rgba(255,255,255,0.09) !important; color: #fff !important; }
-        /* active nav item — amber highlight */
+        body:not(.war-room) aside nav button:hover {
+            background: rgba(255,255,255,0.07) !important;
+            color: #FFFFFF !important;
+        }
         body:not(.war-room) aside nav button.text-apple-blue,
-        body:not(.war-room) aside nav button.text-apple-blue span { color: #F5D060 !important; }
-        body:not(.war-room) aside nav button.text-apple-blue { background: rgba(201,168,48,0.18) !important; }
-        body:not(.war-room) aside [id^="indicator-"] { background: #C9A830 !important; }
-        /* sidebar logo tile */
-        body:not(.war-room) aside .bg-gradient-to-br.from-apple-blue { background: rgba(255,255,255,0.12) !important; }
-        body:not(.war-room) aside .bg-gradient-to-br.from-apple-blue i { color: #F5D060 !important; }
-        body:not(.war-room) aside span.font-bold { color: #fff !important; }
-        /* user card */
-        body:not(.war-room) #sidebarUserCard { background: rgba(255,255,255,0.10) !important; border: 1px solid rgba(255,255,255,0.12) !important; }
-        body:not(.war-room) #sidebarUserCard p,
-        body:not(.war-room) #sidebarUserCard span { color: rgba(255,255,255,0.9) !important; }
-        body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: rgba(255,255,255,0.55) !important; }
-        body:not(.war-room) #sidebarUserInit { background: rgba(201,168,48,0.35) !important; color: #F5D060 !important; }
-        /* theme / lock buttons */
-        body:not(.war-room) aside > div:last-child button { color: rgba(255,255,255,0.55) !important; }
-        body:not(.war-room) aside > div:last-child button:hover { color: #fff !important; }
-        /* mobile bottom bar */
-        @media (max-width: 767px) {
-            body:not(.war-room) aside { background: #1B4332 !important; box-shadow: 0 -4px 20px rgba(0,0,0,0.28); }
-            body:not(.war-room) aside nav button.text-apple-blue i,
-            body:not(.war-room) aside nav button.text-apple-blue span { color: #F5D060 !important; }
+        body:not(.war-room) aside nav button.text-apple-blue span {
+            color: #FFFFFF !important;
+            background: rgba(255,255,255,0.11) !important;
         }
-        /* Right side → white floating rounded panel */
+        body:not(.war-room) aside [id^="indicator-"] {
+            background: #FFFFFF !important;
+            border-radius: 0 !important;
+        }
+        body:not(.war-room) aside .bg-gradient-to-br {
+            background: rgba(255,255,255,0.09) !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+        body:not(.war-room) aside .bg-gradient-to-br i { color: #FFFFFF !important; }
+        body:not(.war-room) aside span.font-bold { color: #FFFFFF !important; }
+        body:not(.war-room) #sidebarUserCard {
+            background: rgba(255,255,255,0.07) !important;
+            border: 1px solid rgba(255,255,255,0.09) !important;
+            border-radius: 0 !important;
+        }
+        body:not(.war-room) #sidebarUserCard p,
+        body:not(.war-room) #sidebarUserCard span { color: rgba(255,255,255,0.75) !important; }
+        body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: rgba(255,255,255,0.38) !important; }
+        body:not(.war-room) #sidebarUserInit {
+            background: rgba(255,255,255,0.14) !important;
+            color: #FFFFFF !important;
+            border-radius: 0 !important;
+        }
+        body:not(.war-room) aside > div:last-child button { color: rgba(255,255,255,0.38) !important; }
+        body:not(.war-room) aside > div:last-child button:hover { color: #FFFFFF !important; background: rgba(255,255,255,0.07) !important; }
+        body:not(.war-room) #sidebarToggle { color: rgba(255,255,255,0.38) !important; }
+        body:not(.war-room) #sidebarToggle:hover { color: #FFFFFF !important; }
+        @media (max-width: 767px) {
+            body:not(.war-room) aside {
+                background: #000000 !important;
+                border-top: 1px solid #1A1A1A !important;
+                box-shadow: none !important;
+            }
+            body:not(.war-room) aside nav button.text-apple-blue i,
+            body:not(.war-room) aside nav button.text-apple-blue span { color: #FFFFFF !important; }
+        }
         body:not(.war-room) #appShell {
             background: #FFFFFF !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
             overflow: hidden;
         }
         @media (min-width: 768px) {
             body:not(.war-room) #appShell {
-                margin: 16px 16px 16px 0;
-                border-radius: 24px;
-                box-shadow: 0 18px 50px rgba(0,20,10,0.30);
-                padding-bottom: 0 !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                border-left: 1px solid #E0E0E0 !important;
             }
         }
         body:not(.war-room) #appShell header {
             background: #FFFFFF !important;
-            border-color: #E8EDE8 !important;
+            border-color: #E0E0E0 !important;
             backdrop-filter: none !important;
+            border-radius: 0 !important;
         }
-        body:not(.war-room) #appShell main { background: #F8FAF8 !important; }
-        html.dark body:not(.war-room) #appShell,
-        html.dark body:not(.war-room) #appShell header,
-        html.dark body:not(.war-room) #appShell main { background: #0D0D14 !important; }
+        body:not(.war-room) #appShell main { background: #F0F0F0 !important; }
 
-        /* ── SLEEK DARK THEME ─────────────────────────────
-           Near-black bg, deep charcoal cards, bright blue accent.
-           Overrides Tailwind dark: classes app-wide.
-        ──────────────────────────────────────────────────── */
+        /* Strip rounded corners from common utility classes */
+        body:not(.war-room) .rounded-xl,
+        body:not(.war-room) .rounded-2xl,
+        body:not(.war-room) .rounded-3xl,
+        body:not(.war-room) .rounded-lg,
+        body:not(.war-room) .rounded-md,
+        body:not(.war-room) .rounded,
+        body:not(.war-room) .rounded-sm { border-radius: 0 !important; }
+
+        /* ── DARK MODE ────────────────────────────────── */
         html.dark body:not(.war-room) {
-            background: #07070E !important;
-            color: #E8E8F0 !important;
+            background: #0A0A0A !important;
+            color: #EFEFEF !important;
         }
-        /* sidebar on dark: deep navy */
         html.dark body:not(.war-room) aside {
-            background: #0D0D18 !important;
+            background: #000000 !important;
+            border-color: #1A1A1A !important;
         }
         @media (max-width: 767px) {
-            html.dark body:not(.war-room) aside { background: #0D0D18 !important; box-shadow: 0 -1px 0 rgba(255,255,255,0.06); }
+            html.dark body:not(.war-room) aside { background: #000000 !important; border-top: 1px solid #1A1A1A !important; box-shadow: none; }
         }
-        html.dark body:not(.war-room) aside nav button { color: rgba(200,210,200,0.6) !important; }
-        html.dark body:not(.war-room) aside nav button.text-apple-blue { background: rgba(201,168,48,0.15) !important; color: #F5D060 !important; }
-        html.dark body:not(.war-room) aside nav button.text-apple-blue span { color: #F5D060 !important; }
-        html.dark body:not(.war-room) aside [id^="indicator-"] { background: #C9A830 !important; }
-        html.dark body:not(.war-room) #sidebarUserCard { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.07); }
-        /* app shell */
-        html.dark body:not(.war-room) #appShell { background: #0D0D14 !important; }
-        html.dark body:not(.war-room) #appShell header { background: #0D0D14 !important; border-color: rgba(255,255,255,0.07) !important; backdrop-filter: none !important; }
-        html.dark body:not(.war-room) #appShell main { background: #0D0D14 !important; }
-        /* cards / panels */
+        html.dark body:not(.war-room) aside nav button { color: rgba(255,255,255,0.38) !important; }
+        html.dark body:not(.war-room) aside nav button.text-apple-blue { background: rgba(255,255,255,0.10) !important; color: #FFFFFF !important; }
+        html.dark body:not(.war-room) aside nav button.text-apple-blue span { color: #FFFFFF !important; }
+        html.dark body:not(.war-room) aside [id^="indicator-"] { background: #FFFFFF !important; }
+        html.dark body:not(.war-room) #sidebarUserCard { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.07) !important; }
+        html.dark body:not(.war-room) #appShell { background: #141414 !important; border-color: #1F1F1F !important; }
+        html.dark body:not(.war-room) #appShell header { background: #141414 !important; border-color: #1F1F1F !important; backdrop-filter: none !important; }
+        html.dark body:not(.war-room) #appShell main { background: #0A0A0A !important; }
         html.dark body:not(.war-room) .bg-white,
         html.dark body:not(.war-room) .dark\\:bg-\\[\\#1C1C1E\\],
         html.dark body:not(.war-room) .dark\\:bg-\\[\\#161618\\] {
-            background-color: #13131F !important;
-            border-color: rgba(255,255,255,0.07) !important;
+            background-color: #141414 !important;
+            border-color: #1F1F1F !important;
         }
-        /* secondary surfaces */
         html.dark body:not(.war-room) .dark\\:bg-\\[\\#2C2C2E\\],
-        html.dark body:not(.war-room) .dark\\:bg-\\[\\#202022\\] {
-            background-color: #1C1C2C !important;
-        }
-        /* text */
-        html.dark body:not(.war-room) .dark\\:text-white { color: #EEEEF8 !important; }
-        html.dark body:not(.war-room) .dark\\:text-gray-400 { color: rgba(180,180,210,0.6) !important; }
-        /* borders */
+        html.dark body:not(.war-room) .dark\\:bg-\\[\\#202022\\] { background-color: #1E1E1E !important; }
+        html.dark body:not(.war-room) .dark\\:text-white { color: #EFEFEF !important; }
+        html.dark body:not(.war-room) .dark\\:text-gray-400 { color: rgba(200,200,200,0.48) !important; }
         html.dark body:not(.war-room) .dark\\:border-\\[\\#2C2C2E\\],
-        html.dark body:not(.war-room) .dark\\:border-\\[\\#3A3A3C\\] {
-            border-color: rgba(255,255,255,0.08) !important;
+        html.dark body:not(.war-room) .dark\\:border-\\[\\#3A3A3C\\] { border-color: #1F1F1F !important; }
+        html.dark body:not(.war-room) input,
+        html.dark body:not(.war-room) textarea,
+        html.dark body:not(.war-room) select {
+            background-color: #1A1A1A !important;
+            border-color: #2A2A2A !important;
+            color: #EFEFEF !important;
         }
-        /* inputs */
-        html.dark body:not(.war-room) input, html.dark body:not(.war-room) textarea, html.dark body:not(.war-room) select {
-            background-color: #1C1C2C !important;
-            border-color: rgba(255,255,255,0.1) !important;
-            color: #EEEEF8 !important;
+        html.dark body:not(.war-room) .bg-apple-blue { background-color: #FFFFFF !important; color: #000000 !important; }
+        html.dark body:not(.war-room) .text-apple-blue { color: #FFFFFF !important; }
+        html.dark body:not(.war-room) .border-apple-blue { border-color: #FFFFFF !important; }
+
+        /* dark login */
+        html.dark #lockScreen { background: #000000 !important; }
+        html.dark #lockScreen h1 { color: #FFFFFF !important; }
+        html.dark #lockScreen p { color: rgba(255,255,255,0.40) !important; }
+        html.dark #lockScreen .zara-login-card {
+            background: #0F0F0F !important;
+            border-color: #2A2A2A !important;
         }
-        /* amber accent in dark mode */
-        html.dark body:not(.war-room) .bg-apple-blue,
-        html.dark body:not(.war-room) .dark\\:bg-apple-blue { background-color: #C9A830 !important; }
-        html.dark body:not(.war-room) .text-apple-blue { color: #F5D060 !important; }
-        html.dark body:not(.war-room) .border-apple-blue { border-color: #C9A830 !important; }
-        /* frame bg: deep forest green in dark */
-        html.dark body:not(.war-room) { background: linear-gradient(165deg, #0A1A10 0%, #071208 100%) !important; }
+        html.dark #lockScreen input {
+            background: #1A1A1A !important;
+            border-color: #2A2A2A !important;
+            color: #FFFFFF !important;
+        }
+        html.dark #lockScreen input::placeholder { color: rgba(255,255,255,0.18) !important; }
 
         /* WAR ROOM MODE OVERRIDES */
         body.war-room aside, body.war-room header, body.war-room #ops-header, body.war-room #fab-add-task { display: none !important; }
@@ -216,14 +239,6 @@
         body.war-room .text-apple-primary { color: #fff !important; }
         body.war-room * { text-shadow: 0 0 1px rgba(255,255,255,0.1); }
 
-        /* Dark mode login */
-        html.dark #lockScreen {
-            background: linear-gradient(170deg, #0A0A14 0%, #0D0D1C 100%) !important;
-        }
-        html.dark #lockScreen h1 { color: #EEEEF8 !important; }
-        html.dark #lockScreen p { color: rgba(180,180,210,0.65) !important; }
-        html.dark #lockScreen .bg-white,
-        html.dark #lockScreen .dark\\:bg-\\[\\#161618\\] { background: #13131F !important; border-color: rgba(255,255,255,0.08) !important; }
         aside.collapsed { width: 64px !important; }
         aside.collapsed .sidebar-label { display: none !important; }
         aside.collapsed #sidebarToggle i { transform: rotate(180deg); }
@@ -241,50 +256,49 @@
         <i class="fa-solid fa-triangle-exclamation mr-1"></i>Offline Mode
     </div>
 
-    <div id="lockScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center select-none p-6 transition-colors" style="background: linear-gradient(170deg, #F4F7FD 0%, #E9EFFA 100%);">
-        <!-- soft ambient glow -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[450px] opacity-50 pointer-events-none" style="background: radial-gradient(ellipse at top, rgba(27,67,50,0.12) 0%, transparent 65%);"></div>
-
-        <div class="relative z-10 w-full max-w-[380px]">
+    <div id="lockScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center select-none p-6 transition-colors" style="background: #FFFFFF;">
+        <div class="relative z-10 w-full max-w-[340px]">
             <!-- brand -->
-            <div class="flex flex-col items-center mb-9">
-                <div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-[#1B4332] to-[#112D21] flex items-center justify-center mb-4 shadow-lg" style="box-shadow:0 10px 24px rgba(27,67,50,0.32);">
-                    <i class="fa-solid fa-headset text-white text-2xl"></i>
+            <div class="flex flex-col items-center mb-10">
+                <div class="h-11 w-11 flex items-center justify-center mb-5 bg-black">
+                    <i class="fa-solid fa-headset text-white text-base"></i>
                 </div>
-                <h1 class="text-[30px] font-bold tracking-tight text-apple-primary">Tempo</h1>
-                <p class="text-[13px] text-apple-secondary mt-1">Set the pace of your floor</p>
+                <h1 class="text-[20px] font-black tracking-[0.14em] uppercase text-black">TEMPO</h1>
+                <p class="text-[9px] tracking-[0.20em] uppercase text-gray-400 mt-1.5">Floor Operations</p>
             </div>
 
-            <!-- card -->
-            <div class="bg-white dark:bg-[#161618] rounded-[22px] p-7 border border-apple-border" style="box-shadow: 0 20px 50px rgba(15,35,90,0.10);">
-                <h2 class="text-base font-semibold text-apple-primary dark:text-white mb-1">Welcome back</h2>
-                <p class="text-[12px] text-apple-secondary dark:text-gray-500 mb-6">Sign in to your floor dashboard</p>
+            <!-- form card -->
+            <div class="zara-login-card border border-[#E0E0E0] p-7 bg-white">
+                <h2 class="text-[10px] font-black tracking-[0.16em] uppercase text-black mb-6">Sign In</h2>
 
                 <div class="space-y-4">
                     <div>
-                        <label class="text-[11px] font-semibold text-apple-secondary dark:text-gray-400 mb-1.5 block">Email</label>
+                        <label class="text-[8px] font-black tracking-[0.20em] uppercase text-gray-400 mb-2 block">Email</label>
                         <input type="email" id="loginUsername" autocomplete="email" placeholder="you@company.com"
-                            class="w-full h-12 px-4 rounded-xl text-sm bg-apple-canvas dark:bg-[#202022] border border-apple-border dark:border-[#3A3A3C] text-apple-primary dark:text-white placeholder-apple-secondary/50 outline-none transition-all focus:border-apple-blue focus:ring-2 focus:ring-apple-blue/15"
+                            class="w-full h-11 px-4 text-sm bg-white border border-[#E0E0E0] text-black placeholder-gray-300 outline-none transition-colors focus:border-black"
+                            style="border-radius:0;"
                             onkeypress="if(event.key === 'Enter') document.getElementById('loginPassword').focus()">
                     </div>
                     <div>
-                        <label class="text-[11px] font-semibold text-apple-secondary dark:text-gray-400 mb-1.5 block">Password</label>
+                        <label class="text-[8px] font-black tracking-[0.20em] uppercase text-gray-400 mb-2 block">Password</label>
                         <input type="password" id="loginPassword" placeholder="Enter your password"
-                            class="w-full h-12 px-4 rounded-xl text-sm bg-apple-canvas dark:bg-[#202022] border border-apple-border dark:border-[#3A3A3C] text-apple-primary dark:text-white placeholder-apple-secondary/50 outline-none transition-all focus:border-apple-blue focus:ring-2 focus:ring-apple-blue/15"
+                            class="w-full h-11 px-4 text-sm bg-white border border-[#E0E0E0] text-black placeholder-gray-300 outline-none transition-colors focus:border-black"
+                            style="border-radius:0;"
                             onkeypress="if(event.key === 'Enter') verifyLogin()">
                     </div>
                     <button onclick="verifyLogin()" id="loginBtn"
-                        class="w-full h-12 text-sm font-semibold text-white rounded-xl bg-apple-blue hover:bg-apple-blueHover transition-all active:scale-[0.98] mt-2 shadow-sm">
-                        Sign In
+                        class="w-full h-11 text-[10px] font-black tracking-[0.20em] uppercase text-white bg-black hover:bg-[#222222] transition-colors mt-2"
+                        style="border-radius:0;">
+                        Enter
                     </button>
                 </div>
 
-                <p id="pinError" class="text-red-500 text-[11px] font-semibold text-center mt-4 h-4 opacity-0 transition-opacity">
-                    Incorrect email or password
+                <p id="pinError" class="text-red-500 text-[9px] font-semibold tracking-widest uppercase text-center mt-4 h-4 opacity-0 transition-opacity">
+                    Incorrect credentials
                 </p>
             </div>
 
-            <p class="text-center text-[11px] text-apple-secondary/70 mt-7">Authorized personnel only &bull; Tempo &copy; 2026</p>
+            <p class="text-center text-[8px] tracking-[0.16em] uppercase text-gray-300 mt-7">Authorized Personnel Only &bull; Tempo &copy; 2026</p>
         </div>
     </div>
 
