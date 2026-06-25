@@ -239,6 +239,99 @@
         body.war-room .text-apple-primary { color: #fff !important; }
         body.war-room * { text-shadow: 0 0 1px rgba(255,255,255,0.1); }
 
+        /* ── LOGIN ANIMATIONS ─────────────────────────── */
+        @keyframes loginFadeUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes loginIconPop {
+            0%   { opacity: 0; transform: scale(0.6); }
+            70%  { transform: scale(1.08); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes loginTitleSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes loginShake {
+            0%, 100% { transform: translateX(0); }
+            15%  { transform: translateX(-7px); }
+            30%  { transform: translateX(7px); }
+            45%  { transform: translateX(-5px); }
+            60%  { transform: translateX(5px); }
+            75%  { transform: translateX(-2px); }
+            90%  { transform: translateX(2px); }
+        }
+        @keyframes loginBtnSpin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes loginBgPulse {
+            0%, 100% { opacity: 0.06; }
+            50%       { opacity: 0.11; }
+        }
+
+        #lockScreen .login-icon-wrap {
+            animation: loginIconPop 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+            animation-delay: 0.05s;
+        }
+        #lockScreen .login-title-wrap {
+            animation: loginTitleSlide 0.45s ease both;
+            animation-delay: 0.18s;
+        }
+        #lockScreen .zara-login-card {
+            animation: loginFadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+            animation-delay: 0.22s;
+        }
+        #lockScreen .login-footer {
+            animation: loginFadeUp 0.4s ease both;
+            animation-delay: 0.38s;
+        }
+
+        /* input focus ring */
+        #lockScreen input {
+            transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+        #lockScreen input:focus {
+            border-color: #000000 !important;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.07) !important;
+        }
+        html.dark #lockScreen input:focus {
+            border-color: #FFFFFF !important;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.07) !important;
+        }
+
+        /* shake on error */
+        #lockScreen.login-error .zara-login-card {
+            animation: loginShake 0.45s ease;
+        }
+
+        /* button loading state */
+        #loginBtn { position: relative; overflow: hidden; transition: background 0.15s ease, opacity 0.15s ease; }
+        #loginBtn.loading { opacity: 0.7; pointer-events: none; }
+        #loginBtn .btn-spinner {
+            display: none;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: loginBtnSpin 0.7s linear infinite;
+            position: absolute; left: 50%; top: 50%;
+            transform: translate(-50%,-50%);
+        }
+        #loginBtn.loading .btn-label { opacity: 0; }
+        #loginBtn.loading .btn-spinner { display: block; }
+
+        /* decorative bg blob */
+        #lockScreen .login-blob {
+            position: absolute;
+            width: 380px; height: 380px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.04);
+            filter: blur(80px);
+            animation: loginBgPulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
         aside.collapsed { width: 64px !important; }
         aside.collapsed .sidebar-label { display: none !important; }
         aside.collapsed #sidebarToggle i { transform: rotate(180deg); }
@@ -257,14 +350,20 @@
     </div>
 
     <div id="lockScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center select-none p-6 transition-colors" style="background: #FFFFFF;">
+        <!-- decorative blobs -->
+        <div class="login-blob" style="top:-120px;right:-80px;"></div>
+        <div class="login-blob" style="bottom:-100px;left:-60px;animation-delay:2s;"></div>
+
         <div class="relative z-10 w-full max-w-[340px]">
             <!-- brand -->
             <div class="flex flex-col items-center mb-10">
-                <div class="h-11 w-11 flex items-center justify-center mb-5 bg-black">
+                <div class="login-icon-wrap h-11 w-11 flex items-center justify-center mb-5 bg-black">
                     <i class="fa-solid fa-headset text-white text-base"></i>
                 </div>
-                <h1 class="text-[20px] font-black tracking-[0.14em] uppercase text-black">TEMPO</h1>
-                <p class="text-[9px] tracking-[0.20em] uppercase text-gray-400 mt-1.5">Floor Operations</p>
+                <div class="login-title-wrap flex flex-col items-center">
+                    <h1 class="text-[20px] font-black tracking-[0.14em] uppercase text-black">TEMPO</h1>
+                    <p class="text-[9px] tracking-[0.20em] uppercase text-gray-400 mt-1.5">Floor Operations</p>
+                </div>
             </div>
 
             <!-- form card -->
@@ -275,21 +374,22 @@
                     <div>
                         <label class="text-[8px] font-black tracking-[0.20em] uppercase text-gray-400 mb-2 block">Email</label>
                         <input type="email" id="loginUsername" autocomplete="email" placeholder="you@company.com"
-                            class="w-full h-11 px-4 text-sm bg-white border border-[#E0E0E0] text-black placeholder-gray-300 outline-none transition-colors focus:border-black"
+                            class="w-full h-11 px-4 text-sm bg-white border border-[#E0E0E0] text-black placeholder-gray-300 outline-none"
                             style="border-radius:0;"
                             onkeypress="if(event.key === 'Enter') document.getElementById('loginPassword').focus()">
                     </div>
                     <div>
                         <label class="text-[8px] font-black tracking-[0.20em] uppercase text-gray-400 mb-2 block">Password</label>
                         <input type="password" id="loginPassword" placeholder="Enter your password"
-                            class="w-full h-11 px-4 text-sm bg-white border border-[#E0E0E0] text-black placeholder-gray-300 outline-none transition-colors focus:border-black"
+                            class="w-full h-11 px-4 text-sm bg-white border border-[#E0E0E0] text-black placeholder-gray-300 outline-none"
                             style="border-radius:0;"
                             onkeypress="if(event.key === 'Enter') verifyLogin()">
                     </div>
                     <button onclick="verifyLogin()" id="loginBtn"
-                        class="w-full h-11 text-[10px] font-black tracking-[0.20em] uppercase text-white bg-black hover:bg-[#222222] transition-colors mt-2"
+                        class="w-full h-11 text-[10px] font-black tracking-[0.20em] uppercase text-white bg-black hover:bg-[#222222] mt-2"
                         style="border-radius:0;">
-                        Enter
+                        <span class="btn-label">Enter</span>
+                        <span class="btn-spinner"></span>
                     </button>
                 </div>
 
@@ -298,7 +398,7 @@
                 </p>
             </div>
 
-            <p class="text-center text-[8px] tracking-[0.16em] uppercase text-gray-300 mt-7">Authorized Personnel Only &bull; Tempo &copy; 2026</p>
+            <p class="login-footer text-center text-[8px] tracking-[0.16em] uppercase text-gray-300 mt-7">Authorized Personnel Only &bull; Tempo &copy; 2026</p>
         </div>
     </div>
 
@@ -1551,7 +1651,7 @@
                 errEl.style.opacity = '1'; setTimeout(() => errEl.style.opacity = '0', 2000); return;
             }
 
-            btn.innerText = "Verifying..."; btn.disabled = true;
+            btn.classList.add('loading'); btn.disabled = true;
 
             try {
                 // 1. Authenticate against Supabase Auth (passwords are hashed server-side).
@@ -1573,8 +1673,10 @@
 
                 currentUser = profile;
                 setOpsGreeting();
-                document.getElementById('lockScreen').style.opacity = '0';
-                setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
+                const ls = document.getElementById('lockScreen');
+                ls.style.transition = 'opacity 0.45s ease';
+                ls.style.opacity = '0';
+                setTimeout(() => ls.style.display = 'none', 460);
                 document.getElementById('activeUserName').innerText = profile.name + ' (' + (profile.department || 'SYS') + ')';
                 updateSidebarUserCard(profile);
                 document.getElementById('searchContainer').classList.remove('hidden');
@@ -1587,9 +1689,14 @@
             } catch (err) {
                 errEl.innerText = "Access Denied";
                 errEl.style.opacity = '1';
-                setTimeout(() => errEl.style.opacity = '0', 2000);
+                setTimeout(() => errEl.style.opacity = '0', 2500);
+                const ls = document.getElementById('lockScreen');
+                ls.classList.remove('login-error');
+                void ls.offsetWidth;
+                ls.classList.add('login-error');
+                setTimeout(() => ls.classList.remove('login-error'), 500);
             }
-            btn.innerText = "Sign In"; btn.disabled = false;
+            btn.classList.remove('loading'); btn.disabled = false;
         }
 
         async function logAction(text) {
