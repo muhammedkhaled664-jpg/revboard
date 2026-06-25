@@ -20,13 +20,13 @@
                 extend: {
                     colors: {
                         apple: {
-                            canvas: '#F6F2FB',
+                            canvas: '#F4F6F8',
                             surface: '#FFFFFF',
-                            border: '#ECE6F3',
-                            primary: '#2A2640',
-                            secondary: '#8B86A0',
-                            blue: '#9B8AD4',
-                            blueHover: '#8775C7'
+                            border: '#E3E8EE',
+                            primary: '#0D1117',
+                            secondary: '#6E7681',
+                            blue: '#14B8A6',
+                            blueHover: '#0F9C8C'
                         }
                     },
                     fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
@@ -79,189 +79,145 @@
             #fab-add-task { width: 52px !important; height: 52px !important; font-size: 1.1rem !important; }
         }
 
-        /* ── CALYRA SOFT WELLNESS THEME ────────────────────
-           Soft pastel gradient canvas, white rounded cards,
-           gentle shadows, lavender accent. Calm & premium.
+        /* ── MIDNIGHT TEAL THEME ───────────────────────────
+           Deep slate canvas, seamless sidebar, teal accent.
+           GitHub/Vercel-grade readability, zero eye strain.
+           Accent: #14B8A6 / #2DD4BF teal
         ──────────────────────────────────────────────────── */
+
+        /* ===== LIGHT MODE — clean slate ===== */
         body:not(.war-room) {
-            background: linear-gradient(140deg, #F3EEFB 0%, #FBEFF5 48%, #FEF4EE 100%) !important;
-            background-attachment: fixed !important;
+            background: #F4F6F8 !important;
         }
-        /* Sidebar → soft frosted white */
         body:not(.war-room) aside {
-            background: rgba(255,255,255,0.72) !important;
-            backdrop-filter: blur(20px) !important;
-            border-color: rgba(236,230,243,0.8) !important;
+            background: #FFFFFF !important;
+            border-color: #E3E8EE !important;
         }
         body:not(.war-room) aside nav button,
         body:not(.war-room) aside nav button span,
         body:not(.war-room) aside > div:last-child button,
         body:not(.war-room) aside > div:last-child button span {
-            color: #8B86A0 !important;
-            border-radius: 14px !important;
+            color: #6E7681 !important;
         }
         body:not(.war-room) aside nav button:hover {
-            background: rgba(155,138,212,0.10) !important;
-            color: #6B5DB0 !important;
+            background: #F0F3F6 !important;
+            color: #0D1117 !important;
         }
-        /* active nav item — soft lavender pill */
         body:not(.war-room) aside nav button.text-apple-blue,
-        body:not(.war-room) aside nav button.text-apple-blue span {
-            color: #6B5DB0 !important;
-        }
-        body:not(.war-room) aside nav button.text-apple-blue {
-            background: linear-gradient(135deg, rgba(155,138,212,0.18), rgba(214,150,200,0.14)) !important;
-        }
-        body:not(.war-room) aside [id^="indicator-"] {
-            background: #9B8AD4 !important;
-            border-radius: 0 4px 4px 0 !important;
-        }
-        /* sidebar logo tile → lavender gradient */
+        body:not(.war-room) aside nav button.text-apple-blue span { color: #0D9488 !important; }
+        body:not(.war-room) aside nav button.text-apple-blue { background: rgba(20,184,166,0.10) !important; }
+        body:not(.war-room) aside [id^="indicator-"] { background: #14B8A6 !important; }
         body:not(.war-room) aside .bg-gradient-to-br {
-            background: linear-gradient(135deg, #A99BE0 0%, #C99BD4 100%) !important;
-            box-shadow: 0 6px 16px rgba(155,138,212,0.30) !important;
+            background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%) !important;
+            box-shadow: 0 4px 12px rgba(20,184,166,0.25) !important;
         }
         body:not(.war-room) aside .bg-gradient-to-br i { color: #FFFFFF !important; }
-        body:not(.war-room) aside span.font-bold { color: #2A2640 !important; }
-        body:not(.war-room) #sidebarUserCard {
-            background: rgba(155,138,212,0.08) !important;
-            border: 1px solid rgba(155,138,212,0.14) !important;
-        }
+        body:not(.war-room) aside span.font-bold { color: #0D1117 !important; }
+        body:not(.war-room) #sidebarUserCard { background: #F4F6F8 !important; border: 1px solid #E3E8EE !important; }
         body:not(.war-room) #sidebarUserCard p,
-        body:not(.war-room) #sidebarUserCard span { color: #2A2640 !important; }
-        body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: #8B86A0 !important; }
-        body:not(.war-room) #sidebarUserInit {
-            background: linear-gradient(135deg, #A99BE0, #C99BD4) !important;
-            color: #FFFFFF !important;
-        }
-        body:not(.war-room) aside > div:last-child button { color: #8B86A0 !important; }
-        body:not(.war-room) aside > div:last-child button:hover { color: #6B5DB0 !important; background: rgba(155,138,212,0.10) !important; }
-        body:not(.war-room) #sidebarToggle { color: #8B86A0 !important; }
-        body:not(.war-room) #sidebarToggle:hover { color: #6B5DB0 !important; }
-        @media (max-width: 767px) {
-            body:not(.war-room) aside {
-                background: rgba(255,255,255,0.92) !important;
-                border-top: 1px solid rgba(236,230,243,0.8) !important;
-                box-shadow: 0 -4px 24px rgba(120,100,180,0.08) !important;
-            }
-            body:not(.war-room) aside nav button.text-apple-blue i,
-            body:not(.war-room) aside nav button.text-apple-blue span { color: #6B5DB0 !important; }
-        }
-        /* Right side → floating white panel */
-        body:not(.war-room) #appShell {
-            background: transparent !important;
-            overflow: hidden;
-        }
-        @media (min-width: 768px) {
-            body:not(.war-room) #appShell {
-                margin: 16px 16px 16px 0;
-                border-radius: 28px;
-                background: rgba(255,255,255,0.55) !important;
-                box-shadow: 0 20px 60px rgba(120,100,180,0.12);
-                border: 1px solid rgba(255,255,255,0.6);
-            }
-        }
-        body:not(.war-room) #appShell header {
-            background: rgba(255,255,255,0.6) !important;
-            border-color: rgba(236,230,243,0.8) !important;
-            backdrop-filter: blur(16px) !important;
-        }
-        body:not(.war-room) #appShell main { background: transparent !important; }
-
-        /* Cards: soft white, gentle shadow */
+        body:not(.war-room) #sidebarUserCard span { color: #0D1117 !important; }
+        body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: #6E7681 !important; }
+        body:not(.war-room) #sidebarUserInit { background: linear-gradient(135deg, #14B8A6, #0D9488) !important; color: #FFFFFF !important; }
+        body:not(.war-room) aside > div:last-child button { color: #6E7681 !important; }
+        body:not(.war-room) aside > div:last-child button:hover { color: #0D1117 !important; background: #F0F3F6 !important; }
+        body:not(.war-room) #appShell { background: #F4F6F8 !important; }
+        body:not(.war-room) #appShell header { background: rgba(244,246,248,0.85) !important; border-color: #E3E8EE !important; backdrop-filter: blur(12px) !important; }
+        body:not(.war-room) #appShell main { background: #F4F6F8 !important; }
         body:not(.war-room) main .bg-white {
-            background: rgba(255,255,255,0.85) !important;
-            box-shadow: 0 8px 30px rgba(120,100,180,0.08) !important;
-            border-color: rgba(236,230,243,0.9) !important;
+            background: #FFFFFF !important;
+            box-shadow: 0 1px 3px rgba(13,17,23,0.06) !important;
+            border-color: #E3E8EE !important;
         }
-        body:not(.war-room) .bg-apple-blue {
-            background: linear-gradient(135deg, #9B8AD4 0%, #B98AD0 100%) !important;
-        }
-        body:not(.war-room) .bg-apple-blue:hover { filter: brightness(0.96); }
+        body:not(.war-room) .bg-apple-blue { background: #14B8A6 !important; }
+        body:not(.war-room) .bg-apple-blue:hover { background: #0F9C8C !important; }
 
-        /* ── DARK MODE — deep plum night ───────────────── */
+        /* ===== DARK MODE — MIDNIGHT TEAL ===== */
         html.dark body:not(.war-room) {
-            background: linear-gradient(145deg, #16121F 0%, #1B1426 55%, #1E1622 100%) !important;
-            background-attachment: fixed !important;
-            color: #E8E4F0 !important;
+            background: #0D1117 !important;
+            color: #E6EDF3 !important;
         }
         html.dark body:not(.war-room) aside {
-            background: rgba(30,24,42,0.70) !important;
-            backdrop-filter: blur(20px) !important;
-            border-color: rgba(255,255,255,0.06) !important;
+            background: #0D1117 !important;
+            border-color: #1C2128 !important;
         }
         @media (max-width: 767px) {
-            html.dark body:not(.war-room) aside { background: rgba(26,20,38,0.95) !important; border-top: 1px solid rgba(255,255,255,0.06) !important; }
+            html.dark body:not(.war-room) aside { background: #0D1117 !important; border-top: 1px solid #1C2128 !important; box-shadow: 0 -4px 20px rgba(0,0,0,0.4); }
         }
-        html.dark body:not(.war-room) aside nav button { color: rgba(200,192,220,0.55) !important; }
-        html.dark body:not(.war-room) aside nav button.text-apple-blue {
-            background: linear-gradient(135deg, rgba(155,138,212,0.22), rgba(201,155,212,0.16)) !important;
-            color: #C9BDF0 !important;
+        html.dark body:not(.war-room) aside nav button { color: #8B949E !important; }
+        html.dark body:not(.war-room) aside nav button:hover { background: #161C24 !important; color: #E6EDF3 !important; }
+        html.dark body:not(.war-room) aside nav button.text-apple-blue,
+        html.dark body:not(.war-room) aside nav button.text-apple-blue span { color: #2DD4BF !important; }
+        html.dark body:not(.war-room) aside nav button.text-apple-blue { background: rgba(45,212,191,0.12) !important; }
+        html.dark body:not(.war-room) aside [id^="indicator-"] { background: #2DD4BF !important; }
+        html.dark body:not(.war-room) aside .bg-gradient-to-br {
+            background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%) !important;
+            box-shadow: 0 4px 14px rgba(20,184,166,0.35) !important;
         }
-        html.dark body:not(.war-room) aside nav button.text-apple-blue span { color: #C9BDF0 !important; }
-        html.dark body:not(.war-room) aside [id^="indicator-"] { background: #A99BE0 !important; }
-        html.dark body:not(.war-room) aside span.font-bold { color: #E8E4F0 !important; }
-        html.dark body:not(.war-room) #sidebarUserCard { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.07) !important; }
+        html.dark body:not(.war-room) aside span.font-bold { color: #E6EDF3 !important; }
+        html.dark body:not(.war-room) #sidebarUserCard { background: #161C24 !important; border: 1px solid #1F2730 !important; }
         html.dark body:not(.war-room) #sidebarUserCard p,
-        html.dark body:not(.war-room) #sidebarUserCard span { color: #E8E4F0 !important; }
-        html.dark body:not(.war-room) #appShell {
-            background: rgba(38,30,52,0.45) !important;
-            border-color: rgba(255,255,255,0.06) !important;
-        }
-        html.dark body:not(.war-room) #appShell header { background: rgba(30,24,42,0.6) !important; border-color: rgba(255,255,255,0.06) !important; }
-        html.dark body:not(.war-room) #appShell main { background: transparent !important; }
+        html.dark body:not(.war-room) #sidebarUserCard span { color: #E6EDF3 !important; }
+        html.dark body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: #8B949E !important; }
+        html.dark body:not(.war-room) #sidebarUserInit { background: linear-gradient(135deg, #14B8A6, #0D9488) !important; color: #FFFFFF !important; }
+        html.dark body:not(.war-room) aside > div:last-child button { color: #8B949E !important; }
+        html.dark body:not(.war-room) aside > div:last-child button:hover { color: #E6EDF3 !important; background: #161C24 !important; }
+        html.dark body:not(.war-room) #sidebarToggle { color: #8B949E !important; }
+        html.dark body:not(.war-room) #sidebarToggle:hover { color: #E6EDF3 !important; }
+        html.dark body:not(.war-room) #appShell { background: #0D1117 !important; border-color: #1C2128 !important; }
+        html.dark body:not(.war-room) #appShell header { background: rgba(13,17,23,0.85) !important; border-color: #1C2128 !important; backdrop-filter: blur(12px) !important; }
+        html.dark body:not(.war-room) #appShell main { background: #0D1117 !important; }
         html.dark body:not(.war-room) main .bg-white,
         html.dark body:not(.war-room) .bg-white,
         html.dark body:not(.war-room) .dark\\:bg-\\[\\#1C1C1E\\],
         html.dark body:not(.war-room) .dark\\:bg-\\[\\#161618\\] {
-            background-color: rgba(42,34,58,0.85) !important;
-            border-color: rgba(255,255,255,0.07) !important;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.25) !important;
+            background-color: #161C24 !important;
+            border-color: #1F2730 !important;
+            box-shadow: none !important;
         }
         html.dark body:not(.war-room) .dark\\:bg-\\[\\#2C2C2E\\],
-        html.dark body:not(.war-room) .dark\\:bg-\\[\\#202022\\] { background-color: #2A2238 !important; }
-        html.dark body:not(.war-room) .dark\\:text-white { color: #E8E4F0 !important; }
-        html.dark body:not(.war-room) .dark\\:text-gray-400 { color: rgba(200,192,220,0.55) !important; }
+        html.dark body:not(.war-room) .dark\\:bg-\\[\\#202022\\] { background-color: #1C2430 !important; }
+        html.dark body:not(.war-room) .dark\\:text-white { color: #E6EDF3 !important; }
+        html.dark body:not(.war-room) .dark\\:text-gray-400 { color: #8B949E !important; }
         html.dark body:not(.war-room) .dark\\:border-\\[\\#2C2C2E\\],
-        html.dark body:not(.war-room) .dark\\:border-\\[\\#3A3A3C\\] { border-color: rgba(255,255,255,0.08) !important; }
+        html.dark body:not(.war-room) .dark\\:border-\\[\\#3A3A3C\\] { border-color: #1F2730 !important; }
         html.dark body:not(.war-room) input,
         html.dark body:not(.war-room) textarea,
         html.dark body:not(.war-room) select {
-            background-color: #2A2238 !important;
-            border-color: rgba(255,255,255,0.1) !important;
-            color: #E8E4F0 !important;
+            background-color: #0D1117 !important;
+            border-color: #2A323C !important;
+            color: #E6EDF3 !important;
         }
-        html.dark body:not(.war-room) .bg-apple-blue { background: linear-gradient(135deg, #9B8AD4 0%, #B98AD0 100%) !important; }
-        html.dark body:not(.war-room) .text-apple-blue { color: #C9BDF0 !important; }
-        html.dark body:not(.war-room) .border-apple-blue { border-color: #9B8AD4 !important; }
+        html.dark body:not(.war-room) .bg-apple-blue { background: #14B8A6 !important; color: #0D1117 !important; }
+        html.dark body:not(.war-room) .text-apple-blue { color: #2DD4BF !important; }
+        html.dark body:not(.war-room) .border-apple-blue { border-color: #14B8A6 !important; }
 
-        /* ── LOGIN — soft pastel ──────────────────────── */
-        #lockScreen { background: linear-gradient(140deg, #F3EEFB 0%, #FBEFF5 48%, #FEF4EE 100%) !important; }
+        /* ── LOGIN ─────────────────────────────────────── */
+        #lockScreen { background: #F4F6F8 !important; }
         #lockScreen .zara-login-card {
-            border-radius: 26px !important;
-            border: 1px solid rgba(255,255,255,0.7) !important;
-            background: rgba(255,255,255,0.78) !important;
-            backdrop-filter: blur(20px) !important;
-            box-shadow: 0 24px 60px rgba(120,100,180,0.16) !important;
+            border-radius: 18px !important;
+            border: 1px solid #E3E8EE !important;
+            background: #FFFFFF !important;
+            box-shadow: 0 12px 40px rgba(13,17,23,0.08) !important;
         }
         #lockScreen .login-icon-wrap {
-            background: linear-gradient(135deg, #A99BE0 0%, #C99BD4 100%) !important;
-            border-radius: 20px !important;
-            box-shadow: 0 10px 28px rgba(155,138,212,0.35) !important;
-        }
-        #lockScreen h1 { color: #2A2640 !important; }
-        #lockScreen input { border-radius: 14px !important; }
-        #lockScreen input:focus { border-color: #9B8AD4 !important; box-shadow: 0 0 0 4px rgba(155,138,212,0.14) !important; }
-        #lockScreen #loginBtn {
+            background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%) !important;
             border-radius: 14px !important;
-            background: linear-gradient(135deg, #9B8AD4 0%, #B98AD0 100%) !important;
+            box-shadow: 0 8px 20px rgba(20,184,166,0.30) !important;
         }
-        html.dark #lockScreen { background: linear-gradient(145deg, #16121F 0%, #1E1622 100%) !important; }
-        html.dark #lockScreen h1 { color: #E8E4F0 !important; }
-        html.dark #lockScreen p { color: rgba(200,192,220,0.55) !important; }
-        html.dark #lockScreen .zara-login-card { background: rgba(42,34,58,0.85) !important; border-color: rgba(255,255,255,0.08) !important; }
-        html.dark #lockScreen input { background: #2A2238 !important; border-color: rgba(255,255,255,0.1) !important; color: #E8E4F0 !important; }
-        html.dark #lockScreen input::placeholder { color: rgba(200,192,220,0.3) !important; }
+        #lockScreen h1 { color: #0D1117 !important; }
+        #lockScreen input { border-radius: 10px !important; }
+        #lockScreen input:focus { border-color: #14B8A6 !important; box-shadow: 0 0 0 4px rgba(20,184,166,0.14) !important; }
+        #lockScreen #loginBtn {
+            border-radius: 10px !important;
+            background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%) !important;
+        }
+        html.dark #lockScreen { background: #0D1117 !important; }
+        html.dark #lockScreen h1 { color: #E6EDF3 !important; }
+        html.dark #lockScreen p { color: #8B949E !important; }
+        html.dark #lockScreen .zara-login-card { background: #161C24 !important; border-color: #1F2730 !important; box-shadow: 0 12px 40px rgba(0,0,0,0.4) !important; }
+        html.dark #lockScreen input { background: #0D1117 !important; border-color: #2A323C !important; color: #E6EDF3 !important; }
+        html.dark #lockScreen input::placeholder { color: #565E68 !important; }
+        #lockScreen .login-blob { background: radial-gradient(circle, rgba(20,184,166,0.30) 0%, rgba(13,148,136,0.12) 60%, transparent 100%) !important; }
 
         /* WAR ROOM MODE OVERRIDES */
         body.war-room aside, body.war-room header, body.war-room #ops-header, body.war-room #fab-add-task { display: none !important; }
