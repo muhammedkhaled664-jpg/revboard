@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Tempo%20Floor%20Operations%22%2C%22short_name%22%3A%22Tempo%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FAFAF8%22%2C%22theme_color%22%3A%22%23C8893A%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAA1BMVEXIiTr%2F2lN8AAAAFElEQVR42mNkYGBgJCEhISEhISEAAAQEAAECAQAAAAAASUVORK5CYII%3D%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
-    <meta name="theme-color" content="#C8893A">
+    <meta name="theme-color" content="#2563EB">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Tempo">
@@ -25,18 +25,18 @@
                 extend: {
                     colors: {
                         apple: {
-                            canvas: '#FAFAF8',
+                            canvas: '#F8F9FB',
                             surface: '#FFFFFF',
-                            border: '#EAE6DF',
-                            primary: '#18181B',
-                            secondary: '#8A8175',
-                            blue: '#C8893A',
-                            blueHover: '#B5762A'
+                            border: '#E2E8F0',
+                            primary: '#0F172A',
+                            secondary: '#64748B',
+                            blue: '#2563EB',
+                            blueHover: '#1D4ED8'
                         }
                     },
                     fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-                    borderRadius: { DEFAULT: '0.75rem', sm: '0.5rem', md: '0.75rem', lg: '1rem', xl: '1.25rem', '2xl': '1.5rem', '3xl': '2rem', full: '9999px' },
-                    boxShadow: { 'apple-soft': '0 8px 30px rgba(120,100,180,0.10)', 'apple-drawer': '-20px 0 40px rgba(120,100,180,0.10)' }
+                    borderRadius: { DEFAULT: '0.75rem', sm: '0.375rem', md: '0.625rem', lg: '0.875rem', xl: '1rem', '2xl': '1.125rem', '3xl': '1.25rem', full: '9999px' },
+                    boxShadow: { 'apple-soft': '0 1px 3px rgba(0,0,0,0.08)', 'apple-drawer': '-20px 0 40px rgba(0,0,0,0.12)' }
                 }
             }
         }
@@ -84,152 +84,147 @@
             #fab-add-task { width: 52px !important; height: 52px !important; font-size: 1.1rem !important; }
         }
 
-        /* ── WARM NEUTRAL THEME (Notion) ───────────────────
-           Warm off-white canvas, soft cards, amber accent.
-           Calm, refined, easy on the eyes. Rounded throughout.
-           Accent: #C8893A / #E4A853 amber
+        /* ── ALTERX THEME ──────────────────────────────────
+           Clean white canvas, navy dark mode, blue accent.
+           Typography-first, crisp borders, subtle shadows.
+           Accent: #2563EB blue / dark: #3B82F6
         ──────────────────────────────────────────────────── */
 
-        /* Round every icon tile so nothing looks sharp */
-        body:not(.war-room) .bg-gradient-to-br,
-        body:not(.war-room) [class*="rounded-xl"],
-        body:not(.war-room) [class*="rounded-2xl"] { border-radius: 16px !important; }
-        body:not(.war-room) .rounded-full,
-        body:not(.war-room) [class*="rounded-full"] { border-radius: 9999px !important; }
-
-        /* ===== LIGHT MODE — warm neutral ===== */
+        /* ===== LIGHT MODE ===== */
         body:not(.war-room) {
-            background: #FAFAF8 !important;
+            background: #F8F9FB !important;
+            color: #0F172A !important;
         }
         body:not(.war-room) aside {
-            background: #F7F5F1 !important;
-            border-color: #EAE6DF !important;
+            background: #FFFFFF !important;
+            border-color: #F0F2F5 !important;
         }
         body:not(.war-room) aside nav button,
         body:not(.war-room) aside nav button span,
         body:not(.war-room) aside > div:last-child button,
         body:not(.war-room) aside > div:last-child button span {
-            color: #8A8175 !important;
+            color: #64748B !important;
         }
         body:not(.war-room) aside nav button:hover {
-            background: #EFEBE3 !important;
-            color: #18181B !important;
+            background: #F8F9FB !important;
+            color: #0F172A !important;
         }
         body:not(.war-room) aside nav button.text-apple-blue,
-        body:not(.war-room) aside nav button.text-apple-blue span { color: #B5762A !important; }
-        body:not(.war-room) aside nav button.text-apple-blue { background: rgba(200,137,58,0.12) !important; }
-        body:not(.war-room) aside [id^="indicator-"] { background: #C8893A !important; }
+        body:not(.war-room) aside nav button.text-apple-blue span { color: #2563EB !important; }
+        body:not(.war-room) aside nav button.text-apple-blue { background: #EFF6FF !important; }
+        body:not(.war-room) aside [id^="indicator-"] { background: #2563EB !important; }
         body:not(.war-room) aside .bg-gradient-to-br {
-            background: linear-gradient(135deg, #E4A853 0%, #C8893A 100%) !important;
-            box-shadow: 0 4px 12px rgba(200,137,58,0.25) !important;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.25) !important;
         }
         body:not(.war-room) aside .bg-gradient-to-br i { color: #FFFFFF !important; }
-        body:not(.war-room) aside span.font-bold { color: #18181B !important; }
-        body:not(.war-room) #sidebarUserCard { background: #FFFFFF !important; border: 1px solid #EAE6DF !important; }
+        body:not(.war-room) aside span.font-bold { color: #0F172A !important; }
+        body:not(.war-room) #sidebarUserCard { background: #F8F9FB !important; border: 1px solid #E2E8F0 !important; }
         body:not(.war-room) #sidebarUserCard p,
-        body:not(.war-room) #sidebarUserCard span { color: #18181B !important; }
-        body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: #8A8175 !important; }
-        body:not(.war-room) #sidebarUserInit { background: linear-gradient(135deg, #E4A853, #C8893A) !important; color: #FFFFFF !important; }
-        body:not(.war-room) aside > div:last-child button { color: #8A8175 !important; }
-        body:not(.war-room) aside > div:last-child button:hover { color: #18181B !important; background: #EFEBE3 !important; }
-        body:not(.war-room) #appShell { background: #FAFAF8 !important; }
-        body:not(.war-room) #appShell header { background: rgba(250,250,248,0.85) !important; border-color: #EAE6DF !important; backdrop-filter: blur(12px) !important; }
-        body:not(.war-room) #appShell main { background: #FAFAF8 !important; }
+        body:not(.war-room) #sidebarUserCard span { color: #0F172A !important; }
+        body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: #64748B !important; }
+        body:not(.war-room) #sidebarUserInit { background: linear-gradient(135deg, #3B82F6, #2563EB) !important; color: #FFFFFF !important; }
+        body:not(.war-room) aside > div:last-child button { color: #94A3B8 !important; }
+        body:not(.war-room) aside > div:last-child button:hover { color: #0F172A !important; background: #F8F9FB !important; }
+        body:not(.war-room) #appShell { background: #F8F9FB !important; }
+        body:not(.war-room) #appShell header { background: rgba(255,255,255,0.9) !important; border-color: #F0F2F5 !important; backdrop-filter: blur(12px) !important; }
+        body:not(.war-room) #appShell main { background: #F8F9FB !important; }
         body:not(.war-room) main .bg-white {
             background: #FFFFFF !important;
-            box-shadow: 0 1px 2px rgba(60,50,30,0.05) !important;
-            border-color: #EAE6DF !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+            border-color: #E2E8F0 !important;
         }
-        body:not(.war-room) .bg-apple-blue { background: #C8893A !important; }
-        body:not(.war-room) .bg-apple-blue:hover { background: #B5762A !important; }
+        body:not(.war-room) .bg-apple-blue { background: #2563EB !important; }
+        body:not(.war-room) .bg-apple-blue:hover { background: #1D4ED8 !important; }
 
-        /* ===== DARK MODE — warm charcoal ===== */
+        /* ===== DARK MODE — deep navy ===== */
         html.dark body:not(.war-room) {
-            background: #1A1917 !important;
-            color: #EDEAE3 !important;
+            background: #0F1117 !important;
+            color: #E2E8F0 !important;
         }
         html.dark body:not(.war-room) aside {
-            background: #1A1917 !important;
-            border-color: #2C2A26 !important;
+            background: #13151C !important;
+            border-color: #1E2130 !important;
         }
         @media (max-width: 767px) {
-            html.dark body:not(.war-room) aside { background: #1A1917 !important; border-top: 1px solid #2C2A26 !important; box-shadow: 0 -4px 20px rgba(0,0,0,0.4); }
+            html.dark body:not(.war-room) aside { background: #13151C !important; border-top: 1px solid #1E2130 !important; box-shadow: 0 -4px 20px rgba(0,0,0,0.5); }
         }
-        html.dark body:not(.war-room) aside nav button { color: #9A9388 !important; }
-        html.dark body:not(.war-room) aside nav button:hover { background: #242220 !important; color: #EDEAE3 !important; }
+        html.dark body:not(.war-room) aside nav button { color: #5A6284 !important; }
+        html.dark body:not(.war-room) aside nav button:hover { background: #1A1E2E !important; color: #E2E8F0 !important; }
         html.dark body:not(.war-room) aside nav button.text-apple-blue,
-        html.dark body:not(.war-room) aside nav button.text-apple-blue span { color: #E4A853 !important; }
-        html.dark body:not(.war-room) aside nav button.text-apple-blue { background: rgba(228,168,83,0.14) !important; }
-        html.dark body:not(.war-room) aside [id^="indicator-"] { background: #E4A853 !important; }
+        html.dark body:not(.war-room) aside nav button.text-apple-blue span { color: #60A5FA !important; }
+        html.dark body:not(.war-room) aside nav button.text-apple-blue { background: #1A2035 !important; }
+        html.dark body:not(.war-room) aside [id^="indicator-"] { background: #3B82F6 !important; }
         html.dark body:not(.war-room) aside .bg-gradient-to-br {
-            background: linear-gradient(135deg, #E4A853 0%, #C8893A 100%) !important;
-            box-shadow: 0 4px 14px rgba(228,168,83,0.30) !important;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+            box-shadow: 0 4px 14px rgba(59,130,246,0.30) !important;
         }
-        html.dark body:not(.war-room) aside span.font-bold { color: #EDEAE3 !important; }
-        html.dark body:not(.war-room) #sidebarUserCard { background: #242220 !important; border: 1px solid #312E2A !important; }
+        html.dark body:not(.war-room) aside span.font-bold { color: #E2E8F0 !important; }
+        html.dark body:not(.war-room) #sidebarUserCard { background: #1A1E2E !important; border: 1px solid #252B3E !important; }
         html.dark body:not(.war-room) #sidebarUserCard p,
-        html.dark body:not(.war-room) #sidebarUserCard span { color: #EDEAE3 !important; }
-        html.dark body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: #9A9388 !important; }
-        html.dark body:not(.war-room) #sidebarUserInit { background: linear-gradient(135deg, #E4A853, #C8893A) !important; color: #FFFFFF !important; }
-        html.dark body:not(.war-room) aside > div:last-child button { color: #9A9388 !important; }
-        html.dark body:not(.war-room) aside > div:last-child button:hover { color: #EDEAE3 !important; background: #242220 !important; }
-        html.dark body:not(.war-room) #sidebarToggle { color: #9A9388 !important; }
-        html.dark body:not(.war-room) #sidebarToggle:hover { color: #EDEAE3 !important; }
-        html.dark body:not(.war-room) #appShell { background: #1A1917 !important; border-color: #2C2A26 !important; }
-        html.dark body:not(.war-room) #appShell header { background: rgba(26,25,23,0.85) !important; border-color: #2C2A26 !important; backdrop-filter: blur(12px) !important; }
-        html.dark body:not(.war-room) #appShell main { background: #1A1917 !important; }
+        html.dark body:not(.war-room) #sidebarUserCard span { color: #E2E8F0 !important; }
+        html.dark body:not(.war-room) #sidebarUserCard #sidebarUserRole { color: #5A6284 !important; }
+        html.dark body:not(.war-room) #sidebarUserInit { background: linear-gradient(135deg, #3B82F6, #2563EB) !important; color: #FFFFFF !important; }
+        html.dark body:not(.war-room) aside > div:last-child button { color: #3D4466 !important; }
+        html.dark body:not(.war-room) aside > div:last-child button:hover { color: #E2E8F0 !important; background: #1A1E2E !important; }
+        html.dark body:not(.war-room) #sidebarToggle { color: #3D4466 !important; }
+        html.dark body:not(.war-room) #sidebarToggle:hover { color: #E2E8F0 !important; }
+        html.dark body:not(.war-room) #appShell { background: #0F1117 !important; border-color: #1E2130 !important; }
+        html.dark body:not(.war-room) #appShell header { background: rgba(19,21,28,0.9) !important; border-color: #1E2130 !important; backdrop-filter: blur(12px) !important; }
+        html.dark body:not(.war-room) #appShell main { background: #0F1117 !important; }
         html.dark body:not(.war-room) main .bg-white,
         html.dark body:not(.war-room) .bg-white,
         html.dark body:not(.war-room) .dark\:bg-\[\#1C1C1E\],
         html.dark body:not(.war-room) .dark\:bg-\[\#161618\] {
-            background-color: #242220 !important;
-            border-color: #312E2A !important;
+            background-color: #13151C !important;
+            border-color: #1E2130 !important;
             box-shadow: none !important;
         }
         html.dark body:not(.war-room) .dark\:bg-\[\#2C2C2E\],
-        html.dark body:not(.war-room) .dark\:bg-\[\#202022\] { background-color: #2E2B27 !important; }
-        html.dark body:not(.war-room) .dark\:text-white { color: #EDEAE3 !important; }
-        html.dark body:not(.war-room) .dark\:text-gray-400 { color: #9A9388 !important; }
+        html.dark body:not(.war-room) .dark\:bg-\[\#202022\] { background-color: #1A1E2E !important; }
+        html.dark body:not(.war-room) .dark\:text-white { color: #E2E8F0 !important; }
+        html.dark body:not(.war-room) .dark\:text-gray-400 { color: #5A6284 !important; }
         html.dark body:not(.war-room) .dark\:border-\[\#2C2C2E\],
-        html.dark body:not(.war-room) .dark\:border-\[\#3A3A3C\] { border-color: #312E2A !important; }
+        html.dark body:not(.war-room) .dark\:border-\[\#3A3A3C\] { border-color: #1E2130 !important; }
         html.dark body:not(.war-room) input,
         html.dark body:not(.war-room) textarea,
         html.dark body:not(.war-room) select {
-            background-color: #1A1917 !important;
-            border-color: #36322C !important;
-            color: #EDEAE3 !important;
+            background-color: #1A1E2E !important;
+            border-color: #252B3E !important;
+            color: #E2E8F0 !important;
         }
-        html.dark body:not(.war-room) .bg-apple-blue { background: #C8893A !important; color: #FFFFFF !important; }
-        html.dark body:not(.war-room) .text-apple-blue { color: #E4A853 !important; }
-        html.dark body:not(.war-room) .border-apple-blue { border-color: #C8893A !important; }
+        html.dark body:not(.war-room) .bg-apple-blue { background: #2563EB !important; color: #FFFFFF !important; }
+        html.dark body:not(.war-room) .text-apple-blue { color: #60A5FA !important; }
+        html.dark body:not(.war-room) .border-apple-blue { border-color: #3B82F6 !important; }
 
         /* ── LOGIN ─────────────────────────────────────── */
-        #lockScreen { background: #FAFAF8 !important; }
+        #lockScreen { background: #F8F9FB !important; }
         #lockScreen .zara-login-card {
-            border-radius: 20px !important;
-            border: 1px solid #EAE6DF !important;
+            border-radius: 16px !important;
+            border: 1px solid #E2E8F0 !important;
             background: #FFFFFF !important;
-            box-shadow: 0 12px 40px rgba(60,50,30,0.08) !important;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07) !important;
         }
         #lockScreen .login-icon-wrap {
-            background: linear-gradient(135deg, #E4A853 0%, #C8893A 100%) !important;
-            border-radius: 16px !important;
-            box-shadow: 0 8px 20px rgba(200,137,58,0.30) !important;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 20px rgba(37,99,235,0.30) !important;
         }
-        #lockScreen h1 { color: #18181B !important; }
-        #lockScreen input { border-radius: 12px !important; }
-        #lockScreen input:focus { border-color: #C8893A !important; box-shadow: 0 0 0 4px rgba(200,137,58,0.14) !important; }
+        #lockScreen h1 { color: #0F172A !important; }
+        #lockScreen input { border-radius: 10px !important; border-color: #E2E8F0 !important; background: #F8F9FB !important; }
+        #lockScreen input:focus { border-color: #2563EB !important; box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important; }
         #lockScreen #loginBtn {
-            border-radius: 12px !important;
-            background: linear-gradient(135deg, #E4A853 0%, #C8893A 100%) !important;
+            border-radius: 10px !important;
+            background: #2563EB !important;
         }
-        html.dark #lockScreen { background: #1A1917 !important; }
-        html.dark #lockScreen h1 { color: #EDEAE3 !important; }
-        html.dark #lockScreen p { color: #9A9388 !important; }
-        html.dark #lockScreen .zara-login-card { background: #242220 !important; border-color: #312E2A !important; box-shadow: 0 12px 40px rgba(0,0,0,0.4) !important; }
-        html.dark #lockScreen input { background: #1A1917 !important; border-color: #36322C !important; color: #EDEAE3 !important; }
-        html.dark #lockScreen input::placeholder { color: #6B655B !important; }
-        #lockScreen .login-blob { background: radial-gradient(circle, rgba(228,168,83,0.28) 0%, rgba(200,137,58,0.10) 60%, transparent 100%) !important; }
+        #lockScreen #loginBtn:hover { background: #1D4ED8 !important; }
+        html.dark #lockScreen { background: #0F1117 !important; }
+        html.dark #lockScreen h1 { color: #E2E8F0 !important; }
+        html.dark #lockScreen p { color: #5A6284 !important; }
+        html.dark #lockScreen .zara-login-card { background: #13151C !important; border-color: #1E2130 !important; box-shadow: 0 12px 40px rgba(0,0,0,0.5) !important; }
+        html.dark #lockScreen input { background: #1A1E2E !important; border-color: #252B3E !important; color: #E2E8F0 !important; }
+        html.dark #lockScreen input::placeholder { color: #3D4466 !important; }
+        #lockScreen .login-blob { background: radial-gradient(circle, rgba(59,130,246,0.20) 0%, rgba(37,99,235,0.08) 60%, transparent 100%) !important; }
 
         /* WAR ROOM MODE OVERRIDES */
         body.war-room aside, body.war-room header, body.war-room #ops-header, body.war-room #fab-add-task { display: none !important; }
@@ -351,26 +346,26 @@
         }
         .skeleton {
             border-radius: 8px;
-            background: linear-gradient(90deg, #EFEBE3 25%, #F7F5F1 50%, #EFEBE3 75%);
+            background: linear-gradient(90deg, #EEF1F6 25%, #F8F9FB 50%, #EEF1F6 75%);
             background-size: 600px 100%;
             animation: shimmer 1.4s ease infinite;
         }
         html.dark .skeleton {
-            background: linear-gradient(90deg, #2A2724 25%, #312E2A 50%, #2A2724 75%);
+            background: linear-gradient(90deg, #1A1E2E 25%, #252B3E 50%, #1A1E2E 75%);
             background-size: 600px 100%;
         }
-        .skeleton-row { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-bottom: 1px solid #EAE6DF; }
-        html.dark .skeleton-row { border-color: #2C2A26; }
-        .skeleton-card { border-radius: 14px; padding: 16px; margin-bottom: 10px; background: #FFFFFF; border: 1px solid #EAE6DF; }
-        html.dark .skeleton-card { background: #242220; border-color: #312E2A; }
+        .skeleton-row { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-bottom: 1px solid #E2E8F0; }
+        html.dark .skeleton-row { border-color: #1E2130; }
+        .skeleton-card { border-radius: 12px; padding: 16px; margin-bottom: 10px; background: #FFFFFF; border: 1px solid #E2E8F0; }
+        html.dark .skeleton-card { background: #13151C; border-color: #1E2130; }
 
         /* ── EMPTY STATES ──────────────────────────────────────── */
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 24px; text-align: center; }
         .empty-state svg { opacity: 0.85; margin-bottom: 20px; }
-        .empty-state h3 { font-size: 15px; font-weight: 700; color: #18181B; margin-bottom: 6px; }
-        .empty-state p { font-size: 12px; color: #8A8175; max-width: 260px; line-height: 1.5; }
-        html.dark .empty-state h3 { color: #EDEAE3; }
-        html.dark .empty-state p { color: #9A9388; }
+        .empty-state h3 { font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 6px; }
+        .empty-state p { font-size: 12px; color: #64748B; max-width: 260px; line-height: 1.5; }
+        html.dark .empty-state h3 { color: #E2E8F0; }
+        html.dark .empty-state p { color: #5A6284; }
 
         /* ── PWA INSTALL BUTTON ────────────────────────────────── */
         #pwaInstallBtn { display: none; }
@@ -438,7 +433,7 @@
 
     <aside id="sidebar" class="fixed bottom-0 left-0 right-0 h-16 md:relative md:h-full md:w-[210px] bg-apple-surface dark:bg-[#1C1C1E] border-t md:border-t-0 md:border-r border-apple-border dark:border-[#2C2C2E] flex flex-row md:flex-col items-center md:items-stretch justify-around md:justify-start md:py-6 md:px-3 z-40">
         <div class="hidden md:flex items-center gap-2 px-2 mb-8">
-            <div class="h-9 w-9 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
+            <div class="h-9 w-9 bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
                 <i class="fa-solid fa-layer-group text-base"></i>
             </div>
             <span class="sidebar-label font-bold text-sm tracking-tight dark:text-white">Tempo</span>
@@ -611,7 +606,7 @@
                     <div class="rounded-2xl p-5 mb-5 relative bg-white dark:bg-[#161618] border border-apple-border dark:border-[#2C2C2E] shadow-sm">
                         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                             <div class="flex items-center gap-4">
-                                <div class="h-12 w-12 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E]" style="box-shadow: 0 8px 20px rgba(27,67,50,0.22);">
+                                <div class="h-12 w-12 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br from-[#2563EB] to-[#1D4ED8]" style="box-shadow: 0 8px 20px rgba(37,99,235,0.22);">
                                     <i class="fa-solid fa-satellite-dish text-white text-lg"></i>
                                 </div>
                                 <div>
@@ -686,8 +681,8 @@
                         </div>
                         <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
                             <div class="flex items-center justify-between mb-3">
-                                <div class="h-9 w-9 rounded-xl bg-[#1B4332]/10 flex items-center justify-center">
-                                    <i class="fa-solid fa-satellite text-[#1B4332] dark:text-emerald-400 text-sm"></i>
+                                <div class="h-9 w-9 rounded-xl bg-[#2563EB]/10 flex items-center justify-center">
+                                    <i class="fa-solid fa-satellite text-[#2563EB] dark:text-emerald-400 text-sm"></i>
                                 </div>
                                 <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Queued</p>
                             </div>
@@ -706,8 +701,8 @@
                         </div>
                         <div class="rounded-2xl p-4 border border-apple-border dark:border-[#2C2C2E] shadow-sm relative overflow-hidden bg-white dark:bg-[#1C1C1E]">
                             <div class="flex items-center justify-between mb-3">
-                                <div class="h-9 w-9 rounded-xl bg-[#1B4332]/10 flex items-center justify-center">
-                                    <i class="fa-solid fa-circle-check text-[#1B4332] dark:text-emerald-400 text-sm"></i>
+                                <div class="h-9 w-9 rounded-xl bg-[#2563EB]/10 flex items-center justify-center">
+                                    <i class="fa-solid fa-circle-check text-[#2563EB] dark:text-emerald-400 text-sm"></i>
                                 </div>
                                 <p class="text-[9px] uppercase font-black text-apple-secondary tracking-widest">Done</p>
                             </div>
@@ -759,7 +754,7 @@
                 <div id="view-rankings" class="hidden flex-col gap-6">
                     <div class="flex items-center justify-between gap-3 flex-wrap">
                         <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] flex items-center justify-center text-white shadow-sm"><i class="fa-solid fa-ranking-star"></i></div>
+                            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] flex items-center justify-center text-white shadow-sm"><i class="fa-solid fa-ranking-star"></i></div>
                             <div>
                                 <h2 class="text-xl font-bold dark:text-white">Team Totals</h2>
                                 <p class="text-[10px] text-apple-secondary uppercase tracking-widest">Team ranking by floor numbers &bull; <span id="rank-dept">your floor</span></p>
@@ -863,13 +858,13 @@
                         <div id="coachingEmpty" class="hidden">
                             <div class="empty-state">
                                 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="40" cy="40" r="38" fill="#C8893A" fill-opacity="0.10"/>
-                                    <path d="M24 52 C24 52 28 44 40 44 C52 44 56 52 56 52" stroke="#C8893A" stroke-width="2.5" stroke-linecap="round"/>
-                                    <circle cx="40" cy="32" r="10" stroke="#C8893A" stroke-width="2.5" fill="none"/>
-                                    <circle cx="30" cy="56" r="3" fill="#C8893A" fill-opacity="0.35"/>
-                                    <circle cx="50" cy="56" r="3" fill="#C8893A" fill-opacity="0.35"/>
-                                    <path d="M58 20 L62 16 M62 20 L58 16" stroke="#C8893A" stroke-width="2" stroke-linecap="round"/>
-                                    <path d="M18 24 L22 20 M22 24 L18 20" stroke="#C8893A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                                    <circle cx="40" cy="40" r="38" fill="#2563EB" fill-opacity="0.10"/>
+                                    <path d="M24 52 C24 52 28 44 40 44 C52 44 56 52 56 52" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+                                    <circle cx="40" cy="32" r="10" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+                                    <circle cx="30" cy="56" r="3" fill="#2563EB" fill-opacity="0.35"/>
+                                    <circle cx="50" cy="56" r="3" fill="#2563EB" fill-opacity="0.35"/>
+                                    <path d="M58 20 L62 16 M62 20 L58 16" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M18 24 L22 20 M22 24 L18 20" stroke="#2563EB" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
                                 </svg>
                                 <h3>No coaching sessions yet</h3>
                                 <p>Start logging 1-on-1s and team coaching sessions to track development.</p>
@@ -939,12 +934,12 @@
                         <div id="leaveEmpty" class="hidden">
                             <div class="empty-state">
                                 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="40" cy="40" r="38" fill="#C8893A" fill-opacity="0.10"/>
-                                    <rect x="18" y="22" width="44" height="38" rx="6" stroke="#C8893A" stroke-width="2.5" fill="none"/>
-                                    <path d="M18 32 H62" stroke="#C8893A" stroke-width="2" stroke-dasharray="0"/>
-                                    <line x1="28" y1="18" x2="28" y2="26" stroke="#C8893A" stroke-width="2.5" stroke-linecap="round"/>
-                                    <line x1="52" y1="18" x2="52" y2="26" stroke="#C8893A" stroke-width="2.5" stroke-linecap="round"/>
-                                    <path d="M32 45 L37 50 L48 39" stroke="#C8893A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                                    <circle cx="40" cy="40" r="38" fill="#2563EB" fill-opacity="0.10"/>
+                                    <rect x="18" y="22" width="44" height="38" rx="6" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+                                    <path d="M18 32 H62" stroke="#2563EB" stroke-width="2" stroke-dasharray="0"/>
+                                    <line x1="28" y1="18" x2="28" y2="26" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+                                    <line x1="52" y1="18" x2="52" y2="26" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+                                    <path d="M32 45 L37 50 L48 39" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
                                 </svg>
                                 <h3>No leave requests</h3>
                                 <p>No leave has been logged yet. Submissions will appear here when added.</p>
@@ -1070,7 +1065,7 @@
 
                     <!-- Stat cards row -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div class="rounded-2xl p-4 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] text-white shadow-lg col-span-2 md:col-span-1 flex items-center gap-4" style="box-shadow:0 8px 24px rgba(27,67,50,0.28)">
+                        <div class="rounded-2xl p-4 bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-white shadow-lg col-span-2 md:col-span-1 flex items-center gap-4" style="box-shadow:0 8px 24px rgba(37,99,235,0.28)">
                             <div class="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
                                 <i class="fa-solid fa-headset text-xl"></i>
                             </div>
@@ -1187,7 +1182,7 @@
             </div>
         </main>
 
-        <button id="fab-add-task" onclick="openModal('newTaskModal')" class="admin-only fixed bottom-20 md:bottom-10 right-6 md:right-10 h-14 w-14 bg-gradient-to-br from-[#1B4332] to-[#0F2A1E] text-white rounded-full shadow-xl active:scale-90 hover:scale-105 transition-all flex items-center justify-center text-xl z-30 border border-white/20"><i class="fa-solid fa-plus"></i></button>
+        <button id="fab-add-task" onclick="openModal('newTaskModal')" class="admin-only fixed bottom-20 md:bottom-10 right-6 md:right-10 h-14 w-14 bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-white rounded-full shadow-xl active:scale-90 hover:scale-105 transition-all flex items-center justify-center text-xl z-30 border border-white/20"><i class="fa-solid fa-plus"></i></button>
 
         <div id="slideDrawer" class="fixed top-0 bottom-0 right-0 w-full sm:w-[420px] bg-white dark:bg-[#1C1C1E] shadow-2xl border-l border-apple-border dark:border-[#2C2C2E] z-[120] translate-x-full flex flex-col transition-transform duration-300">
             <div class="p-6 border-b border-apple-border dark:border-[#2C2C2E] flex justify-between items-center">
@@ -1816,8 +1811,8 @@
                 });
                 if(!data.slice(0, 40).length) {
                     container.innerHTML = `<div class="py-16 text-center flex flex-col items-center gap-3">
-  <div class="h-14 w-14 rounded-2xl bg-[#1B4332]/10 flex items-center justify-center">
-    <i class="fa-solid fa-bolt text-[#1B4332] text-2xl"></i>
+  <div class="h-14 w-14 rounded-2xl bg-[#2563EB]/10 flex items-center justify-center">
+    <i class="fa-solid fa-bolt text-[#2563EB] text-2xl"></i>
   </div>
   <p class="text-sm font-semibold text-apple-primary dark:text-white">No activity yet</p>
   <p class="text-xs text-apple-secondary">Actions taken on this floor will appear here.</p>
@@ -2172,12 +2167,12 @@
                 tbody.innerHTML = `<tr><td colspan="6" class="py-0">
   <div class="empty-state">
     <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="45" cy="45" r="43" fill="#C8893A" fill-opacity="0.09"/>
-      <rect x="22" y="20" width="46" height="54" rx="8" stroke="#C8893A" stroke-width="2.5" fill="none"/>
-      <line x1="32" y1="34" x2="58" y2="34" stroke="#C8893A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-      <line x1="32" y1="43" x2="58" y2="43" stroke="#C8893A" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
-      <line x1="32" y1="52" x2="48" y2="52" stroke="#C8893A" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
-      <circle cx="66" cy="66" r="12" fill="#C8893A"/>
+      <circle cx="45" cy="45" r="43" fill="#2563EB" fill-opacity="0.09"/>
+      <rect x="22" y="20" width="46" height="54" rx="8" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+      <line x1="32" y1="34" x2="58" y2="34" stroke="#2563EB" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      <line x1="32" y1="43" x2="58" y2="43" stroke="#2563EB" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+      <line x1="32" y1="52" x2="48" y2="52" stroke="#2563EB" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+      <circle cx="66" cy="66" r="12" fill="#2563EB"/>
       <path d="M61 66 L64 69 L71 62" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <h3>All clear — no directives</h3>
@@ -2279,7 +2274,7 @@
             rankEntriesCache = entries;
 
             if(board) {
-                if(!entries.length) { board.innerHTML = `<div class="empty-state"><svg width="72" height="72" viewBox="0 0 72 72" fill="none"><circle cx="36" cy="36" r="34" fill="#C8893A" fill-opacity="0.09"/><path d="M22 52 L22 38 M36 52 L36 28 M50 52 L50 34" stroke="#C8893A" stroke-width="3" stroke-linecap="round"/><circle cx="22" cy="34" r="4" fill="#C8893A" fill-opacity="0.3"/><circle cx="36" cy="24" r="4" fill="#C8893A"/><circle cx="50" cy="30" r="4" fill="#C8893A" fill-opacity="0.5"/></svg><h3>No team data yet</h3><p>Assign directives to team members and rankings will appear here.</p></div>`; }
+                if(!entries.length) { board.innerHTML = `<div class="empty-state"><svg width="72" height="72" viewBox="0 0 72 72" fill="none"><circle cx="36" cy="36" r="34" fill="#2563EB" fill-opacity="0.09"/><path d="M22 52 L22 38 M36 52 L36 28 M50 52 L50 34" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/><circle cx="22" cy="34" r="4" fill="#2563EB" fill-opacity="0.3"/><circle cx="36" cy="24" r="4" fill="#2563EB"/><circle cx="50" cy="30" r="4" fill="#2563EB" fill-opacity="0.5"/></svg><h3>No team data yet</h3><p>Assign directives to team members and rankings will appear here.</p></div>`; }
                 else {
                     const maxDone = Math.max(...entries.map(e => e[1].done), 1);
                     const medals = ['text-yellow-500', 'text-gray-400', 'text-amber-700'];
@@ -2297,7 +2292,7 @@
                                     <span class="text-[10px] text-apple-secondary shrink-0 ml-2">${s.done}/${s.total} &bull; ${rate}%</span>
                                 </div>
                                 <div class="h-2.5 w-full bg-apple-canvas dark:bg-[#2C2C2E] rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-[#1B4332] to-[#0F2A1E] rounded-full transition-all" style="width:${pct}%"></div>
+                                    <div class="h-full bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] rounded-full transition-all" style="width:${pct}%"></div>
                                 </div>
                             </div>
                         </div>`;
@@ -2673,7 +2668,7 @@
                     </div>
                     <div class="hs-label text-xs font-bold text-apple-primary dark:text-white cursor-pointer hover:text-apple-blue flex items-center gap-1 truncate" data-key="${key}">${label}<i class="fa-solid fa-pen text-[7px] ml-1 opacity-0 group-hover:opacity-40 transition-opacity"></i></div>
                     <div class="h-1.5 w-full rounded-full bg-apple-canvas dark:bg-[#2C2C2E] overflow-hidden">
-                        <div class="h-full rounded-full bg-gradient-to-r from-[#1B4332] to-[#0F2A1E] transition-all duration-500" style="width:${pct}%"></div>
+                        <div class="h-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] transition-all duration-500" style="width:${pct}%"></div>
                     </div>
                 </div>`;
             };
