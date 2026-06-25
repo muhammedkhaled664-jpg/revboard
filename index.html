@@ -6,6 +6,11 @@
     <title>Tempo | Floor Operations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Tempo%20Floor%20Operations%22%2C%22short_name%22%3A%22Tempo%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FAFAF8%22%2C%22theme_color%22%3A%22%23C8893A%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAA1BMVEXIiTr%2F2lN8AAAAFElEQVR42mNkYGBgJCEhISEhISEAAAQEAAECAQAAAAAASUVORK5CYII%3D%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+    <meta name="theme-color" content="#C8893A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Tempo">
     
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -338,6 +343,38 @@
         @media (min-width: 768px) {
             aside { transition: width 0.2s ease; }
         }
+
+        /* ── LOADING SKELETONS ─────────────────────────────────── */
+        @keyframes shimmer {
+            0%   { background-position: -600px 0; }
+            100% { background-position: 600px 0; }
+        }
+        .skeleton {
+            border-radius: 8px;
+            background: linear-gradient(90deg, #EFEBE3 25%, #F7F5F1 50%, #EFEBE3 75%);
+            background-size: 600px 100%;
+            animation: shimmer 1.4s ease infinite;
+        }
+        html.dark .skeleton {
+            background: linear-gradient(90deg, #2A2724 25%, #312E2A 50%, #2A2724 75%);
+            background-size: 600px 100%;
+        }
+        .skeleton-row { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-bottom: 1px solid #EAE6DF; }
+        html.dark .skeleton-row { border-color: #2C2A26; }
+        .skeleton-card { border-radius: 14px; padding: 16px; margin-bottom: 10px; background: #FFFFFF; border: 1px solid #EAE6DF; }
+        html.dark .skeleton-card { background: #242220; border-color: #312E2A; }
+
+        /* ── EMPTY STATES ──────────────────────────────────────── */
+        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 24px; text-align: center; }
+        .empty-state svg { opacity: 0.85; margin-bottom: 20px; }
+        .empty-state h3 { font-size: 15px; font-weight: 700; color: #18181B; margin-bottom: 6px; }
+        .empty-state p { font-size: 12px; color: #8A8175; max-width: 260px; line-height: 1.5; }
+        html.dark .empty-state h3 { color: #EDEAE3; }
+        html.dark .empty-state p { color: #9A9388; }
+
+        /* ── PWA INSTALL BUTTON ────────────────────────────────── */
+        #pwaInstallBtn { display: none; }
+        #pwaInstallBtn.visible { display: flex; }
     </style>
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col md:flex-row antialiased bg-apple-canvas text-apple-primary dark:bg-[#121212] dark:text-[#F5F5F7] transition-colors duration-300">
@@ -525,6 +562,10 @@
         </div>
 
         <div class="md:flex flex-row md:flex-col gap-2 md:gap-1 items-center md:items-stretch flex">
+            <button id="pwaInstallBtn" onclick="triggerPwaInstall()" title="Install App" class="text-apple-secondary dark:text-gray-400 hover:text-apple-blue transition-colors p-2 md:px-3 md:py-2.5 md:rounded-xl items-center justify-center md:justify-start gap-3">
+                <i class="fa-solid fa-mobile-screen-button text-xl md:text-base w-5 text-center"></i>
+                <span class="sidebar-label hidden md:inline text-xs font-semibold">Install App</span>
+            </button>
             <button onclick="toggleTheme()" class="text-apple-secondary dark:text-gray-400 p-2 md:px-3 md:py-2.5 md:rounded-xl flex md:items-center justify-center md:justify-start gap-3 transition-colors">
                 <i id="themeIcon" class="fa-solid fa-moon text-xl md:text-base w-5 text-center"></i>
                 <span class="sidebar-label hidden md:inline text-xs font-semibold">Theme</span>
@@ -680,7 +721,14 @@
                     <div class="overflow-x-auto overflow-y-auto scrollbar-hide flex-1 w-full max-h-[calc(100vh-320px)]" style="min-width:0">
                         <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead class="sticky top-0 z-10"><tr class="bg-[#F7F7FA] dark:bg-[#1A1A1E] border-b border-apple-border dark:border-[#2C2C2E]"><th class="py-3.5 px-5 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Directive</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Timing</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Dept</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Assignee</th><th class="py-3.5 px-4 text-[9px] uppercase font-black text-apple-secondary dark:text-gray-500 tracking-widest">Status</th><th class="py-3.5 px-4 text-right"></th></tr></thead>
-                            <tbody id="taskTableBody"></tbody>
+                            <tbody id="taskTableBody">
+                                <!-- skeleton rows shown on first load -->
+                                <tr class="skeleton-row-tr"><td colspan="6" class="p-0"><div class="skeleton-row"><div class="skeleton h-4 flex-1" style="max-width:340px"></div><div class="skeleton h-4 w-16"></div><div class="skeleton h-4 w-20"></div><div class="skeleton h-4 w-24"></div><div class="skeleton h-5 w-14 rounded-full"></div></div></td></tr>
+                                <tr class="skeleton-row-tr"><td colspan="6" class="p-0"><div class="skeleton-row"><div class="skeleton h-4 flex-1" style="max-width:280px"></div><div class="skeleton h-4 w-16"></div><div class="skeleton h-4 w-20"></div><div class="skeleton h-4 w-20"></div><div class="skeleton h-5 w-18 rounded-full"></div></div></td></tr>
+                                <tr class="skeleton-row-tr"><td colspan="6" class="p-0"><div class="skeleton-row"><div class="skeleton h-4 flex-1" style="max-width:310px"></div><div class="skeleton h-4 w-16"></div><div class="skeleton h-4 w-20"></div><div class="skeleton h-4 w-28"></div><div class="skeleton h-5 w-14 rounded-full"></div></div></td></tr>
+                                <tr class="skeleton-row-tr"><td colspan="6" class="p-0"><div class="skeleton-row"><div class="skeleton h-4 flex-1" style="max-width:260px"></div><div class="skeleton h-4 w-16"></div><div class="skeleton h-4 w-20"></div><div class="skeleton h-4 w-22"></div><div class="skeleton h-5 w-16 rounded-full"></div></div></td></tr>
+                                <tr class="skeleton-row-tr"><td colspan="6" class="p-0"><div class="skeleton-row"><div class="skeleton h-4 flex-1" style="max-width:300px"></div><div class="skeleton h-4 w-16"></div><div class="skeleton h-4 w-20"></div><div class="skeleton h-4 w-24"></div><div class="skeleton h-5 w-14 rounded-full"></div></div></td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -688,7 +736,7 @@
                 <div id="view-board" class="hidden gap-4 overflow-x-auto pb-4">
                     <div class="w-72 shrink-0 flex flex-col bg-white/40 dark:bg-[#1C1C1E]/40 border border-apple-border dark:border-[#2C2C2E] rounded-2xl p-4 h-fit">
                         <h3 class="text-[9px] uppercase font-black text-apple-secondary mb-4 flex justify-between">Radar <span id="board-count-radar" class="text-apple-primary dark:text-white">0</span></h3>
-                        <div id="col-radar" class="space-y-3"></div>
+                        <div id="col-radar" class="space-y-3"><div class="skeleton-card"><div class="skeleton h-3 w-3/4 mb-3"></div><div class="skeleton h-3 w-1/2"></div></div><div class="skeleton-card"><div class="skeleton h-3 w-2/3 mb-3"></div><div class="skeleton h-3 w-2/5"></div></div></div>
                     </div>
                     <div class="w-72 shrink-0 flex flex-col bg-white/40 dark:bg-[#1C1C1E]/40 border border-apple-border dark:border-[#2C2C2E] rounded-2xl p-4 h-fit">
                         <h3 class="text-[9px] uppercase font-black text-apple-secondary mb-4 flex justify-between">Assigned <span id="board-count-assigned" class="text-apple-primary dark:text-white">0</span></h3>
@@ -812,7 +860,21 @@
                                 <tbody id="coachingTableBody"></tbody>
                             </table>
                         </div>
-                        <div id="coachingEmpty" class="hidden text-xs text-apple-secondary italic text-center py-10">No coaching sessions logged yet.</div>
+                        <div id="coachingEmpty" class="hidden">
+                            <div class="empty-state">
+                                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="40" cy="40" r="38" fill="#C8893A" fill-opacity="0.10"/>
+                                    <path d="M24 52 C24 52 28 44 40 44 C52 44 56 52 56 52" stroke="#C8893A" stroke-width="2.5" stroke-linecap="round"/>
+                                    <circle cx="40" cy="32" r="10" stroke="#C8893A" stroke-width="2.5" fill="none"/>
+                                    <circle cx="30" cy="56" r="3" fill="#C8893A" fill-opacity="0.35"/>
+                                    <circle cx="50" cy="56" r="3" fill="#C8893A" fill-opacity="0.35"/>
+                                    <path d="M58 20 L62 16 M62 20 L58 16" stroke="#C8893A" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M18 24 L22 20 M22 24 L18 20" stroke="#C8893A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                                </svg>
+                                <h3>No coaching sessions yet</h3>
+                                <p>Start logging 1-on-1s and team coaching sessions to track development.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -874,7 +936,20 @@
                                 <tbody id="leaveTableBody"></tbody>
                             </table>
                         </div>
-                        <div id="leaveEmpty" class="hidden text-xs text-apple-secondary italic text-center py-10">No leave logged yet.</div>
+                        <div id="leaveEmpty" class="hidden">
+                            <div class="empty-state">
+                                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="40" cy="40" r="38" fill="#C8893A" fill-opacity="0.10"/>
+                                    <rect x="18" y="22" width="44" height="38" rx="6" stroke="#C8893A" stroke-width="2.5" fill="none"/>
+                                    <path d="M18 32 H62" stroke="#C8893A" stroke-width="2" stroke-dasharray="0"/>
+                                    <line x1="28" y1="18" x2="28" y2="26" stroke="#C8893A" stroke-width="2.5" stroke-linecap="round"/>
+                                    <line x1="52" y1="18" x2="52" y2="26" stroke="#C8893A" stroke-width="2.5" stroke-linecap="round"/>
+                                    <path d="M32 45 L37 50 L48 39" stroke="#C8893A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                                </svg>
+                                <h3>No leave requests</h3>
+                                <p>No leave has been logged yet. Submissions will appear here when added.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2094,13 +2169,19 @@
                 }
             });
             if(!tbody.children.length) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-16 text-center">
-  <div class="flex flex-col items-center gap-3">
-    <div class="h-14 w-14 rounded-2xl bg-[#1B4332]/10 flex items-center justify-center">
-      <i class="fa-solid fa-list-check text-[#1B4332] text-2xl"></i>
-    </div>
-    <p class="text-sm font-semibold text-apple-primary dark:text-white">No directives for today</p>
-    <p class="text-xs text-apple-secondary">All caught up — or add a new directive above.</p>
+                tbody.innerHTML = `<tr><td colspan="6" class="py-0">
+  <div class="empty-state">
+    <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="45" cy="45" r="43" fill="#C8893A" fill-opacity="0.09"/>
+      <rect x="22" y="20" width="46" height="54" rx="8" stroke="#C8893A" stroke-width="2.5" fill="none"/>
+      <line x1="32" y1="34" x2="58" y2="34" stroke="#C8893A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      <line x1="32" y1="43" x2="58" y2="43" stroke="#C8893A" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+      <line x1="32" y1="52" x2="48" y2="52" stroke="#C8893A" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+      <circle cx="66" cy="66" r="12" fill="#C8893A"/>
+      <path d="M61 66 L64 69 L71 62" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h3>All clear — no directives</h3>
+    <p>Nothing on the board yet. Hit <strong>+ New</strong> above to add the first directive.</p>
   </div>
 </td></tr>`;
             }
@@ -2198,7 +2279,7 @@
             rankEntriesCache = entries;
 
             if(board) {
-                if(!entries.length) { board.innerHTML = `<p class="text-xs text-apple-secondary italic text-center py-8">No directives assigned yet.</p>`; }
+                if(!entries.length) { board.innerHTML = `<div class="empty-state"><svg width="72" height="72" viewBox="0 0 72 72" fill="none"><circle cx="36" cy="36" r="34" fill="#C8893A" fill-opacity="0.09"/><path d="M22 52 L22 38 M36 52 L36 28 M50 52 L50 34" stroke="#C8893A" stroke-width="3" stroke-linecap="round"/><circle cx="22" cy="34" r="4" fill="#C8893A" fill-opacity="0.3"/><circle cx="36" cy="24" r="4" fill="#C8893A"/><circle cx="50" cy="30" r="4" fill="#C8893A" fill-opacity="0.5"/></svg><h3>No team data yet</h3><p>Assign directives to team members and rankings will appear here.</p></div>`; }
                 else {
                     const maxDone = Math.max(...entries.map(e => e[1].done), 1);
                     const medals = ['text-yellow-500', 'text-gray-400', 'text-amber-700'];
@@ -3426,6 +3507,48 @@
         // On page load, restore state
         if(localStorage.getItem('sidebarCollapsed') === 'true') {
             document.getElementById('sidebar')?.classList.add('collapsed');
+        }
+
+        // ── PWA: Service Worker + Install Prompt ────────────────
+        let _pwaPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            _pwaPrompt = e;
+            const btn = document.getElementById('pwaInstallBtn');
+            if(btn) btn.classList.add('visible');
+        });
+        window.addEventListener('appinstalled', () => {
+            _pwaPrompt = null;
+            const btn = document.getElementById('pwaInstallBtn');
+            if(btn) btn.classList.remove('visible');
+            showToast('Tempo installed!');
+        });
+        function triggerPwaInstall() {
+            if(!_pwaPrompt) { showToast('Open in Chrome/Safari and use "Add to Home Screen"'); return; }
+            _pwaPrompt.prompt();
+            _pwaPrompt.userChoice.then(r => {
+                if(r.outcome === 'accepted') showToast('Installing Tempo...');
+                _pwaPrompt = null;
+                const btn = document.getElementById('pwaInstallBtn');
+                if(btn) btn.classList.remove('visible');
+            });
+        }
+        // Register a minimal service worker for offline support
+        if('serviceWorker' in navigator) {
+            const swCode = `
+const CACHE = 'tempo-v1';
+const SHELL = [location.href];
+self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())));
+self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+self.addEventListener('fetch', e => {
+  if(e.request.method !== 'GET') return;
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+    if(res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+    return res;
+  }).catch(() => caches.match(location.href))));
+});`;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(blob), { scope: '/' }).catch(() => {});
         }
     </script>
 </body>
